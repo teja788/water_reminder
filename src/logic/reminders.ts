@@ -1,7 +1,11 @@
 import { Settings } from '../types';
 
 const MINUTE_MS = 60 * 1000;
-/** Never schedule two reminders closer than this. */
+/**
+ * Never schedule two reminders closer than this. Also load-bearing for the
+ * iOS 64-scheduled-notification cap: at the widest wake/sleep window it bounds
+ * the schedule to ~47 (24 today + 23 tomorrow) — don't lower it casually.
+ */
 const MIN_GAP_MS = 45 * MINUTE_MS;
 /** Give the user breathing room after "now" before the next nudge. */
 const START_DELAY_MS = 45 * MINUTE_MS;

@@ -69,6 +69,12 @@ export function dailyTotals(entries: DrinkEntry[], days: number, now: Date): Day
  * is still in progress); it just doesn't count yet.
  */
 export function currentStreak(entries: DrinkEntry[], goalMl: number, now: Date): number {
+  // 0/negative goals would make the while-loop below walk back forever
+  // (0 >= 0 every day). Written negated so null/NaN from a corrupt persisted
+  // settings blob also bail out to 0 instead of hanging the render.
+  if (!(goalMl > 0)) {
+    return 0;
+  }
   const totals = new Map<string, number>();
   for (const e of entries) {
     const k = dayKey(e.timestamp);
