@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "water_reminder",
+    "name": "Water Reminder",
     "slug": "water_reminder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teja788.waterreminder"
     },
     "android": {
       "adaptiveIcon": {
@@ -20,6 +21,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["expo-notifications"]
   }
 }
