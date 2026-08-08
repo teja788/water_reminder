@@ -12,7 +12,7 @@
 
 **Constraints:**
 - Sequential tasks; each ends in a commit on branch `claude/iphone-app-store-improvements-548841`.
-- YAGNI applies: build exactly what each task specifies. No extra features, no speculative props/config.
+- YAGNI applies: build exactly what each task specifies. No extra features, no speculative props/config. (`src/pro.ts` is the one deliberate, owner-requested exception — a monetization seam the project owner asked for explicitly. Keep it to the single function.)
 - Sleep time must be later than wake time on the same day (guaranteed by the UI's chip ranges: wake ≤ 12:00 < 18:00 ≤ sleep). Overnight (past-midnight) schedules are out of scope for v1.
 - iOS caps scheduled local notifications at 64; our max is ~2 days × ~16 = well under.
 - **Known v1 limitations (accepted, do not "fix"):** reminders are scheduled for today + tomorrow only, so if the app isn't foregrounded for 2+ days they pause until the next open (mitigated by rescheduling on every foreground). A quick-log action tapped while the app is killed records at most the latest response — earlier untapped ones are lost.
@@ -170,20 +170,31 @@ export async function loadSettings(): Promise<Settings | null> {
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
-  await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  try {
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch {
+    // Persistence is best-effort; in-memory state stays authoritative.
+  }
 }
 
 export async function loadEntries(): Promise<DrinkEntry[]> {
   try {
     const raw = await AsyncStorage.getItem(ENTRIES_KEY);
-    return raw ? (JSON.parse(raw) as DrinkEntry[]) : [];
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    // A non-array here would crash every render downstream (entries.reduce),
+    // permanently, since the bad value persists. Degrade to empty instead.
+    return Array.isArray(parsed) ? (parsed as DrinkEntry[]) : [];
   } catch {
     return [];
   }
 }
 
 export async function saveEntries(entries: DrinkEntry[]): Promise<void> {
-  await AsyncStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+  try {
+    await AsyncStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+  } catch {
+    // Persistence is best-effort; in-memory state stays authoritative.
+  }
 }
 ```
 
@@ -937,7 +948,7 @@ Single scrollable screen, welcome header ("Let's set your daily goal"), then:
 2. Live suggested goal via `calcGoalMl`, displayed prominently, with an editable goal field prefilled from the suggestion (typing a custom value keeps it).
 3. Units toggle (ml / oz) — affects display only; storage stays ml.
 4. Wake hour chips (default 07:00) and sleep hour chips (default 22:00).
-5. `Start` button: requests notification permission via `requestNotificationPermission()`, then calls `onComplete` with a full `Settings` object: entered values + `cupSizesMl: DEFAULT_CUP_SIZES_ML`, `defaultCupMl: DEFAULT_CUP_ML`, `remindersEnabled: <permission result>`.
+5. `Start` button: requests notification permission via `requestNotificationPermission()`, then calls `onComplete` with a full `Settings` object: entered values + `cupSizesMl: [...DEFAULT_CUP_SIZES_ML]` (spread — never alias the module constant, or later in-place edits corrupt the default), `defaultCupMl: DEFAULT_CUP_ML`, `remindersEnabled: <permission result>`.
 
 - [ ] **Step 2: Replace `SettingsScreen` stub**
 
