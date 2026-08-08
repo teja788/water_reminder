@@ -14,7 +14,7 @@
 - Sequential tasks; each ends in a commit on branch `claude/iphone-app-store-improvements-548841`.
 - YAGNI applies: build exactly what each task specifies. No extra features, no speculative props/config. (`src/pro.ts` is the one deliberate, owner-requested exception — a monetization seam the project owner asked for explicitly. Keep it to the single function.)
 - Sleep time must be later than wake time on the same day (guaranteed by the UI's chip ranges: wake ≤ 12:00 < 18:00 ≤ sleep). Overnight (past-midnight) schedules are out of scope for v1.
-- iOS caps scheduled local notifications at 64; our max is ~2 days × ~16 = well under.
+- iOS caps scheduled local notifications at 64; our measured worst case is 47 (24 today + 23 tomorrow at the widest wake/sleep window), held under the cap by MIN_GAP_MS.
 - **Known v1 limitations (accepted, do not "fix"):** reminders are scheduled for today + tomorrow only, so if the app isn't foregrounded for 2+ days they pause until the next open (mitigated by rescheduling on every foreground). A quick-log action tapped while the app is killed records at most the latest response — earlier untapped ones are lost.
 
 **File structure (locked in — do not restructure):**
@@ -304,6 +304,12 @@ export function dailyTotals(entries: DrinkEntry[], days: number, now: Date): Day
  * is still in progress); it just doesn't count yet.
  */
 export function currentStreak(entries: DrinkEntry[], goalMl: number, now: Date): number {
+  // 0/negative goals would make the while-loop below walk back forever
+  // (0 >= 0 every day). Written negated so null/NaN from a corrupt persisted
+  // settings blob also bail out to 0 instead of hanging the render.
+  if (!(goalMl > 0)) {
+    return 0;
+  }
   const totals = new Map<string, number>();
   for (const e of entries) {
     const k = dayKey(e.timestamp);
@@ -335,7 +341,11 @@ export function currentStreak(entries: DrinkEntry[], goalMl: number, now: Date):
 import { Settings } from '../types';
 
 const MINUTE_MS = 60 * 1000;
-/** Never schedule two reminders closer than this. */
+/**
+ * Never schedule two reminders closer than this. Also load-bearing for the
+ * iOS 64-scheduled-notification cap: at the widest wake/sleep window it bounds
+ * the schedule to ~47 (24 today + 23 tomorrow) — don't lower it casually.
+ */
 const MIN_GAP_MS = 45 * MINUTE_MS;
 /** Give the user breathing room after "now" before the next nudge. */
 const START_DELAY_MS = 45 * MINUTE_MS;
@@ -945,7 +955,7 @@ Both screens edit the same fields — extract nothing into shared files (two scr
 
 Single scrollable screen, welcome header ("Let's set your daily goal"), then:
 1. Weight input (kg) + activity picker (three chips: Sedentary / Moderate / Active).
-2. Live suggested goal via `calcGoalMl`, displayed prominently, with an editable goal field prefilled from the suggestion (typing a custom value keeps it).
+2. Live suggested goal via `calcGoalMl`, displayed prominently, with an editable goal field prefilled from the suggestion (typing a custom value keeps it). Validate the *derived* value the same as typed input: with weight empty/invalid the suggestion is NaN, and the Start button must stay disabled until the goal field holds a positive number. (A NaN goal would JSON-round-trip to `null` in storage; `currentStreak` guards against it, but it must never be persisted in the first place.)
 3. Units toggle (ml / oz) — affects display only; storage stays ml.
 4. Wake hour chips (default 07:00) and sleep hour chips (default 22:00).
 5. `Start` button: requests notification permission via `requestNotificationPermission()`, then calls `onComplete` with a full `Settings` object: entered values + `cupSizesMl: [...DEFAULT_CUP_SIZES_ML]` (spread — never alias the module constant, or later in-place edits corrupt the default), `defaultCupMl: DEFAULT_CUP_ML`, `remindersEnabled: <permission result>`.
