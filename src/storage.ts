@@ -14,18 +14,29 @@ export async function loadSettings(): Promise<Settings | null> {
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
-  await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  try {
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch {
+    // Persistence is best-effort; in-memory state stays authoritative.
+  }
 }
 
 export async function loadEntries(): Promise<DrinkEntry[]> {
   try {
     const raw = await AsyncStorage.getItem(ENTRIES_KEY);
-    return raw ? (JSON.parse(raw) as DrinkEntry[]) : [];
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    // A non-array here would crash every render downstream (entries.reduce),
+    // permanently, since the bad value persists. Degrade to empty instead.
+    return Array.isArray(parsed) ? (parsed as DrinkEntry[]) : [];
   } catch {
     return [];
   }
 }
 
 export async function saveEntries(entries: DrinkEntry[]): Promise<void> {
-  await AsyncStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+  try {
+    await AsyncStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+  } catch {
+    // Persistence is best-effort; in-memory state stays authoritative.
+  }
 }
