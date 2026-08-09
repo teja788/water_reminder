@@ -26,6 +26,10 @@ const WAKE_HOURS = [5, 6, 7, 8, 9, 10, 11, 12];
 const SLEEP_HOURS = [18, 19, 20, 21, 22, 23];
 const MIN_WEIGHT_KG = 20;
 const MAX_WEIGHT_KG = 300;
+// Commits happen per valid keystroke, so an abandoned intermediate value must
+// not be a plausible goal — a 2 ml goal would mark every day as met.
+const MIN_GOAL_ML = 500;
+const MAX_GOAL_ML = 8000;
 
 const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
   { id: 'sedentary', label: 'Sedentary' },
@@ -114,7 +118,8 @@ export default function OnboardingScreen(props: {
   const suggestedMl = weightValid ? calcGoalMl(weightKg, activity) : NaN;
   const goalMl =
     goalDraft === null ? suggestedMl : toMl(parseNumber(goalDraft), units);
-  const goalValid = Number.isFinite(goalMl) && goalMl > 0;
+  const goalValid =
+    Number.isFinite(goalMl) && goalMl >= MIN_GOAL_ML && goalMl <= MAX_GOAL_ML;
   // Weight is part of the persisted Settings, so it must be valid too —
   // otherwise a NaN weightKg would round-trip to null in storage.
   const canStart = weightValid && goalValid && !submitting;
@@ -141,7 +146,15 @@ export default function OnboardingScreen(props: {
       return;
     }
     setSubmitting(true);
-    const granted = await requestNotificationPermission();
+    let granted = false;
+    try {
+      granted = await requestNotificationPermission();
+    } catch {
+      // Permission plumbing must never block onboarding — reminders start
+      // off and the Settings switch is the recovery path.
+    } finally {
+      setSubmitting(false);
+    }
     onComplete({
       weightKg,
       activity,
@@ -164,6 +177,7 @@ export default function OnboardingScreen(props: {
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
+      automaticallyAdjustKeyboardInsets
     >
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
         Let's set your daily goal
@@ -250,7 +264,7 @@ export default function OnboardingScreen(props: {
         </Text>
         <TextInput
           value={goalFieldValue}
-          onChangeText={setGoalDraft}
+          onChangeText={(t) => setGoalDraft(t.trim() === '' ? null : t)}
           keyboardType="number-pad"
           maxLength={5}
           maxFontSizeMultiplier={1.5}

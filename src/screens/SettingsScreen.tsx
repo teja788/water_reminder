@@ -19,7 +19,11 @@ const WAKE_HOURS = [5, 6, 7, 8, 9, 10, 11, 12];
 const SLEEP_HOURS = [18, 19, 20, 21, 22, 23];
 const MIN_WEIGHT_KG = 20;
 const MAX_WEIGHT_KG = 300;
-const MIN_CUP_ML = 1;
+// Commits happen per valid keystroke, so an abandoned intermediate value must
+// not be a plausible amount — a 2 ml goal would mark every day as met.
+const MIN_GOAL_ML = 500;
+const MAX_GOAL_ML = 8000;
+const MIN_CUP_ML = 50;
 const MAX_CUP_ML = 5000;
 const APP_VERSION = '1.0.0';
 
@@ -148,7 +152,7 @@ export default function SettingsScreen(props: {
   const onGoalChange = (text: string): void => {
     setGoalDraft(text);
     const value = parseNumber(text);
-    if (!Number.isFinite(value) || value <= 0) {
+    if (!Number.isFinite(value) || value < MIN_GOAL_ML || value > MAX_GOAL_ML) {
       return;
     }
     commit({ goalMl: Math.round(value) });
@@ -181,7 +185,13 @@ export default function SettingsScreen(props: {
       commit({ remindersEnabled: false });
       return;
     }
-    const granted = await requestNotificationPermission();
+    let granted = false;
+    try {
+      granted = await requestNotificationPermission();
+    } catch {
+      // Treat a native failure exactly like a denial: the inline hint below
+      // points the user at iOS Settings, which is the only real recovery.
+    }
     setPermissionDenied(!granted);
     commit({ remindersEnabled: granted });
   };
@@ -192,6 +202,7 @@ export default function SettingsScreen(props: {
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
+      automaticallyAdjustKeyboardInsets
     >
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
         Settings
