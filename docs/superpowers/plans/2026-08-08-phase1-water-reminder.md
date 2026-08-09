@@ -656,12 +656,17 @@ export function useHydration(): HydrationState {
     (async () => {
       let [s, e] = await Promise.all([loadSettings(), loadEntries()]);
       if (s?.remindersEnabled) {
-        // The user may have revoked notification permission in iOS Settings
-        // since last launch; don't keep pretending reminders are on.
-        const perm = await Notifications.getPermissionsAsync();
-        if (!perm.granted) {
-          s = { ...s, remindersEnabled: false };
-          void saveSettings(s);
+        try {
+          // The user may have revoked notification permission in iOS Settings
+          // since last launch; don't keep pretending reminders are on.
+          const perm = await Notifications.getPermissionsAsync();
+          if (!perm.granted) {
+            s = { ...s, remindersEnabled: false };
+            void saveSettings(s);
+          }
+        } catch {
+          // Permission plumbing must never block startup: an unguarded throw
+          // here would skip setReady(true) and hang the loading screen forever.
         }
       }
       setSettings(s);
@@ -687,15 +692,31 @@ export function useHydration(): HydrationState {
         return;
       }
       setNowTick(Date.now());
-      if (settings) {
-        void rescheduleReminders(
-          settings,
-          totalForDay(entriesRef.current, Date.now())
-        );
+      if (!settings) {
+        return;
+      }
+      void rescheduleReminders(
+        settings,
+        totalForDay(entriesRef.current, Date.now())
+      );
+      if (settings.remindersEnabled) {
+        // Mirror the launch-time revocation check: without this, revoking
+        // permission while backgrounded leaves the Settings switch on and
+        // keeps scheduling notifications iOS silently drops.
+        void (async () => {
+          try {
+            const perm = await Notifications.getPermissionsAsync();
+            if (!perm.granted) {
+              updateSettings({ ...settings, remindersEnabled: false });
+            }
+          } catch {
+            // Best-effort; a failed check must not disturb foregrounding.
+          }
+        })();
       }
     });
     return () => sub.remove();
-  }, [settings]);
+  }, [settings, updateSettings]);
 
   const todayTotalMl = useMemo(
     () => totalForDay(entries, Date.now()),
@@ -1043,6 +1064,7 @@ Sections (card per section, section titles in `textSecondary`):
 - Clearing the Onboarding goal field returns to suggestion-following: `onChangeText={(t) => setGoalDraft(t.trim() === '' ? null : t)}`.
 - Both ScrollViews set `automaticallyAdjustKeyboardInsets` (iOS; without it the number pad covers low fields on SE-class screens, and `keyboardDismissMode="on-drag"` makes scrolling to them close the keyboard).
 - Goal range-checked like weight and cups: `MIN_GOAL_ML = 500`, `MAX_GOAL_ML = 8000` (both screens); `MIN_CUP_ML = 50`. Rationale: commits happen per valid keystroke, so an abandoned intermediate "2" would otherwise persist as a 2 ml goal — every day counts as met, streaks fabricate, reminders stop.
+- Out-of-range goal entries are explained, not silently rejected: when a non-empty goal draft is invalid, Onboarding swaps the hint text under the suggestion to `Enter a goal between 500 and 8,000 ml` (oz equivalents in oz mode) and Settings shows the same hint under its goal field.
 
 - [ ] **Step 3: Verify**
 
