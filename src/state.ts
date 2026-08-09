@@ -161,7 +161,7 @@ export function useHydration(): HydrationState {
     processedResponses.current.add(id);
     // Notification.date is Unix ms (SDK 56 docs) — safe to use as a timestamp.
     logDrink(settings.defaultCupMl, lastResponse.notification.date);
-    void Notifications.clearLastNotificationResponseAsync();
+    Notifications.clearLastNotificationResponse();
   }, [lastResponse, settings, logDrink]);
 
   return {
