@@ -30,6 +30,10 @@ export function useHydration(): HydrationState {
   const [ready, setReady] = useState(false);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [entries, setEntries] = useState<DrinkEntry[]>([]);
+  // Synchronous mirror of `entries` so same-tick updates (double-tapping a
+  // cup button, or a manual log racing the quick-log effect) can't build
+  // from a stale closure and silently drop a drink.
+  const entriesRef = useRef<DrinkEntry[]>([]);
   // Bumped on every return to foreground. It is ONLY a dependency that forces
   // the day-based memos below to recompute — without it, an app backgrounded
   // over midnight would keep showing yesterday's totals.
@@ -48,6 +52,7 @@ export function useHydration(): HydrationState {
         }
       }
       setSettings(s);
+      entriesRef.current = e;
       setEntries(e);
       setReady(true);
       if (s) {
@@ -95,7 +100,9 @@ export function useHydration(): HydrationState {
   }, [settings, todayTotalMl, nowTick]);
 
   const persistEntries = useCallback(
-    (next: DrinkEntry[], s: Settings | null) => {
+    (update: (prev: DrinkEntry[]) => DrinkEntry[], s: Settings | null) => {
+      const next = update(entriesRef.current);
+      entriesRef.current = next;
       setEntries(next);
       void saveEntries(next);
       if (s) {
@@ -113,25 +120,27 @@ export function useHydration(): HydrationState {
         timestamp: ts,
         amountMl,
       };
-      persistEntries([...entries, entry], settings);
+      persistEntries((prev) => [...prev, entry], settings);
     },
-    [entries, settings, persistEntries]
+    [settings, persistEntries]
   );
 
   const undoLast = useCallback(() => {
-    if (entries.length === 0) {
+    if (entriesRef.current.length === 0) {
       return;
     }
-    // Backdated quick-log entries mean the last array element isn't
-    // necessarily the most recent drink — remove the max-timestamp entry.
-    let latest = 0;
-    for (let i = 1; i < entries.length; i++) {
-      if (entries[i].timestamp > entries[latest].timestamp) {
-        latest = i;
+    persistEntries((prev) => {
+      // Backdated quick-log entries mean the last array element isn't
+      // necessarily the most recent drink — remove the max-timestamp entry.
+      let latest = 0;
+      for (let i = 1; i < prev.length; i++) {
+        if (prev[i].timestamp > prev[latest].timestamp) {
+          latest = i;
+        }
       }
-    }
-    persistEntries(entries.filter((_, i) => i !== latest), settings);
-  }, [entries, settings, persistEntries]);
+      return prev.filter((_, i) => i !== latest);
+    }, settings);
+  }, [settings, persistEntries]);
 
   const updateSettings = useCallback(
     (next: Settings) => {

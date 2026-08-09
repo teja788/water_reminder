@@ -5,6 +5,9 @@ export interface Theme {
   textSecondary: string;
   accent: string;
   accentSoft: string;
+  /** Pressed-state variant of accentSoft: darker in light mode, lighter in
+   *  dark mode so pressed feedback stays visible on dark backgrounds. */
+  accentSoftPressed: string;
   success: string;
   danger: string;
   border: string;
@@ -17,6 +20,7 @@ export const lightTheme: Theme = {
   textSecondary: '#5B7386',
   accent: '#1E88E5',
   accentSoft: '#DEEFFB',
+  accentSoftPressed: '#C7E1F5',
   success: '#2E9E6B',
   danger: '#D64545',
   border: '#E1EAF2',
@@ -29,6 +33,7 @@ export const darkTheme: Theme = {
   textSecondary: '#8FA7B8',
   accent: '#4DA8F0',
   accentSoft: '#17324A',
+  accentSoftPressed: '#1F4260',
   success: '#4CC38A',
   danger: '#E5686B',
   border: '#243342',
