@@ -29,7 +29,11 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('home');
 
   if (!hydration.ready) {
-    return <View style={[styles.root, { backgroundColor: theme.background }]} />;
+    return (
+      <View style={[styles.root, { backgroundColor: theme.background }]}>
+        <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      </View>
+    );
   }
 
   if (!hydration.settings) {
@@ -56,7 +60,14 @@ export default function App() {
       </View>
       <View style={[styles.tabBar, { borderTopColor: theme.border, backgroundColor: theme.card }]}>
         {TABS.map((t) => (
-          <Pressable key={t.id} style={styles.tabButton} onPress={() => setTab(t.id)}>
+          <Pressable
+            key={t.id}
+            style={styles.tabButton}
+            onPress={() => setTab(t.id)}
+            accessibilityRole="tab"
+            accessibilityLabel={t.label}
+            accessibilityState={{ selected: tab === t.id }}
+          >
             <Text style={styles.tabIcon}>{t.icon}</Text>
             <Text
               style={[

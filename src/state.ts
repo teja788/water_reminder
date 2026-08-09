@@ -51,8 +51,11 @@ export function useHydration(): HydrationState {
       setEntries(e);
       setReady(true);
       if (s) {
-        await setupQuickLogCategory(s.defaultCupMl, s.units);
-        await rescheduleReminders(s, totalForDay(e, Date.now()));
+        // Enqueue synchronously, before yielding: this baseline reschedule
+        // must be ordered ahead of any reschedule a pending quick-log effect
+        // enqueues, so the quick-log's (higher) total is the queue's last word.
+        void rescheduleReminders(s, totalForDay(e, Date.now()));
+        void setupQuickLogCategory(s.defaultCupMl, s.units);
       }
     })();
   }, []);
@@ -142,9 +145,9 @@ export function useHydration(): HydrationState {
 
   // Quick-log action tapped on a notification (works from background; if the
   // app was killed, the response arrives on next launch). The entry is
-  // backdated to when the notification was acted on so an overnight-delayed
-  // response still lands on the correct day. Known v1 limitation: only the
-  // most recent response survives an app kill.
+  // backdated to when the notification FIRED (not when it was tapped), so an
+  // overnight-delayed response lands on the day the reminder belonged to.
+  // Known v1 limitation: only the most recent response survives an app kill.
   const lastResponse = Notifications.useLastNotificationResponse();
   const processedResponses = useRef<Set<string>>(new Set());
   useEffect(() => {
@@ -159,8 +162,13 @@ export function useHydration(): HydrationState {
       return;
     }
     processedResponses.current.add(id);
-    // Notification.date is Unix ms (SDK 56 docs) — safe to use as a timestamp.
-    logDrink(settings.defaultCupMl, lastResponse.notification.date);
+    // expo-notifications serializes Notification.date as SECONDS on iOS
+    // (timeIntervalSince1970 in NotificationRecords.swift) but MILLISECONDS
+    // on Android, with no JS-side normalization. 1e11 sits unambiguously
+    // between the two for any plausible date.
+    const rawDate = lastResponse.notification.date;
+    const firedAtMs = Math.round(rawDate < 1e11 ? rawDate * 1000 : rawDate);
+    logDrink(settings.defaultCupMl, firedAtMs);
     Notifications.clearLastNotificationResponse();
   }, [lastResponse, settings, logDrink]);
 
