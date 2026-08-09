@@ -1038,6 +1038,12 @@ Sections (card per section, section titles in `textSecondary`):
 5. **Reminders** — `Switch` for `remindersEnabled`; when turning on, call `requestNotificationPermission()` first and only enable if granted; when denied show inline hint `Enable notifications in iOS Settings`.
 6. **About** — app version 1.0.0, one line: `Your data never leaves this device.`
 
+**Review addenda (mandatory, from the Task 6 quality review):**
+- Every `await requestNotificationPermission()` sits in try/catch: Onboarding catches to `granted = false` with `finally { setSubmitting(false) }` (a deterministic native throw must never dead-end onboarding — reminders start off, the Settings switch is the recovery path); Settings catches to the denied hint.
+- Clearing the Onboarding goal field returns to suggestion-following: `onChangeText={(t) => setGoalDraft(t.trim() === '' ? null : t)}`.
+- Both ScrollViews set `automaticallyAdjustKeyboardInsets` (iOS; without it the number pad covers low fields on SE-class screens, and `keyboardDismissMode="on-drag"` makes scrolling to them close the keyboard).
+- Goal range-checked like weight and cups: `MIN_GOAL_ML = 500`, `MAX_GOAL_ML = 8000` (both screens); `MIN_CUP_ML = 50`. Rationale: commits happen per valid keystroke, so an abandoned intermediate "2" would otherwise persist as a 2 ml goal — every day counts as met, streaks fabricate, reminders stop.
+
 - [ ] **Step 3: Verify**
 
 Run: `npx tsc --noEmit` → exit 0.
