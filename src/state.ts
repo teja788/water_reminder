@@ -75,11 +75,14 @@ export function useHydration(): HydrationState {
       }
       setNowTick(Date.now());
       if (settings) {
-        void rescheduleReminders(settings, totalForDay(entries, Date.now()));
+        void rescheduleReminders(
+          settings,
+          totalForDay(entriesRef.current, Date.now())
+        );
       }
     });
     return () => sub.remove();
-  }, [settings, entries]);
+  }, [settings]);
 
   const todayTotalMl = useMemo(
     () => totalForDay(entries, Date.now()),
@@ -147,9 +150,12 @@ export function useHydration(): HydrationState {
       setSettings(next);
       void saveSettings(next);
       void setupQuickLogCategory(next.defaultCupMl, next.units);
-      void rescheduleReminders(next, totalForDay(entries, Date.now()));
+      void rescheduleReminders(
+        next,
+        totalForDay(entriesRef.current, Date.now())
+      );
     },
-    [entries]
+    []
   );
 
   // Quick-log action tapped on a notification (works from background; if the

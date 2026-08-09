@@ -68,8 +68,11 @@ export default function App() {
             accessibilityLabel={t.label}
             accessibilityState={{ selected: tab === t.id }}
           >
-            <Text style={styles.tabIcon}>{t.icon}</Text>
+            <Text style={styles.tabIcon} maxFontSizeMultiplier={1.5}>
+              {t.icon}
+            </Text>
             <Text
+              maxFontSizeMultiplier={1.5}
               style={[
                 styles.tabLabel,
                 { color: tab === t.id ? theme.accent : theme.textSecondary },
