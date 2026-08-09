@@ -15,6 +15,8 @@
 - YAGNI applies: build exactly what each task specifies. No extra features, no speculative props/config. (`src/pro.ts` is the one deliberate, owner-requested exception — a monetization seam the project owner asked for explicitly. Keep it to the single function.)
 - Sleep time must be later than wake time on the same day (guaranteed by the UI's chip ranges: wake ≤ 12:00 < 18:00 ≤ sleep). Overnight (past-midnight) schedules are out of scope for v1.
 - iOS caps scheduled local notifications at 64; our measured worst case is 47 (24 today + 23 tomorrow at the widest wake/sleep window), held under the cap by MIN_GAP_MS.
+- **Single-writer rule:** `entries` has two representations in `src/state.ts` — state for rendering, `entriesRef` for imperative reschedule paths. `persistEntries` is the only writer and updates both. All entry mutations MUST go through the hook's `logDrink`/`undoLast`; never call `setEntries` directly or the two drift.
+- **Home layout budget:** at max accessibility text on an SE-class screen the glass fits with ~10pt slack. Do not add rows to HomeScreen without re-checking at AX sizes.
 - **Known v1 limitations (accepted, do not "fix"):** reminders are scheduled for today + tomorrow only, so if the app isn't foregrounded for 2+ days they pause until the next open (mitigated by rescheduling on every foreground). A quick-log action tapped while the app is killed records at most the latest response — earlier untapped ones are lost.
 
 **File structure (locked in — do not restructure):**
