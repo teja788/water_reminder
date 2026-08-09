@@ -458,7 +458,9 @@ import {
   computeTomorrowReminderTimes,
 } from './logic/reminders';
 
-export const REMINDER_CATEGORY = 'water-reminder';
+// No '-' or ':' in the category identifier — the SDK docs warn categories
+// might not work as expected with them. (Action identifiers are unconstrained.)
+export const REMINDER_CATEGORY = 'waterReminder';
 export const ACTION_LOG_DEFAULT = 'log-default';
 
 Notifications.setNotificationHandler({
@@ -470,6 +472,11 @@ Notifications.setNotificationHandler({
   }),
 });
 
+/**
+ * iOS denial is terminal: after the user denies once, requestPermissionsAsync
+ * keeps returning denied without showing the prompt again. Recovery is only
+ * via iOS Settings — callers should surface that hint when this returns false.
+ */
 export async function requestNotificationPermission(): Promise<boolean> {
   const current = await Notifications.getPermissionsAsync();
   if (current.granted) {
@@ -519,6 +526,8 @@ let rescheduleQueue: Promise<void> = Promise.resolve();
  * cancel/schedule phases (which would leave duplicate or missing reminders).
  * Schedules the rest of today (progress-aware) plus tomorrow (baseline),
  * staying far under the 64-notification iOS limit.
+ * The returned promise always resolves — failures are swallowed to protect
+ * the queue, so callers cannot observe success/failure by awaiting it.
  */
 export function rescheduleReminders(
   settings: Settings,
@@ -547,8 +556,12 @@ async function doReschedule(
     ...computeTomorrowReminderTimes(now, settings),
   ];
   await Promise.all(
-    times.map((date, i) => {
-      const [title, body] = MESSAGES[i % MESSAGES.length];
+    times.map((date) => {
+      // Key the message off the target hour, not the array index. The times
+      // array is rebuilt on every reschedule, so an index key would pin the
+      // soonest reminder — the one users actually see — to MESSAGES[0] forever.
+      const slot = Math.floor(date.getTime() / (60 * 60 * 1000));
+      const [title, body] = MESSAGES[slot % MESSAGES.length];
       return Notifications.scheduleNotificationAsync({
         content: {
           title,
