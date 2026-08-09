@@ -1031,7 +1031,7 @@ Single scrollable screen, welcome header ("Let's set your daily goal"), then:
 - [ ] **Step 2: Replace `SettingsScreen` stub**
 
 Sections (card per section, section titles in `textSecondary`):
-1. **Daily goal** — weight, activity chips, suggested goal with `Use suggested` button, manual goal input. Changes call `updateSettings` on field commit (onEndEditing / chip tap), not per keystroke.
+1. **Daily goal** — weight, activity chips, suggested goal with `Use suggested` button, manual goal input. Changes commit per the preamble rule: on every valid change (validated onChangeText) and on chip tap.
 2. **Units** — ml/oz toggle.
 3. **Schedule** — wake/sleep hour chips as in onboarding, same sleep > wake rule.
 4. **Cups** — three numeric inputs for the preset sizes; a "default cup" selector (chip per size) controlling `defaultCupMl` (used by notification quick-log; note this under the selector in small text). If the user edits a preset size that is currently the default cup, `defaultCupMl` follows the new value (otherwise it would silently point at an amount no longer on any button).
