@@ -16,7 +16,9 @@ export default function ProgressGlass(props: {
   units: Units;
 }): React.JSX.Element {
   const { theme, totalMl, goalMl, units } = props;
-  const goalReached = totalMl >= goalMl;
+  // The goalMl > 0 term agrees with the corrupt-goal guard in the animation
+  // below: a 0/NaN goal must not read as "reached".
+  const goalReached = goalMl > 0 && totalMl >= goalMl;
 
   // Percentage heights cannot use the native driver, so this stays on the JS
   // driver and interpolates to a '0%'–'100%' string (a raw 0–100 number bound
@@ -26,11 +28,16 @@ export default function ProgressGlass(props: {
   useEffect(() => {
     // A corrupt persisted goal (0/NaN) would otherwise animate toward NaN.
     const ratio = goalMl > 0 ? Math.min(totalMl / goalMl, 1) : 0;
-    Animated.timing(fillAnim, {
+    const anim = Animated.timing(fillAnim, {
       toValue: ratio,
       duration: 500,
       useNativeDriver: false,
-    }).start();
+    });
+    anim.start();
+    // Switching tabs unmounts this screen mid-animation.
+    return () => {
+      anim.stop();
+    };
   }, [totalMl, goalMl, fillAnim]);
 
   const fillHeight = fillAnim.interpolate({
@@ -47,6 +54,7 @@ export default function ProgressGlass(props: {
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={`${formatAmount(totalMl, units)} of ${formatAmount(goalMl, units)}`}
+      accessibilityValue={{ min: 0, max: goalMl, now: totalMl }}
       style={[
         styles.glass,
         { borderColor: theme.border, backgroundColor: theme.card },
@@ -56,10 +64,18 @@ export default function ProgressGlass(props: {
         style={[styles.fill, { height: fillHeight, backgroundColor: fillColor }]}
       />
       <View style={styles.overlay}>
-        <Text style={[styles.total, { color: theme.text }]}>
+        <Text
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          maxFontSizeMultiplier={1.5}
+          style={[styles.total, { color: theme.text }]}
+        >
           {formatAmount(totalMl, units)}
         </Text>
-        <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
+        <Text
+          maxFontSizeMultiplier={1.5}
+          style={[styles.subtitle, { color: theme.textSecondary }]}
+        >
           {goalReached ? 'Goal reached! 🎉' : `of ${formatAmount(goalMl, units)}`}
         </Text>
       </View>

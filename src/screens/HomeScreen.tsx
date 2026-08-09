@@ -36,7 +36,12 @@ export default function HomeScreen(props: {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.date, { color: theme.textSecondary }]}>{dateLabel}</Text>
+      <Text
+        maxFontSizeMultiplier={1.5}
+        style={[styles.date, { color: theme.textSecondary }]}
+      >
+        {dateLabel}
+      </Text>
 
       <View style={styles.glassArea}>
         <ProgressGlass
@@ -56,7 +61,10 @@ export default function HomeScreen(props: {
         onUndo={hydration.undoLast}
       />
 
-      <Text style={[styles.hint, { color: theme.textSecondary }]}>
+      <Text
+        maxFontSizeMultiplier={1.5}
+        style={[styles.hint, { color: theme.textSecondary }]}
+      >
         {reminderHint(hydration, settings)}
       </Text>
     </View>
