@@ -73,7 +73,11 @@ export default function LogButtons(props: {
               { backgroundColor: pressedBackground(pressed) },
             ]}
           >
-            <Text numberOfLines={1} style={[styles.buttonLabel, { color: theme.accent }]}>
+            <Text
+              numberOfLines={1}
+              maxFontSizeMultiplier={1.5}
+              style={[styles.buttonLabel, { color: theme.accent }]}
+            >
               {formatAmount(size, units)}
             </Text>
           </Pressable>
@@ -87,7 +91,11 @@ export default function LogButtons(props: {
             { backgroundColor: pressedBackground(pressed) },
           ]}
         >
-          <Text numberOfLines={1} style={[styles.buttonLabel, { color: theme.accent }]}>
+          <Text
+            numberOfLines={1}
+            maxFontSizeMultiplier={1.5}
+            style={[styles.buttonLabel, { color: theme.accent }]}
+          >
             Custom…
           </Text>
         </Pressable>
@@ -101,7 +109,12 @@ export default function LogButtons(props: {
           hitSlop={8}
           style={({ pressed }) => [styles.undo, { opacity: pressed ? 0.6 : 1 }]}
         >
-          <Text style={[styles.undoLabel, { color: theme.danger }]}>Undo last</Text>
+          <Text
+            maxFontSizeMultiplier={1.5}
+            style={[styles.undoLabel, { color: theme.danger }]}
+          >
+            Undo last
+          </Text>
         </Pressable>
       )}
 
@@ -128,10 +141,16 @@ export default function LogButtons(props: {
                 { backgroundColor: theme.card, borderColor: theme.border },
               ]}
             >
-              <Text style={[styles.modalTitle, { color: theme.text }]}>
+              <Text
+                maxFontSizeMultiplier={1.5}
+                style={[styles.modalTitle, { color: theme.text }]}
+              >
                 Custom amount
               </Text>
-              <Text style={[styles.modalHint, { color: theme.textSecondary }]}>
+              <Text
+                maxFontSizeMultiplier={1.5}
+                style={[styles.modalHint, { color: theme.textSecondary }]}
+              >
                 {amountLabel}
               </Text>
               <TextInput
@@ -139,6 +158,7 @@ export default function LogButtons(props: {
                 onChangeText={setCustomText}
                 keyboardType={units === 'oz' ? 'decimal-pad' : 'number-pad'}
                 maxLength={5}
+                maxFontSizeMultiplier={1.5}
                 placeholder={units === 'oz' ? '12' : '300'}
                 placeholderTextColor={theme.textSecondary}
                 autoFocus
@@ -162,7 +182,10 @@ export default function LogButtons(props: {
                     { borderColor: theme.border, opacity: pressed ? 0.6 : 1 },
                   ]}
                 >
-                  <Text style={[styles.modalButtonLabel, { color: theme.textSecondary }]}>
+                  <Text
+                    maxFontSizeMultiplier={1.5}
+                    style={[styles.modalButtonLabel, { color: theme.textSecondary }]}
+                  >
                     Cancel
                   </Text>
                 </Pressable>
@@ -180,7 +203,10 @@ export default function LogButtons(props: {
                     },
                   ]}
                 >
-                  <Text style={[styles.modalButtonLabel, styles.modalPrimaryLabel]}>
+                  <Text
+                    maxFontSizeMultiplier={1.5}
+                    style={[styles.modalButtonLabel, styles.modalPrimaryLabel]}
+                  >
                     Log
                   </Text>
                 </Pressable>

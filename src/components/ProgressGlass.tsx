@@ -54,7 +54,7 @@ export default function ProgressGlass(props: {
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={`${formatAmount(totalMl, units)} of ${formatAmount(goalMl, units)}`}
-      accessibilityValue={{ min: 0, max: goalMl, now: totalMl }}
+      accessibilityValue={{ min: 0, max: goalMl > 0 ? goalMl : 0, now: totalMl }}
       style={[
         styles.glass,
         { borderColor: theme.border, backgroundColor: theme.card },
