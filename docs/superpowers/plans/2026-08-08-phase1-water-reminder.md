@@ -686,11 +686,14 @@ export function useHydration(): HydrationState {
       }
       setNowTick(Date.now());
       if (settings) {
-        void rescheduleReminders(settings, totalForDay(entries, Date.now()));
+        void rescheduleReminders(
+          settings,
+          totalForDay(entriesRef.current, Date.now())
+        );
       }
     });
     return () => sub.remove();
-  }, [settings, entries]);
+  }, [settings]);
 
   const todayTotalMl = useMemo(
     () => totalForDay(entries, Date.now()),
@@ -758,9 +761,12 @@ export function useHydration(): HydrationState {
       setSettings(next);
       void saveSettings(next);
       void setupQuickLogCategory(next.defaultCupMl, next.units);
-      void rescheduleReminders(next, totalForDay(entries, Date.now()));
+      void rescheduleReminders(
+        next,
+        totalForDay(entriesRef.current, Date.now())
+      );
     },
-    [entries]
+    []
   );
 
   // Quick-log action tapped on a notification (works from background; if the
@@ -879,8 +885,11 @@ export default function App() {
             accessibilityLabel={t.label}
             accessibilityState={{ selected: tab === t.id }}
           >
-            <Text style={styles.tabIcon}>{t.icon}</Text>
+            <Text style={styles.tabIcon} maxFontSizeMultiplier={1.5}>
+              {t.icon}
+            </Text>
             <Text
+              maxFontSizeMultiplier={1.5}
               style={[
                 styles.tabLabel,
                 { color: tab === t.id ? theme.accent : theme.textSecondary },
@@ -980,11 +989,11 @@ Layout top to bottom, safe-area padded (paddingTop ~70): date header (`new Date(
 - The custom-amount Modal must wrap its card in `KeyboardAvoidingView` (`behavior="padding"`), and the backdrop must be a `Pressable` that closes the modal. iOS number pads have no return key; without these the keyboard can cover Cancel/Log with no way out.
 - Normalize decimal commas before parsing: `Number(text.trim().replace(',', '.'))` — decimal-pad shows `,` in many locales.
 - Cap custom input: `maxLength={5}` on the TextInput and reject amounts above 5000 ml (after oz conversion).
-- Dynamic Type: `numberOfLines={1}` + `adjustsFontSizeToFit` on the big total; `maxFontSizeMultiplier={1.5}` on glass texts, date header, and hint line so large accessibility fonts can't overlap the fixed-size glass.
+- Dynamic Type: `numberOfLines={1}` + `adjustsFontSizeToFit` on the big total; `maxFontSizeMultiplier={1.5}` on ALL Text in ProgressGlass, LogButtons (cup labels, undo label, every modal text/input), the HomeScreen date header and hint line, and the App.tsx tab bar — uncapped labels still push the fixed 260pt glass into overlap at AX sizes on an SE.
 - `goalReached` must be `goalMl > 0 && totalMl >= goalMl` (agrees with the animation's corrupt-goal guard).
 - Undo button: effective hit target ≥ 44pt (padding or hitSlop).
 - Stop the fill animation in the effect cleanup (`anim.stop()`) — tab switches unmount the screen mid-animation.
-- ProgressGlass adds `accessibilityValue={{ min: 0, max: goalMl, now: totalMl }}`.
+- ProgressGlass adds `accessibilityValue={{ min: 0, max: goalMl > 0 ? goalMl : 0, now: totalMl }}` (guarded like the fill/goalReached math).
 - Pressed states use `theme.accentSoftPressed`; components contain no local color math.
 
 - [ ] **Step 4: Verify**
