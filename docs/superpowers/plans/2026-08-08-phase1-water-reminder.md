@@ -121,6 +121,9 @@ export interface Theme {
   textSecondary: string;
   accent: string;
   accentSoft: string;
+  /** Pressed-state variant of accentSoft: darker in light mode, lighter in
+   *  dark mode so pressed feedback stays visible on dark backgrounds. */
+  accentSoftPressed: string;
   success: string;
   danger: string;
   border: string;
@@ -133,6 +136,7 @@ export const lightTheme: Theme = {
   textSecondary: '#5B7386',
   accent: '#1E88E5',
   accentSoft: '#DEEFFB',
+  accentSoftPressed: '#C7E1F5',
   success: '#2E9E6B',
   danger: '#D64545',
   border: '#E1EAF2',
@@ -145,6 +149,7 @@ export const darkTheme: Theme = {
   textSecondary: '#8FA7B8',
   accent: '#4DA8F0',
   accentSoft: '#17324A',
+  accentSoftPressed: '#1F4260',
   success: '#4CC38A',
   danger: '#E5686B',
   border: '#243342',
@@ -636,6 +641,10 @@ export function useHydration(): HydrationState {
   const [ready, setReady] = useState(false);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [entries, setEntries] = useState<DrinkEntry[]>([]);
+  // Synchronous mirror of `entries` so same-tick updates (double-tapping a
+  // cup button, or a manual log racing the quick-log effect) can't build
+  // from a stale closure and silently drop a drink.
+  const entriesRef = useRef<DrinkEntry[]>([]);
   // Bumped on every return to foreground. It is ONLY a dependency that forces
   // the day-based memos below to recompute — without it, an app backgrounded
   // over midnight would keep showing yesterday's totals.
@@ -654,6 +663,7 @@ export function useHydration(): HydrationState {
         }
       }
       setSettings(s);
+      entriesRef.current = e;
       setEntries(e);
       setReady(true);
       if (s) {
@@ -701,7 +711,9 @@ export function useHydration(): HydrationState {
   }, [settings, todayTotalMl, nowTick]);
 
   const persistEntries = useCallback(
-    (next: DrinkEntry[], s: Settings | null) => {
+    (update: (prev: DrinkEntry[]) => DrinkEntry[], s: Settings | null) => {
+      const next = update(entriesRef.current);
+      entriesRef.current = next;
       setEntries(next);
       void saveEntries(next);
       if (s) {
@@ -719,25 +731,27 @@ export function useHydration(): HydrationState {
         timestamp: ts,
         amountMl,
       };
-      persistEntries([...entries, entry], settings);
+      persistEntries((prev) => [...prev, entry], settings);
     },
-    [entries, settings, persistEntries]
+    [settings, persistEntries]
   );
 
   const undoLast = useCallback(() => {
-    if (entries.length === 0) {
+    if (entriesRef.current.length === 0) {
       return;
     }
-    // Backdated quick-log entries mean the last array element isn't
-    // necessarily the most recent drink — remove the max-timestamp entry.
-    let latest = 0;
-    for (let i = 1; i < entries.length; i++) {
-      if (entries[i].timestamp > entries[latest].timestamp) {
-        latest = i;
+    persistEntries((prev) => {
+      // Backdated quick-log entries mean the last array element isn't
+      // necessarily the most recent drink — remove the max-timestamp entry.
+      let latest = 0;
+      for (let i = 1; i < prev.length; i++) {
+        if (prev[i].timestamp > prev[latest].timestamp) {
+          latest = i;
+        }
       }
-    }
-    persistEntries(entries.filter((_, i) => i !== latest), settings);
-  }, [entries, settings, persistEntries]);
+      return prev.filter((_, i) => i !== latest);
+    }, settings);
+  }, [settings, persistEntries]);
 
   const updateSettings = useCallback(
     (next: Settings) => {
@@ -962,6 +976,17 @@ Layout top to bottom, safe-area padded (paddingTop ~70): date header (`new Date(
 
 `canUndo` = `hydration.todayTotalMl > 0`.
 
+**Review addenda (mandatory, from the Task 5 quality review):**
+- The custom-amount Modal must wrap its card in `KeyboardAvoidingView` (`behavior="padding"`), and the backdrop must be a `Pressable` that closes the modal. iOS number pads have no return key; without these the keyboard can cover Cancel/Log with no way out.
+- Normalize decimal commas before parsing: `Number(text.trim().replace(',', '.'))` — decimal-pad shows `,` in many locales.
+- Cap custom input: `maxLength={5}` on the TextInput and reject amounts above 5000 ml (after oz conversion).
+- Dynamic Type: `numberOfLines={1}` + `adjustsFontSizeToFit` on the big total; `maxFontSizeMultiplier={1.5}` on glass texts, date header, and hint line so large accessibility fonts can't overlap the fixed-size glass.
+- `goalReached` must be `goalMl > 0 && totalMl >= goalMl` (agrees with the animation's corrupt-goal guard).
+- Undo button: effective hit target ≥ 44pt (padding or hitSlop).
+- Stop the fill animation in the effect cleanup (`anim.stop()`) — tab switches unmount the screen mid-animation.
+- ProgressGlass adds `accessibilityValue={{ min: 0, max: goalMl, now: totalMl }}`.
+- Pressed states use `theme.accentSoftPressed`; components contain no local color math.
+
 - [ ] **Step 4: Verify**
 
 Run: `npx tsc --noEmit` → exit 0.
@@ -981,7 +1006,7 @@ git commit -m "feat: home screen with animated progress glass and one-tap loggin
 **Files:**
 - Modify: `src/screens/OnboardingScreen.tsx`, `src/screens/SettingsScreen.tsx` (replace stubs)
 
-Both screens edit the same fields — extract nothing into shared files (two screens, different flows; duplication is acceptable at this size). Small single-file helper components (e.g. a `Chip` or `Section`) inside each screen are fine to keep them readable. Use only RN core components. All numeric inputs: `TextInput` with `keyboardType="number-pad"`, validated (reject NaN/≤0). Text inputs bind to local draft state and commit via `updateSettings` (or `onComplete`) with a full `Settings` object on every VALID change (validated `onChangeText`) — NOT on blur, because App.tsx unmounts a screen on tab switch and blur does not fire on unmount, so blur-committed edits would be silently dropped. Brief intermediate values (e.g. goal "2" while typing "2500") are acceptable: they only affect future-dated schedules, which recompute on each change. Never drive a `TextInput` directly from `hydration.settings`. Time selection: whole hours only — a row of `Pressable` chips per hour, wake 05:00–12:00, sleep 18:00–23:00, stored as minutes from midnight (hour × 60). These ranges themselves guarantee sleep > wake (max wake 12:00 < min sleep 18:00), so write no extra validation for it.
+Both screens edit the same fields — extract nothing into shared files (two screens, different flows; duplication is acceptable at this size). Small single-file helper components (e.g. a `Chip` or `Section`) inside each screen are fine to keep them readable. Use only RN core components. All numeric inputs: `TextInput` with `keyboardType="number-pad"`, validated (reject NaN/≤0). Text inputs bind to local draft state and commit via `updateSettings` (or `onComplete`) with a full `Settings` object on every VALID change (validated `onChangeText`) — NOT on blur, because App.tsx unmounts a screen on tab switch and blur does not fire on unmount, so blur-committed edits would be silently dropped. Brief intermediate values (e.g. goal "2" while typing "2500") are acceptable: they only affect future-dated schedules, which recompute on each change. Never drive a `TextInput` directly from `hydration.settings`. Time selection: whole hours only — a row of `Pressable` chips per hour, wake 05:00–12:00, sleep 18:00–23:00, stored as minutes from midnight (hour × 60). These ranges themselves guarantee sleep > wake (max wake 12:00 < min sleep 18:00), so write no extra validation for it. Pressed chip/button states use `theme.accentSoftPressed` — never compute colors locally.
 
 - [ ] **Step 1: Replace `OnboardingScreen` stub**
 
