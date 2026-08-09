@@ -657,8 +657,11 @@ export function useHydration(): HydrationState {
       setEntries(e);
       setReady(true);
       if (s) {
-        await setupQuickLogCategory(s.defaultCupMl, s.units);
-        await rescheduleReminders(s, totalForDay(e, Date.now()));
+        // Enqueue synchronously, before yielding: this baseline reschedule
+        // must be ordered ahead of any reschedule a pending quick-log effect
+        // enqueues, so the quick-log's (higher) total is the queue's last word.
+        void rescheduleReminders(s, totalForDay(e, Date.now()));
+        void setupQuickLogCategory(s.defaultCupMl, s.units);
       }
     })();
   }, []);
@@ -748,9 +751,9 @@ export function useHydration(): HydrationState {
 
   // Quick-log action tapped on a notification (works from background; if the
   // app was killed, the response arrives on next launch). The entry is
-  // backdated to when the notification was acted on so an overnight-delayed
-  // response still lands on the correct day. Known v1 limitation: only the
-  // most recent response survives an app kill.
+  // backdated to when the notification FIRED (not when it was tapped), so an
+  // overnight-delayed response lands on the day the reminder belonged to.
+  // Known v1 limitation: only the most recent response survives an app kill.
   const lastResponse = Notifications.useLastNotificationResponse();
   const processedResponses = useRef<Set<string>>(new Set());
   useEffect(() => {
@@ -765,8 +768,13 @@ export function useHydration(): HydrationState {
       return;
     }
     processedResponses.current.add(id);
-    // Notification.date is Unix ms (SDK 56 docs) — safe to use as a timestamp.
-    logDrink(settings.defaultCupMl, lastResponse.notification.date);
+    // expo-notifications serializes Notification.date as SECONDS on iOS
+    // (timeIntervalSince1970 in NotificationRecords.swift) but MILLISECONDS
+    // on Android, with no JS-side normalization. 1e11 sits unambiguously
+    // between the two for any plausible date.
+    const rawDate = lastResponse.notification.date;
+    const firedAtMs = Math.round(rawDate < 1e11 ? rawDate * 1000 : rawDate);
+    logDrink(settings.defaultCupMl, firedAtMs);
     Notifications.clearLastNotificationResponse();
   }, [lastResponse, settings, logDrink]);
 
@@ -818,7 +826,11 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('home');
 
   if (!hydration.ready) {
-    return <View style={[styles.root, { backgroundColor: theme.background }]} />;
+    return (
+      <View style={[styles.root, { backgroundColor: theme.background }]}>
+        <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      </View>
+    );
   }
 
   if (!hydration.settings) {
@@ -845,7 +857,14 @@ export default function App() {
       </View>
       <View style={[styles.tabBar, { borderTopColor: theme.border, backgroundColor: theme.card }]}>
         {TABS.map((t) => (
-          <Pressable key={t.id} style={styles.tabButton} onPress={() => setTab(t.id)}>
+          <Pressable
+            key={t.id}
+            style={styles.tabButton}
+            onPress={() => setTab(t.id)}
+            accessibilityRole="tab"
+            accessibilityLabel={t.label}
+            accessibilityState={{ selected: tab === t.id }}
+          >
             <Text style={styles.tabIcon}>{t.icon}</Text>
             <Text
               style={[
@@ -962,7 +981,7 @@ git commit -m "feat: home screen with animated progress glass and one-tap loggin
 **Files:**
 - Modify: `src/screens/OnboardingScreen.tsx`, `src/screens/SettingsScreen.tsx` (replace stubs)
 
-Both screens edit the same fields — extract nothing into shared files (two screens, different flows; duplication is acceptable at this size). Small single-file helper components (e.g. a `Chip` or `Section`) inside each screen are fine to keep them readable. Use only RN core components. All numeric inputs: `TextInput` with `keyboardType="number-pad"`, validated (reject NaN/≤0). Text inputs bind to local draft state and commit via `updateSettings` (or `onComplete`) with a full `Settings` object on blur/tap — never drive a `TextInput` directly from `hydration.settings`. Time selection: whole hours only — a row of `Pressable` chips per hour, wake 05:00–12:00, sleep 18:00–23:00, stored as minutes from midnight (hour × 60). These ranges themselves guarantee sleep > wake (max wake 12:00 < min sleep 18:00), so write no extra validation for it.
+Both screens edit the same fields — extract nothing into shared files (two screens, different flows; duplication is acceptable at this size). Small single-file helper components (e.g. a `Chip` or `Section`) inside each screen are fine to keep them readable. Use only RN core components. All numeric inputs: `TextInput` with `keyboardType="number-pad"`, validated (reject NaN/≤0). Text inputs bind to local draft state and commit via `updateSettings` (or `onComplete`) with a full `Settings` object on every VALID change (validated `onChangeText`) — NOT on blur, because App.tsx unmounts a screen on tab switch and blur does not fire on unmount, so blur-committed edits would be silently dropped. Brief intermediate values (e.g. goal "2" while typing "2500") are acceptable: they only affect future-dated schedules, which recompute on each change. Never drive a `TextInput` directly from `hydration.settings`. Time selection: whole hours only — a row of `Pressable` chips per hour, wake 05:00–12:00, sleep 18:00–23:00, stored as minutes from midnight (hour × 60). These ranges themselves guarantee sleep > wake (max wake 12:00 < min sleep 18:00), so write no extra validation for it.
 
 - [ ] **Step 1: Replace `OnboardingScreen` stub**
 
