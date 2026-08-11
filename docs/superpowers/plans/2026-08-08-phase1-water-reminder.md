@@ -683,41 +683,6 @@ export function useHydration(): HydrationState {
     })();
   }, []);
 
-  // On foreground: refresh "today" and re-sync scheduled notifications with
-  // reality (they were computed against stale progress if the app slept over
-  // midnight, and tomorrow's batch needs to keep rolling forward).
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', (state) => {
-      if (state !== 'active') {
-        return;
-      }
-      setNowTick(Date.now());
-      if (!settings) {
-        return;
-      }
-      void rescheduleReminders(
-        settings,
-        totalForDay(entriesRef.current, Date.now())
-      );
-      if (settings.remindersEnabled) {
-        // Mirror the launch-time revocation check: without this, revoking
-        // permission while backgrounded leaves the Settings switch on and
-        // keeps scheduling notifications iOS silently drops.
-        void (async () => {
-          try {
-            const perm = await Notifications.getPermissionsAsync();
-            if (!perm.granted) {
-              updateSettings({ ...settings, remindersEnabled: false });
-            }
-          } catch {
-            // Best-effort; a failed check must not disturb foregrounding.
-          }
-        })();
-      }
-    });
-    return () => sub.remove();
-  }, [settings, updateSettings]);
-
   const todayTotalMl = useMemo(
     () => totalForDay(entries, Date.now()),
     [entries, nowTick]
@@ -791,6 +756,44 @@ export function useHydration(): HydrationState {
     },
     []
   );
+
+  // On foreground: refresh "today" and re-sync scheduled notifications with
+  // reality (they were computed against stale progress if the app slept over
+  // midnight, and tomorrow's batch needs to keep rolling forward).
+  // Declared AFTER updateSettings: the dependency array below is evaluated at
+  // render time, so referencing updateSettings any earlier would be a
+  // temporal-dead-zone ReferenceError, not a lint nit.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state !== 'active') {
+        return;
+      }
+      setNowTick(Date.now());
+      if (!settings) {
+        return;
+      }
+      void rescheduleReminders(
+        settings,
+        totalForDay(entriesRef.current, Date.now())
+      );
+      if (settings.remindersEnabled) {
+        // Mirror the launch-time revocation check: without this, revoking
+        // permission while backgrounded leaves the Settings switch on and
+        // keeps scheduling notifications iOS silently drops.
+        void (async () => {
+          try {
+            const perm = await Notifications.getPermissionsAsync();
+            if (!perm.granted) {
+              updateSettings({ ...settings, remindersEnabled: false });
+            }
+          } catch {
+            // Best-effort; a failed check must not disturb foregrounding.
+          }
+        })();
+      }
+    });
+    return () => sub.remove();
+  }, [settings, updateSettings]);
 
   // Quick-log action tapped on a notification (works from background; if the
   // app was killed, the response arrives on next launch). The entry is
