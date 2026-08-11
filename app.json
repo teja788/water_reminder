@@ -1,7 +1,15 @@
 {
   "expo": {
-    "name": "water_reminder",
+    "name": "Water Reminder",
     "slug": "water_reminder",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#1E88E5"
+        }
+      ]
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,6 +18,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.ravi.waterreminder",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d9653679-ef86-431f-9f9a-a6e0351323f5"
+      }
     }
   }
 }
