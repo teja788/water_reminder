@@ -1094,6 +1094,15 @@ Top to bottom, safe-area padded, scrollable:
 2. **Last 7 days** bar chart built from `dailyTotals(entries, 7, new Date())`: one column per day (flex row), bar height proportional to `totalMl / max(goalMl, highest total)` of a fixed 140px chart area, bar color `success` when total ≥ goal else `accent`, weekday initial under each bar, today highlighted. Pure `View`s — no chart lib.
 3. **Last 30 days** list from `dailyTotals(entries, 30, ...)` reversed (newest first), skipping zero days: date, `formatAmount(totalMl, units)`, and a ✓ when goal met. Plain `.map` inside the ScrollView (30 rows max — no FlatList needed).
 
+**Review addenda (mandatory, from the Task 7 quality review):**
+- No `useMemo` around the dailyTotals computations — compute `days30 = dailyTotals(entries, 30, new Date())` and `days7 = days30.slice(-7)` directly at render (same pattern as HomeScreen's date header). A memo keyed on [entries] caches `new Date()` and makes the chart's "today" go stale across midnight while the streak banner above it refreshes — the two visibly disagree. The computation is O(entries + 30); memoization wasn't paying for itself.
+- The goal caption doubles as the color legend, e.g. `Green = daily goal {formatAmount} met` — color is the only encoding of "met" and an outlier day moves the goal off the top of the scale, so the caption must connect the color to the number.
+- 30-day rows are grouped for VoiceOver like the chart columns: `accessible` + an accessibilityLabel carrying date, amount, and goal-met on each row View.
+- The today column's accessibilityLabel includes "today".
+- Scale guard degrades to the data, not to 1: `scaleMl = Math.max(highest, settings.goalMl > 0 ? settings.goalMl : 0) || 1`.
+- All-zero week shows a short empty-state line in the chart card (e.g. `No drinks logged this week`) instead of a blank 140pt box.
+- Drop the leftover `keyboardDismissMode="on-drag"` (no text inputs on this screen).
+
 - [ ] **Step 2: Verify (full integration checkpoint)**
 
 Run: `npx tsc --noEmit` → exit 0.
