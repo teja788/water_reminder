@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
@@ -68,10 +68,9 @@ function Bar(props: {
   return (
     <View
       accessible
-      accessibilityLabel={`${shortDate(day.dayStart)}: ${formatAmount(
-        day.totalMl,
-        units
-      )}${met ? ', goal met' : ''}`}
+      accessibilityLabel={`${shortDate(day.dayStart)}${
+        isToday ? ', today' : ''
+      }: ${formatAmount(day.totalMl, units)}${met ? ', goal met' : ''}`}
       style={[
         styles.column,
         isToday && { backgroundColor: theme.accentSoft },
@@ -113,28 +112,26 @@ export default function HistoryScreen(props: {
   const { theme, hydration, settings } = props;
   const { entries, streak } = hydration;
 
+  // Deliberately NOT memoized: a memo keyed on [entries] would cache this
+  // `new Date()`, so backgrounding on this tab over midnight would leave the
+  // chart pointing at yesterday as "today" while the streak banner above it
+  // refreshes. O(entries + 30) per render is cheaper than that inconsistency.
   // One pass covers both views: the chart is just the last 7 of the 30.
-  const days30 = useMemo(
-    () => dailyTotals(entries, 30, new Date()),
-    [entries]
-  );
-  const days7 = useMemo(() => days30.slice(-7), [days30]);
+  const days30 = dailyTotals(entries, 30, new Date());
+  const days7 = days30.slice(-7);
 
   const highest = days7.reduce((max, d) => Math.max(max, d.totalMl), 0);
-  // Settings gates keep goalMl >= 500, but a corrupt persisted value must
-  // still not divide by zero here.
-  const rawScale = Math.max(settings.goalMl, highest);
-  const scaleMl = rawScale > 0 ? rawScale : 1;
+  // Settings gates keep goalMl >= 500, but a corrupt persisted value must not
+  // divide by zero. Degrade to the data: a NaN goal drops out of the max and
+  // the bars stay proportional to the week's own highest day.
+  const scaleMl = Math.max(highest, settings.goalMl > 0 ? settings.goalMl : 0) || 1;
   const todayKey = days30[days30.length - 1].key;
+  const weekIsEmpty = highest === 0;
 
   const loggedDays = days30.filter((d) => d.totalMl > 0).reverse();
 
   return (
-    <ScrollView
-      style={styles.root}
-      contentContainerStyle={styles.content}
-      keyboardDismissMode="on-drag"
-    >
+    <ScrollView style={styles.root} contentContainerStyle={styles.content}>
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
         History
       </Text>
@@ -155,25 +152,42 @@ export default function HistoryScreen(props: {
       </View>
 
       <Section theme={theme} title="LAST 7 DAYS">
-        <View style={styles.chart}>
-          {days7.map((day) => (
-            <Bar
-              key={day.key}
-              theme={theme}
-              day={day}
-              goalMl={settings.goalMl}
-              scaleMl={scaleMl}
-              isToday={day.key === todayKey}
-              units={settings.units}
-            />
-          ))}
-        </View>
-        <Text
-          maxFontSizeMultiplier={1.5}
-          style={[styles.note, { color: theme.textSecondary }]}
-        >
-          {`Daily goal ${formatAmount(settings.goalMl, settings.units)}`}
-        </Text>
+        {weekIsEmpty ? (
+          <Text
+            maxFontSizeMultiplier={1.5}
+            style={[styles.empty, { color: theme.textSecondary }]}
+          >
+            No drinks logged this week
+          </Text>
+        ) : (
+          <>
+            <View style={styles.chart}>
+              {days7.map((day) => (
+                <Bar
+                  key={day.key}
+                  theme={theme}
+                  day={day}
+                  goalMl={settings.goalMl}
+                  scaleMl={scaleMl}
+                  isToday={day.key === todayKey}
+                  units={settings.units}
+                />
+              ))}
+            </View>
+            {/* Color is the only encoding of "met", and one outlier day pushes
+                the goal off the top of the scale — so the caption has to tie
+                the color back to the number. */}
+            <Text
+              maxFontSizeMultiplier={1.5}
+              style={[styles.note, { color: theme.textSecondary }]}
+            >
+              {`Green = daily goal ${formatAmount(
+                settings.goalMl,
+                settings.units
+              )} met`}
+            </Text>
+          </>
+        )}
       </Section>
 
       <Section theme={theme} title="LAST 30 DAYS">
@@ -190,6 +204,11 @@ export default function HistoryScreen(props: {
             return (
               <View
                 key={day.key}
+                accessible
+                accessibilityLabel={`${shortDate(day.dayStart)}: ${formatAmount(
+                  day.totalMl,
+                  settings.units
+                )}${met ? ', goal met' : ''}`}
                 style={[
                   styles.row,
                   index > 0 && { borderTopWidth: StyleSheet.hairlineWidth },
@@ -217,7 +236,6 @@ export default function HistoryScreen(props: {
                   {met && (
                     <Text
                       maxFontSizeMultiplier={1.5}
-                      accessibilityLabel="Goal met"
                       style={[styles.check, { color: theme.success }]}
                     >
                       ✓
