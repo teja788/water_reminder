@@ -55,6 +55,13 @@ function fromMl(ml: number, units: Units): number {
   return units === 'oz' ? Math.round(mlToOz(ml)) : ml;
 }
 
+/** Shown instead of silently ignoring a goal the app will not accept. */
+function goalRangeHint(units: Units): string {
+  const min = fromMl(MIN_GOAL_ML, units).toLocaleString();
+  const max = fromMl(MAX_GOAL_ML, units).toLocaleString();
+  return `Enter a goal between ${min} and ${max} ${units}`;
+}
+
 function Chip(props: {
   theme: Theme;
   label: string;
@@ -120,6 +127,9 @@ export default function OnboardingScreen(props: {
     goalDraft === null ? suggestedMl : toMl(parseNumber(goalDraft), units);
   const goalValid =
     Number.isFinite(goalMl) && goalMl >= MIN_GOAL_ML && goalMl <= MAX_GOAL_ML;
+  // A typed goal the app will not accept (goalDraft is null when the field
+  // is empty, so this only fires on real input).
+  const goalOutOfRange = goalDraft !== null && !goalValid;
   // Weight is part of the persisted Settings, so it must be valid too —
   // otherwise a NaN weightKg would round-trip to null in storage.
   const canStart = weightValid && goalValid && !submitting;
@@ -249,11 +259,16 @@ export default function OnboardingScreen(props: {
         </Text>
         <Text
           maxFontSizeMultiplier={1.5}
-          style={[styles.hint, { color: theme.textSecondary }]}
+          style={[
+            styles.hint,
+            { color: goalOutOfRange ? theme.danger : theme.textSecondary },
+          ]}
         >
-          {weightValid
-            ? 'Change it below if you prefer your own target.'
-            : 'Enter your weight to see a suggestion.'}
+          {goalOutOfRange
+            ? goalRangeHint(units)
+            : weightValid
+              ? 'Change it below if you prefer your own target.'
+              : 'Enter your weight to see a suggestion.'}
         </Text>
 
         <Text

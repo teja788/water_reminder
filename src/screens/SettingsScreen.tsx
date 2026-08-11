@@ -131,6 +131,15 @@ export default function SettingsScreen(props: {
     Number.isFinite(draftWeight) &&
     draftWeight >= MIN_WEIGHT_KG &&
     draftWeight <= MAX_WEIGHT_KG;
+  // A typed goal the app will not accept — explained rather than ignored.
+  const draftGoal = parseNumber(goalDraft);
+  const goalOutOfRange =
+    goalDraft.trim() !== '' &&
+    !(
+      Number.isFinite(draftGoal) &&
+      draftGoal >= MIN_GOAL_ML &&
+      draftGoal <= MAX_GOAL_ML
+    );
   const suggestedMl = calcGoalMl(
     draftWeightValid ? draftWeight : settings.weightKg,
     settings.activity
@@ -314,6 +323,14 @@ export default function SettingsScreen(props: {
             },
           ]}
         />
+        {goalOutOfRange && (
+          <Text
+            maxFontSizeMultiplier={1.5}
+            style={[styles.note, { color: theme.danger }]}
+          >
+            {`Enter a goal between ${MIN_GOAL_ML.toLocaleString()} and ${MAX_GOAL_ML.toLocaleString()} ml`}
+          </Text>
+        )}
       </Section>
 
       <Section theme={theme} title="UNITS">
