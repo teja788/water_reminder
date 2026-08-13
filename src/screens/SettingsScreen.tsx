@@ -1,5 +1,6 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
+  AppState,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { Theme } from '../theme';
 import { ActivityLevel, Settings } from '../types';
 import { HydrationState } from '../state';
@@ -119,12 +121,89 @@ export default function SettingsScreen(props: {
     settings.cupSizesMl.map((ml) => String(ml))
   );
   const [permissionDenied, setPermissionDenied] = useState(false);
+  // If the user follows the hint to iOS Settings and grants permission there,
+  // clear the hint when they come back — it would otherwise claim a problem
+  // that no longer exists. Ref-gated so the listener only does work while the
+  // hint is actually showing.
+  const permissionDeniedRef = useRef(permissionDenied);
+  permissionDeniedRef.current = permissionDenied;
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state !== 'active' || !permissionDeniedRef.current) {
+        return;
+      }
+      void (async () => {
+        try {
+          const perm = await Notifications.getPermissionsAsync();
+          if (perm.granted) {
+            setPermissionDenied(false);
+          }
+        } catch {
+          // Best-effort; keep the hint if the check itself fails.
+        }
+      })();
+    });
+    return () => sub.remove();
+  }, []);
 
   // Screens unmount on tab switch, so commit on every VALID change rather
   // than on blur — blur never fires on unmount and the edit would be lost.
-  const commit = (patch: Partial<Settings>): void => {
-    hydration.updateSettings({ ...settings, ...patch });
+  //
+  // Text-field commits are additionally DEBOUNCED (400 ms): every committed
+  // settings change rebuilds the notification schedule (~100 native calls in
+  // a keystroke burst otherwise). All refs so the flush-on-unmount effect can
+  // stay mounted once and never fire early on re-renders.
+  const pendingRef = useRef<Partial<Settings> | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
+  const updateSettingsRef = useRef(hydration.updateSettings);
+  updateSettingsRef.current = hydration.updateSettings;
+
+  const flushPending = (): void => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    const patch = pendingRef.current;
+    if (patch) {
+      pendingRef.current = null;
+      updateSettingsRef.current({ ...settingsRef.current, ...patch });
+    }
   };
+  const flushRef = useRef(flushPending);
+  flushRef.current = flushPending;
+
+  // Flush on unmount so a just-typed edit survives a tab switch.
+  useEffect(() => () => flushRef.current(), []);
+
+  /** Immediate commit (chips, switches). Folds in any pending typed patch so
+   *  a chip tap 200 ms after a keystroke can't discard the typed value. */
+  const commit = (patch: Partial<Settings>): void => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    const merged = { ...pendingRef.current, ...patch };
+    pendingRef.current = null;
+    hydration.updateSettings({ ...settings, ...merged });
+  };
+
+  /** Debounced commit for text fields. */
+  const commitDebounced = (patch: Partial<Settings>): void => {
+    pendingRef.current = { ...pendingRef.current, ...patch };
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => flushRef.current(), 400);
+  };
+
+  /** Settings as they will be once any pending debounce lands — the base for
+   *  edits that derive from current values (cup sizes / default cup). */
+  const effectiveSettings = (): Settings => ({
+    ...settings,
+    ...pendingRef.current,
+  });
 
   const draftWeight = parseNumber(weightDraft);
   const draftWeightValid =
@@ -155,7 +234,7 @@ export default function SettingsScreen(props: {
     ) {
       return;
     }
-    commit({ weightKg: value });
+    commitDebounced({ weightKg: value });
   };
 
   const onGoalChange = (text: string): void => {
@@ -164,7 +243,7 @@ export default function SettingsScreen(props: {
     if (!Number.isFinite(value) || value < MIN_GOAL_ML || value > MAX_GOAL_ML) {
       return;
     }
-    commit({ goalMl: Math.round(value) });
+    commitDebounced({ goalMl: Math.round(value) });
   };
 
   const useSuggested = (): void => {
@@ -179,13 +258,16 @@ export default function SettingsScreen(props: {
       return;
     }
     const ml = Math.round(value);
-    const previous = settings.cupSizesMl[index];
-    const cupSizesMl = settings.cupSizesMl.map((s, i) => (i === index ? ml : s));
+    // Base on effective (pending-inclusive) settings: editing cup 1 then cup 2
+    // inside one debounce window must not lose cup 1's edit.
+    const base = effectiveSettings();
+    const previous = base.cupSizesMl[index];
+    const cupSizesMl = base.cupSizesMl.map((s, i) => (i === index ? ml : s));
     // The default cup follows its own size edit, or it would point at an
     // amount that is no longer on any button.
     const defaultCupMl =
-      previous === settings.defaultCupMl ? ml : settings.defaultCupMl;
-    commit({ cupSizesMl, defaultCupMl });
+      previous === base.defaultCupMl ? ml : base.defaultCupMl;
+    commitDebounced({ cupSizesMl, defaultCupMl });
   };
 
   const onToggleReminders = async (value: boolean): Promise<void> => {

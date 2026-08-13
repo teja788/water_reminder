@@ -18,7 +18,9 @@ export const lightTheme: Theme = {
   card: '#FFFFFF',
   text: '#10222E',
   textSecondary: '#5B7386',
-  accent: '#1E88E5',
+  // 4.88:1 on accentSoft, 5.75:1 on card — AA for the selected-chip and
+  // today-column text that sits on accentSoft (was #1E88E5 at 3.1:1).
+  accent: '#1565C0',
   accentSoft: '#DEEFFB',
   accentSoftPressed: '#C7E1F5',
   success: '#2E9E6B',
