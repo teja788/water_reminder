@@ -1,14 +1,23 @@
-import { ReactNode } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ReactNode, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
-import { DayTotal, dailyTotals, formatAmount } from '../logic/hydration';
+import {
+  DayTotal,
+  dailyTotals,
+  formatAmount,
+  loggedDayTotals,
+} from '../logic/hydration';
 
 /** Fixed drawing area for the 7-day chart, in points. */
 const CHART_HEIGHT = 140;
 /** So a small-but-nonzero day is still visible as a bar. */
 const MIN_BAR_HEIGHT = 4;
+/** History is unlimited, but rows mount inside a plain ScrollView — render
+ *  in slices so a year of daily use can't dump 350+ rows in one mount. */
+const INITIAL_HISTORY_ROWS = 60;
+const HISTORY_ROWS_STEP = 120;
 
 function weekdayInitial(dayStart: number): string {
   return new Date(dayStart).toLocaleDateString(undefined, { weekday: 'narrow' });
@@ -115,20 +124,21 @@ export default function HistoryScreen(props: {
   // Deliberately NOT memoized: a memo keyed on [entries] would cache this
   // `new Date()`, so backgrounding on this tab over midnight would leave the
   // chart pointing at yesterday as "today" while the streak banner above it
-  // refreshes. O(entries + 30) per render is cheaper than that inconsistency.
-  // One pass covers both views: the chart is just the last 7 of the 30.
-  const days30 = dailyTotals(entries, 30, new Date());
-  const days7 = days30.slice(-7);
+  // refreshes. O(entries) per render is cheaper than that inconsistency.
+  const days7 = dailyTotals(entries, 7, new Date());
 
   const highest = days7.reduce((max, d) => Math.max(max, d.totalMl), 0);
   // Settings gates keep goalMl >= 500, but a corrupt persisted value must not
   // divide by zero. Degrade to the data: a NaN goal drops out of the max and
   // the bars stay proportional to the week's own highest day.
   const scaleMl = Math.max(highest, settings.goalMl > 0 ? settings.goalMl : 0) || 1;
-  const todayKey = days30[days30.length - 1].key;
+  const todayKey = days7[days7.length - 1].key;
   const weekIsEmpty = highest === 0;
 
-  const loggedDays = days30.filter((d) => d.totalMl > 0).reverse();
+  const loggedDays = loggedDayTotals(entries);
+  const [visibleRows, setVisibleRows] = useState(INITIAL_HISTORY_ROWS);
+  const visibleDays = loggedDays.slice(0, visibleRows);
+  const hiddenCount = loggedDays.length - visibleDays.length;
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.content}>
@@ -190,7 +200,7 @@ export default function HistoryScreen(props: {
         )}
       </Section>
 
-      <Section theme={theme} title="LAST 30 DAYS">
+      <Section theme={theme} title="ALL HISTORY">
         {loggedDays.length === 0 ? (
           <Text
             maxFontSizeMultiplier={1.5}
@@ -199,7 +209,7 @@ export default function HistoryScreen(props: {
             Nothing logged yet. Your days will show up here.
           </Text>
         ) : (
-          loggedDays.map((day, index) => {
+          visibleDays.map((day, index) => {
             const met = settings.goalMl > 0 && day.totalMl >= settings.goalMl;
             return (
               <View
@@ -245,6 +255,29 @@ export default function HistoryScreen(props: {
               </View>
             );
           })
+        )}
+        {hiddenCount > 0 && (
+          <Pressable
+            onPress={() => setVisibleRows((n) => n + HISTORY_ROWS_STEP)}
+            accessibilityRole="button"
+            accessibilityLabel={`Show earlier days, ${hiddenCount} more`}
+            style={({ pressed }) => [
+              styles.moreButton,
+              {
+                backgroundColor: pressed
+                  ? theme.accentSoftPressed
+                  : theme.accentSoft,
+              },
+            ]}
+          >
+            <Text
+              numberOfLines={1}
+              maxFontSizeMultiplier={1.5}
+              style={[styles.moreLabel, { color: theme.accent }]}
+            >
+              {`Show earlier days (${hiddenCount})`}
+            </Text>
+          </Pressable>
         )}
       </Section>
     </ScrollView>
@@ -313,4 +346,14 @@ const styles = StyleSheet.create({
   rowRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   rowAmount: { fontSize: 15, fontWeight: '600' },
   check: { fontSize: 15, fontWeight: '700' },
+  moreButton: {
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 14,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  moreLabel: { fontSize: 14, fontWeight: '700' },
 });

@@ -63,6 +63,25 @@ export function dailyTotals(entries: DrinkEntry[], days: number, now: Date): Day
   return result;
 }
 
+/** Every day with at least one entry, newest first. Unlike dailyTotals this
+ *  has no window — it is the full logged history — and skips empty days, so
+ *  its length grows by at most one per day of real use. */
+export function loggedDayTotals(entries: DrinkEntry[]): DayTotal[] {
+  const totals = new Map<string, number>();
+  for (const e of entries) {
+    const k = dayKey(e.timestamp);
+    totals.set(k, (totals.get(k) ?? 0) + e.amountMl);
+  }
+  const result: DayTotal[] = [];
+  for (const [key, totalMl] of totals) {
+    // dayKey is zero-padded "YYYY-MM-DD"; rebuild local midnight from it
+    // rather than keeping per-entry timestamps around.
+    const [y, m, d] = key.split('-').map(Number);
+    result.push({ key, dayStart: new Date(y, m - 1, d).getTime(), totalMl });
+  }
+  return result.sort((a, b) => b.dayStart - a.dayStart);
+}
+
 /**
  * Consecutive days meeting the goal, counting back from today.
  * Today not yet meeting the goal does not break the streak (the day
