@@ -1,5 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Easing,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import Svg, {
   ClipPath,
   Defs,
@@ -29,8 +36,16 @@ const BOTTOM_Y = 396; // water surface when empty
 // Cropped to the artwork (x 55-165, y 5-401) so the bottle fills the box
 // instead of sitting in the empty margins the original grid left for text.
 const VIEW_BOX = '55 5 110 396';
-const BOTTLE_HEIGHT = 320;
-const BOTTLE_WIDTH = Math.round(110 * (BOTTLE_HEIGHT / 396));
+const VIEW_BOX_WIDTH = 110;
+const VIEW_BOX_HEIGHT = 396;
+/** Clamped so the bottle uses a tall screen without pushing the log buttons
+ *  off a small one (the 4.7" SE has ~280pt to spare here). */
+const MIN_BOTTLE_HEIGHT = 280;
+const MAX_BOTTLE_HEIGHT = 400;
+/** The body is 100 of the viewBox's 110 units wide, so ~12% of the box on each
+ *  side is outside the glass. Padding the overlay by that much lets
+ *  `adjustsFontSizeToFit` shrink the percent to the body rather than the box. */
+const OVERLAY_INSET = '12%';
 
 export default function ProgressBottle(props: {
   theme: Theme;
@@ -39,6 +54,13 @@ export default function ProgressBottle(props: {
   units: Units;
 }): React.JSX.Element {
   const { theme, totalMl, goalMl, units } = props;
+  const { height: windowHeight } = useWindowDimensions();
+  const bottleHeight = Math.round(
+    Math.min(MAX_BOTTLE_HEIGHT, Math.max(MIN_BOTTLE_HEIGHT, windowHeight * 0.42)),
+  );
+  const bottleWidth = Math.round(
+    VIEW_BOX_WIDTH * (bottleHeight / VIEW_BOX_HEIGHT),
+  );
   // The goalMl > 0 term agrees with the corrupt-goal guard below: a 0/NaN goal
   // must not read as "reached".
   const goalReached = goalMl > 0 && totalMl >= goalMl;
@@ -83,8 +105,8 @@ export default function ProgressBottle(props: {
       accessibilityValue={{ min: 0, max: goalMl > 0 ? goalMl : 0, now: totalMl }}
       style={styles.container}
     >
-      <View style={styles.bottleWrap}>
-        <Svg width={BOTTLE_WIDTH} height={BOTTLE_HEIGHT} viewBox={VIEW_BOX}>
+      <View style={[styles.bottleWrap, { width: bottleWidth, height: bottleHeight }]}>
+        <Svg width={bottleWidth} height={bottleHeight} viewBox={VIEW_BOX}>
           <Defs>
             <LinearGradient id="water" x1="0" y1="0" x2="0" y2="1">
               <Stop offset="0" stopColor={topStop} />
@@ -189,8 +211,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottleWrap: {
-    width: BOTTLE_WIDTH,
-    height: BOTTLE_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -202,6 +222,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: OVERLAY_INSET,
   },
   percent: {
     fontSize: 40,
