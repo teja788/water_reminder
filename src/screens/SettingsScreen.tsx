@@ -587,6 +587,11 @@ const styles = StyleSheet.create({
     paddingTop: 64,
     paddingHorizontal: 22,
     paddingBottom: 40,
+    // Tablets: keep the column readable instead of stretching it across a
+    // 1024pt-wide iPad.
+    width: '100%',
+    maxWidth: 560,
+    alignSelf: 'center',
   },
   title: { fontSize: 27, fontWeight: '700', letterSpacing: 0.2, marginBottom: 18 },
   section: { marginBottom: 18 },

@@ -3,12 +3,12 @@
     "name": "Water Reminder",
     "slug": "water_reminder",
     "owner": "seeker88",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.teja788.waterreminder",
       "buildNumber": "1",
       "infoPlist": {

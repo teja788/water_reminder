@@ -86,6 +86,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 8,
     alignItems: 'center',
+    // Tablets: keep the column readable instead of stretching the log buttons
+    // across a 1024pt-wide iPad.
+    width: '100%',
+    maxWidth: 560,
+    alignSelf: 'center',
   },
   date: {
     fontSize: 15,
