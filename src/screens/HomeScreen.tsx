@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
@@ -28,6 +29,12 @@ export default function HomeScreen(props: {
   settings: Settings;
 }): React.JSX.Element {
   const { theme, hydration, settings } = props;
+  // The bottle sizes itself to this, so it grows on a big screen and stays
+  // clear of the log buttons on a small one.
+  const [gaugeHeight, setGaugeHeight] = useState(0);
+  const onGaugeLayout = (e: LayoutChangeEvent): void => {
+    setGaugeHeight(e.nativeEvent.layout.height);
+  };
   const dateLabel = new Date().toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
@@ -43,12 +50,13 @@ export default function HomeScreen(props: {
         {dateLabel}
       </Text>
 
-      <View style={styles.gaugeArea}>
+      <View style={styles.gaugeArea} onLayout={onGaugeLayout}>
         <ProgressBottle
           theme={theme}
           totalMl={hydration.todayTotalMl}
           goalMl={settings.goalMl}
           units={settings.units}
+          availableHeight={gaugeHeight}
         />
       </View>
 
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 24,
+    paddingVertical: 10,
   },
   hint: {
     fontSize: 13,
