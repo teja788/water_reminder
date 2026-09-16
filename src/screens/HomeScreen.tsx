@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
-import ProgressGlass from '../components/ProgressGlass';
+import ProgressBottle from '../components/ProgressBottle';
 import LogButtons from '../components/LogButtons';
 
 function reminderHint(hydration: HydrationState, settings: Settings): string {
@@ -43,8 +43,8 @@ export default function HomeScreen(props: {
         {dateLabel}
       </Text>
 
-      <View style={styles.glassArea}>
-        <ProgressGlass
+      <View style={styles.gaugeArea}>
+        <ProgressBottle
           theme={theme}
           totalMl={hydration.todayTotalMl}
           goalMl={settings.goalMl}
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.2,
   },
-  glassArea: {
+  gaugeArea: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
