@@ -38,12 +38,18 @@ const BOTTOM_Y = 396; // water surface when empty
 const VIEW_BOX = '55 5 110 396';
 const VIEW_BOX_WIDTH = 110;
 const VIEW_BOX_HEIGHT = 396;
-/** The bottle grows to fill whatever Home gives it, within these bounds. */
+/** The bottle grows to fill whatever Home gives it, within these bounds.
+ *  A phone cap that held on an iPad left the bottle marooned in ~480pt of
+ *  dead space, so tablets get their own ceiling. */
 const MIN_BOTTLE_HEIGHT = 200;
 const MAX_BOTTLE_HEIGHT = 460;
+const MAX_BOTTLE_HEIGHT_TABLET = 720;
+/** Shortest side at or above this reads as a tablet. */
+const TABLET_MIN_SIDE = 768;
 /** Room the amount + subtitle below the bottle need, so the bottle claims the
  *  rest rather than pushing them into the log buttons. */
 const TEXT_BLOCK_HEIGHT = 84;
+const TEXT_BLOCK_HEIGHT_TABLET = 112;
 /** The body is 100 of the viewBox's 110 units wide, so ~12% of the box on each
  *  side is outside the glass. Padding the overlay by that much lets
  *  `adjustsFontSizeToFit` shrink the percent to the body rather than the box. */
@@ -58,13 +64,16 @@ export default function ProgressBottle(props: {
   availableHeight: number;
 }): React.JSX.Element {
   const { theme, totalMl, goalMl, units, availableHeight } = props;
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const isTablet = Math.min(windowWidth, windowHeight) >= TABLET_MIN_SIDE;
+  const textBlock = isTablet ? TEXT_BLOCK_HEIGHT_TABLET : TEXT_BLOCK_HEIGHT;
+  const maxBottle = isTablet ? MAX_BOTTLE_HEIGHT_TABLET : MAX_BOTTLE_HEIGHT;
   // Before the first onLayout there is nothing to measure against, so start
   // from the window and let the measured value take over on the next pass.
   const budget =
-    availableHeight > 0 ? availableHeight - TEXT_BLOCK_HEIGHT : windowHeight * 0.42;
+    availableHeight > 0 ? availableHeight - textBlock : windowHeight * 0.42;
   const bottleHeight = Math.round(
-    Math.min(MAX_BOTTLE_HEIGHT, Math.max(MIN_BOTTLE_HEIGHT, budget)),
+    Math.min(maxBottle, Math.max(MIN_BOTTLE_HEIGHT, budget)),
   );
   const bottleWidth = Math.round(
     VIEW_BOX_WIDTH * (bottleHeight / VIEW_BOX_HEIGHT),
@@ -245,9 +254,11 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     marginTop: 14,
   },
+  amountTablet: { fontSize: 44, marginTop: 20 },
   subtitle: {
     fontSize: 17,
     fontWeight: '600',
     marginTop: 2,
   },
+  subtitleTablet: { fontSize: 22, marginTop: 4 },
 });
