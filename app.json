@@ -3,7 +3,7 @@
     "name": "Water Reminder",
     "slug": "water_reminder",
     "owner": "seeker88",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -11,7 +11,7 @@
       "supportsTablet": true,
       "appStoreUrl": "https://apps.apple.com/app/id6801325939",
       "bundleIdentifier": "com.teja788.waterreminder",
-      "buildNumber": "1",
+      "buildNumber": "5",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
