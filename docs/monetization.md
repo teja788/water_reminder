@@ -101,3 +101,79 @@ Not a recommendation, but the way to do it with the least damage:
 3. **Update the privacy label before the build goes live**, not after.
 4. **Ship it as a major version** with a clear What's New note, rather than
    sliding it in quietly.
+
+
+---
+
+# DECIDED 2026-09-20: Sip is a commercial business
+
+Owner's call, resolving the open question in `marketing-plan.md`. Not a
+portfolio piece. That changes several things on this page and elsewhere.
+
+## What stays true
+
+The case against ads is unchanged, and is in fact stronger. A business needs a
+revenue model that scales with value delivered; banner ads on a
+four-taps-a-day utility do not, and they spend the differentiator to earn a few
+hundred dollars a year. Ads remain the wrong instrument.
+
+## The model: one-time unlock, and make it the pitch
+
+Every serious competitor in this category — Waterllama, WaterMinder,
+Plant Nanny — puts you on a subscription. Subscription fatigue is real, and it
+is loudest exactly where this app has positioned itself: people who resent being
+nagged also resent being billed monthly for a reminder.
+
+So the recommendation is a **one-time Pro unlock around $4.99–7.99**, and to put
+the model itself in the marketing:
+
+> Pay once. No subscription, no ads, no account.
+
+That turns pricing into a third differentiator alongside "doesn't nag" and
+"nothing leaves your device". In a category where every alternative subscribes
+you, it is a genuine wedge and it costs nothing to claim, because it is true.
+
+**The honest counterpoint:** one-time purchases do not compound. A subscription
+business grows on its back catalogue of subscribers; a one-time business earns
+once per customer and has to keep finding new ones. That makes volume — and
+therefore ASO and ratings — the whole game rather than half of it. Accept that
+trade deliberately, or price a subscription and give up the wedge.
+
+## Realistic scale, stated plainly
+
+At 2–5% conversion on a one-time utility unlock, 10,000 lifetime installs is
+200–500 buyers, netting roughly **$1,000–2,500**. That is side income, not a
+business. A business in this category needs installs in the hundreds of
+thousands, which means ASO, ratings and localization are not marketing garnish —
+they are the product work.
+
+This is a crowded category with entrenched incumbents holding 100,000+ ratings
+and a decade of head start. The differentiator is real but narrow. Worth doing
+with eyes open.
+
+## Sequencing — what actually changes
+
+The instinct is "monetize before growth", and `marketing-plan.md` warns that
+driving installs to a product with no revenue path pays the acquisition cost
+twice. That warning stands, but it does **not** mean stopping v1.1:
+
+1. **v1.1 ships as planned.** The rating prompt is already built and costs
+   nothing more. Ratings gate discovery, which gates everything commercial.
+2. **Build the Pro tier during the v1.1 review cycle**, not after it. Review is
+   dead time — roughly a week of work fits inside it (HealthKit 1–2 days,
+   widgets 2–3 days, IAP with restore-purchases 1–2 days).
+3. **Paid acquisition becomes possible** once there is an LTV number to optimise
+   toward — but not before. There is still nothing to optimise today.
+
+## Things a business needs that a side project does not
+
+- **Support that is not GitHub issues.** Paying customers need an email address.
+  The current support page points at GitHub, which is fine for free users and
+  not fine once money changes hands.
+- **Analytics without breaking the privacy label.** App Store Connect's own
+  analytics is free, aggregate, needs no SDK, and changes nothing about "Data
+  Not Collected". Use that. Do not add an analytics SDK — the privacy label is a
+  store asset and part of the pitch.
+- **IAP infrastructure.** Nothing is installed; `expo-in-app-purchases` is gone.
+  RevenueCat is free under $2.5k/month and handles restore-purchases and receipt
+  validation, which are the fiddly parts.

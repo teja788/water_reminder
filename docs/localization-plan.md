@@ -184,7 +184,37 @@ Aug 2026, pageview-weighted so it over-reads iPhone somewhat.
 | Korean | outside top 10 | 522 Moderate | 35.5% | Yes — #4 by revenue |
 | Hindi + 10 Indic | 3.7% (#6, +22%) | 484 Low | **7.2%** | Yes, but India's storefront default is English (U.K.) already |
 
-## What this means for Sip specifically
+## SUPERSEDED 2026-09-20 — Sip is a commercial business
+
+The ranking below was derived on the assumption that Sip is free with no revenue
+path, which made *downloads* the only currency. The owner has since decided Sip
+is a commercial business (see `monetization.md`), so revenue markets matter and
+the order changes:
+
+| # | Language | Why, for a paid app |
+|---|---|---|
+| 1 | **Japanese** | #3 in iOS downloads *and* #3 in revenue, 64.7% iOS share, and EF 446 — the lowest English proficiency of any large market. The only language where both arguments point the same way. Hardest to do well. |
+| 2 | **German** | #5 by revenue and the highest price tolerance in Europe — Adapty's index has Germany sustaining 4.4x Turkey's price for identical subscriptions. |
+| 3 | **French** | Top-10 revenue, and one catalog covers France, Belgium, Switzerland, Canada and much of Africa. |
+| 4 | **Korean** | #4 by revenue, EF 522, 35.5% iOS share. |
+| 5 | **Spanish / Portuguese (BR)** | Still worth doing — both listings are being created anyway for keyword reasons — but they drop on a revenue ranking. Brazil is #4 in downloads and absent from the revenue top ten. |
+
+**German moves from last to second.** The reasoning has not changed, only the
+premise: Germany is EF Very High (615), so Germans read an English UI perfectly
+well and localizing buys no *comprehension*. What it buys is willingness to pay,
+which was worth nothing to a free app and is worth a lot to a paid one.
+
+Markets to stop prioritising on a revenue ranking: Brazil, Indonesia, Vietnam,
+Turkey, India — high download volume, low spend. Russia is now doubly out: Apple
+switched off App Store payments there in April 2026, so a paid tier cannot be
+sold at all.
+
+The original free-app analysis is kept below, because it becomes correct again
+if the app ever goes back to being free.
+
+---
+
+## Original analysis — correct only for a free app with no IAP
 
 **Sip is free with no IAP, so revenue rankings do not apply.** Every revenue
 argument for a language — Germany's price tolerance, Japan's spend per user,

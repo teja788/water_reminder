@@ -84,7 +84,30 @@ Same verdict for influencers and cross-promo: not now.
 
 ---
 
-## Open question that changes everything above
+## ANSWERED 2026-09-20: it is a business
+
+The owner decided Sip is a commercial business, not a portfolio piece. The
+question below is settled; the analysis is kept because the reasoning still
+applies.
+
+What it changes:
+- **A revenue path is now required**, and the plan is a one-time Pro unlock
+  (~$4.99-7.99) rather than ads or a subscription — see `monetization.md`.
+- **Item 5 (skip paid ads) still stands for now** but for a narrower reason:
+  there is no LTV number to optimise toward yet. Revisit once the Pro tier has
+  conversion data, rather than never.
+- **Item 3 (ASO) is promoted from marketing to product work.** A one-time
+  purchase does not compound, so volume is the entire business, and ASO plus
+  ratings plus localization are how volume happens.
+- **Localization priority flips toward revenue markets** — Japanese, German,
+  French, Korean ahead of Brazil and the other high-download/low-spend markets.
+  See the superseding section in `localization-plan.md`.
+- **Support needs to stop being GitHub issues** once customers are paying.
+
+Item 1 (the rating prompt) is unchanged and still the highest-return item on
+this page. It is now built and ships with v1.1.
+
+## Open question that changes everything above (resolved — see above)
 
 The app is free with no monetisation, so all of this buys **users, not revenue**.
 
