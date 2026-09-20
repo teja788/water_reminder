@@ -120,17 +120,38 @@ they buy nothing in the biggest market — and UK/AU/CA searchers already fall
 back to the en-US metadata. (An earlier draft of this plan recommended them.
 It was wrong.)
 
-**Add Spanish (Mexico) instead.** The US storefront indexes English (US) *plus*
-Spanish (Mexico), Russian, Chinese (Simplified), Arabic, French, Korean,
-Portuguese (Brazil) and Vietnamese. So an es-MX localization gives you a second
+**Add Spanish (Mexico) instead.** Apple publishes the storefront/locale mapping
+itself at
+<https://developer.apple.com/help/app-store-connect/reference/app-store-localizations/>
+— verified against it 2026-09-20. The US storefront serves English (US) *plus*
+**nine** others: Arabic, Chinese (Simplified), **Chinese (Traditional)**, French,
+Korean, Portuguese (Brazil), Russian, Spanish (Mexico) and Vietnamese. (An
+earlier draft of this plan listed eight and missed Chinese Traditional.)
+
+Apple frames that table as which metadata is *shown*, and has never documented
+keyword indexing; the indexing behaviour is vendor-observed, not a contract.
+
+So an es-MX localization gives you a second
 100-character keyword field indexed *in the US*, free.
 
-**Write the es-MX title, subtitle and description in English.** A Spanish-locale
-user already falls back to the en-US listing today, so an English es-MX listing
-is not a regression — while the keyword field, which no user ever sees, gets
-indexed in the US. This sidesteps the usual localization trap, where localized
-metadata over an English-only UI earns one-star reviews from people who
-downloaded something they cannot read.
+**Only the keyword field is safe to fill flexibly.** An earlier draft of this
+plan said to write the es-MX name, subtitle and description in English too. That
+carries a real risk and should not be done as stated:
+
+- The **keyword field is invisible** to users. Filling it with English terms in a
+  Spanish slot is the low-risk, established practice.
+- The **name, subtitle and description are rendered** to anyone whose device
+  language matches that locale. App Review checks every localization, and
+  untranslated or keyword-shaped visible fields in a secondary locale are a
+  documented rejection cause under **Guideline 2.3.7 (inaccurate metadata)**.
+
+So the visible fields have to be genuinely written in the locale's language. For
+an app whose UI is English-only, say so in the localized description — one line
+along the lines of "The app itself is currently available in English only" is
+honest, sets expectations, and keeps 2.3.7 off your back.
+
+That makes a secondary locale cost a short translation rather than nothing. The
+keyword-field gain is still free; the listing around it is not.
 
 ### How many locales to add: three, not eight
 
@@ -185,6 +206,11 @@ morning,night,schedule,routine,minimal,simple,clean,offline,nag,quiet,diary,moni
 Deliberately left out as padding: `hydrated`, `drinking`, `reminders`,
 `tracking` are inflections Apple already indexes from the singulars above, and
 `widget`, `watch`, `siri` name features the app does not have.
+
+**Phrases do not combine across localizations.** A term in the en-US field and a
+term in the es-MX field will each rank on their own, but the two will not rank as
+a two-word phrase together. Each locale is a separate silo, so plan each field as
+a self-contained set rather than as overflow from the last one.
 
 All three go in at once. The trade that buys: with one locale you could read
 its effect cleanly, and with three you cannot attribute a ranking change to any
