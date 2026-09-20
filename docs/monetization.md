@@ -177,3 +177,71 @@ twice. That warning stands, but it does **not** mean stopping v1.1:
 - **IAP infrastructure.** Nothing is installed; `expo-in-app-purchases` is gone.
   RevenueCat is free under $2.5k/month and handles restore-purchases and receipt
   validation, which are the fiddly parts.
+
+
+---
+
+## Asked 2026-09-20: what about a $1 optional subscription?
+
+**You can create the product. It is likely to be rejected, and the reason is
+structural rather than fixable by pricing.**
+
+### Guideline 3.1.2 requires ongoing value
+
+Apple's rule for auto-renewable subscriptions: *"you must provide ongoing value
+to the customer, and the subscription period must last at least seven days and
+be available across all of the user's devices."* The examples Apple gives are
+new game levels, episodic content, multiplayer support, apps offering
+consistent substantive updates, continually updated media, SaaS, and cloud
+support.
+
+A static feature unlock — widgets, HealthKit sync — is not that, and developers
+do get rejected for exactly this shape. At least one documented case only passed
+review after switching from auto-renewing to non-renewing.
+
+### The conflict is with the product, not the price
+
+Sip has no server, no account and no cloud **by design**. That is the
+differentiator, it is what the "Data Not Collected" label is built on, and it is
+half the App Store description. It is also precisely what leaves nothing
+ongoing to sell.
+
+The only credible ongoing value for an app like this is cloud sync or backup —
+which means a server, which breaks the privacy wedge and the privacy label. The
+thing that makes Sip distinctive is the thing that disqualifies it from a
+subscription. Pricing cannot solve that; only a different product can.
+
+### The economics are worse anyway
+
+- **Price floor** is $0.49 for subscriptions (900 price points, $0.29 minimum
+  for paid apps), so $0.99 is not even the cheapest option available.
+- **Commission** is 15% under the Small Business Program, so $0.99 nets ~$0.84.
+- **Churn** is the killer. Low-priced monthly consumer subscriptions retain
+  badly; a realistic lifetime is a handful of months, so ~$3-5 per subscriber.
+- **"Optional" makes it far worse.** A subscription that gates nothing converts
+  at a fraction of one percent, not the 2-5% of a real unlock. At 10,000
+  installs that is tens of subscribers, decaying.
+
+A one-time $5.99 unlock nets $5.09 immediately, with no churn, no 3.1.2
+exposure, and no ongoing obligation to keep shipping "substantive updates" to
+justify a recurring charge.
+
+### If recurring revenue is the goal
+
+It is a legitimate ambition — recurring compounds and one-time does not, which
+is the trade already recorded above. But Sip cannot honestly sell recurring
+today. Getting there means building something genuinely ongoing, and every
+candidate (sync, backup, an account) costs the privacy positioning.
+
+That is a real strategic fork, and it should be taken deliberately rather than
+arrived at by picking a price.
+
+### Allowed alternatives, if a small recurring-feeling option is wanted
+
+- **Consumable tip jar.** Permitted, must go through IAP, Apple takes its cut.
+  Earns little and only works once there are fans. Costs the positioning
+  nothing.
+- **Non-renewing subscription.** Allowed and sidesteps 3.1.2, but the user has
+  to repurchase manually, which is worse UX than a one-time unlock for no gain.
+
+**Recommendation unchanged: one-time unlock, ~$4.99-7.99.**
