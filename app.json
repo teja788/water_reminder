@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
+      "appStoreUrl": "https://apps.apple.com/app/id6801325939",
       "bundleIdentifier": "com.teja788.waterreminder",
       "buildNumber": "1",
       "infoPlist": {

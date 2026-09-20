@@ -11,6 +11,7 @@ import {
   rescheduleReminders,
   setupQuickLogCategory,
 } from './notifications';
+import { maybeRequestReview } from './review';
 
 export interface HydrationState {
   /** False until AsyncStorage has been read. */
@@ -120,6 +121,7 @@ export function useHydration(): HydrationState {
       if (s) {
         void rescheduleReminders(s, totalForDay(next, Date.now()));
       }
+      return next;
     },
     []
   );
@@ -132,7 +134,26 @@ export function useHydration(): HydrationState {
         timestamp: ts,
         amountMl,
       };
-      persistEntries((prev) => [...prev, entry], settings);
+      const prevTotalMl = totalForDay(entriesRef.current, Date.now());
+      const next = persistEntries((prev) => [...prev, entry], settings);
+      if (!settings) {
+        return;
+      }
+      // Asking for five stars in the same breath as "you are drinking too
+      // fast" reads badly, so a live notice takes the moment.
+      if (intakeNotice({ entries: next, goalMl: settings.goalMl, now: Date.now() })) {
+        return;
+      }
+      // Both totals are recomputed rather than derived by adding amountMl: a
+      // quick-log backdated to yesterday's reminder does not move today's
+      // total at all, and would otherwise fake a goal crossing.
+      // Hooked here and not in persistEntries so undoLast can never trigger it.
+      void maybeRequestReview({
+        prevTotalMl,
+        newTotalMl: totalForDay(next, Date.now()),
+        goalMl: settings.goalMl,
+        streak: currentStreak(next, settings.goalMl, new Date()),
+      });
     },
     [settings, persistEntries]
   );

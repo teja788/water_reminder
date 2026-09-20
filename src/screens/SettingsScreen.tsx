@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   AppState,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -27,7 +28,12 @@ const MIN_GOAL_ML = 500;
 const MAX_GOAL_ML = 8000;
 const MIN_CUP_ML = 50;
 const MAX_CUP_ML = 5000;
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
+// Apple's own "leave a review" deep link. The in-app StoreKit sheet is NOT
+// used here on purpose: it silently does nothing once the user's three yearly
+// prompts are spent, so a button wired to it looks broken. See src/review.ts
+// for the earned-moment prompt.
+const REVIEW_URL = 'https://apps.apple.com/app/id6801325939?action=write-review';
 
 const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
   { id: 'sedentary', label: 'Sedentary' },
@@ -576,6 +582,31 @@ export default function SettingsScreen(props: {
         >
           Your data never leaves this device.
         </Text>
+        <Pressable
+          onPress={() => {
+            // Nothing to recover if the store won't open — no error UI for it.
+            void Linking.openURL(REVIEW_URL).catch(() => {});
+          }}
+          accessibilityRole="link"
+          accessibilityLabel="Rate Sip on the App Store"
+          style={({ pressed }) => [
+            styles.softButton,
+            styles.rateButton,
+            {
+              backgroundColor: pressed
+                ? theme.accentSoftPressed
+                : theme.accentSoft,
+            },
+          ]}
+        >
+          <Text
+            numberOfLines={1}
+            maxFontSizeMultiplier={1.5}
+            style={[styles.softButtonLabel, { color: theme.accent }]}
+          >
+            Rate Sip
+          </Text>
+        </Pressable>
       </Section>
     </ScrollView>
   );
@@ -650,6 +681,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   softButtonLabel: { fontSize: 14, fontWeight: '700' },
+  rateButton: { alignSelf: 'flex-start', marginTop: 14 },
   cupRow: { flexDirection: 'row', gap: 10 },
   cupInput: { flex: 1, fontSize: 18 },
   switchRow: {
