@@ -240,6 +240,33 @@ required for any of the above.
    > The water reminder that respects your attention. No mascots, no guilt, no
    > spam — reminders stop the moment you hit your goal.
 
+## What's New for 1.1.0 — draft
+
+Only one change in this version is user-visible. The rating prompt and the i18n
+groundwork are invisible by design, so the note is about the intake notices and
+nothing else. Padding it with internals would be worse than being short.
+
+```
+Sip now watches your pace, not just your total.
+
+Log more than a litre inside an hour and a gentle note appears on the Today
+screen, with a short explanation of why that is worth easing off for — your
+kidneys clear only about that much an hour.
+
+No alarm, no notification, no nagging. It is there when it matters and
+invisible the rest of the time.
+
+Everything else is unchanged: no ads, no account, and your data still never
+leaves your phone.
+```
+
+**Worth knowing before shipping under this number:** `v1.1-plan.md` describes a
+v1.1 built around adaptive reminder backoff, a snooze action, pace-aware
+spreading and an evening cutoff. **None of that is in this build.** 1.1.0 as it
+stands is the intake notices plus invisible groundwork. Either that is fine and
+the plan's v1.1 becomes v1.2, or this should ship as 1.0.2 — but the version
+number currently promises more than the binary delivers.
+
 ## Ship with v1.1
 
 2. Rating prompt on a 3-day streak (`expo-store-review`). Zero ratings is worth
