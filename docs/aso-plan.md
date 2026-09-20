@@ -278,3 +278,68 @@ number currently promises more than the binary delivers.
 5. A 15–25s App Preview video. Zero of ten on that factor today, and it is the
    only remaining free conversion lever.
 6. Screenshots 5 and 6 (4 of 10 slots used).
+
+
+---
+
+# AS SHIPPED — 1.1.0, submitted 2026-09-20
+
+What actually went into App Store Connect. Differs from the plan above; where
+they disagree, this section is the record.
+
+## The name changed, because Apple rejected the planned one
+
+`Sip: Water Tracker & Reminder` was refused — **already in use**. It was visible
+in this session's own competitor search and should have been caught before it was
+recommended. Owner chose `Sip: Calm Water Reminder & Log` instead (30/30).
+
+That knocked on twice:
+
+- **`tracker` fell out of the listing entirely** — it had been excluded from the
+  keyword fields precisely because the planned title carried it. The subtitle was
+  rewritten to `Drink daily: hydration tracker` to reclaim it, which also dropped
+  a duplicated `log`.
+- **`calm` moved into the title**, so it was removed from the es-MX keyword field
+  and replaced with `pace`.
+
+**The rejection is the plan's own argument, proven.** Five App Store apps are
+named some variant of Sip + water. The brand is not ownable, and this is the
+second cost it has imposed.
+
+## Final metadata
+
+| | name | subtitle | keywords |
+|---|---|---|---|
+| en-US | Sip: Calm Water Reminder & Log | Drink daily: hydration tracker | `intake,hydrate,thirst,habit,streak,bottle,glass,cup,h2o,aqua,oz,ml,ounce,alarm,remind,health,private` |
+| es-MX | Sip: Recordatorio de Agua | Hidratación diaria sin regaños | `counter,journal,liter,gallon,refill,hourly,timer,chart,goal,weight,fitness,wellness,diet,pace,gentle` |
+| pt-BR | Sip: Lembrete de Beber Água | Controle sua hidratação diária | `soda,quit,sugar,detox,kidney,skin,energy,workout,gym,sport,run,summer,heat,fatigue,hike,yoga,focus` |
+| fr | Sip : rappel d'eau et suivi | Hydratation, boire sans stress | `morning,night,schedule,routine,minimal,simple,clean,offline,nag,quiet,diary,monitor,litre,pint,quart` |
+
+400 characters of indexed keywords, against 93 before. Zero word overlap between
+any name, subtitle or keyword field.
+
+## The three localizations are genuinely translated
+
+Not the English-in-a-foreign-slot approach the plan originally described — that
+was corrected mid-flight for Guideline 2.3.7 reasons. Each has a native name,
+subtitle, description, promotional text and What's New, written by native-level
+translation rather than rendered from English.
+
+Each localized description carries an explicit section saying **the app's
+interface is English only** (`SOBRE O IDIOMA`, `L'INTERFACE EST EN ANGLAIS`, and
+an up-front line in Spanish). That costs conversion and protects the rating
+average, which is the right trade while ratings are the binding constraint.
+
+**Keyword fields stayed English** in all three, because the field is invisible
+and its purpose is US cross-indexing. Open question deliberately left open: es-MX
+is the default locale for most of Latin America, so Spanish keywords there would
+be primary reach across a dozen storefronts rather than incremental US reach.
+Revisit if LatAm installs show up in App Analytics.
+
+## Known translation debt
+
+Translations are native-level but unreviewed by an actual native speaker. The
+riskiest strings are the medical sentence in each What's New and the idioms the
+translators deliberately chose over literal renderings — `no da lata`,
+`sem pegadinha`, `pas de traceurs`, `sans contrepartie`. Worth one pass by a
+speaker before leaning on these markets.
