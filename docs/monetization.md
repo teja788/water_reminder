@@ -76,14 +76,17 @@ one.
 
 ## Better options, in order
 
-1. **The Pro IAP already seamed into `src/pro.ts`** (~$9.99, currently deferred
-   to v1.2 behind widgets/HealthKit). Sell *additions*, not the removal of an
-   annoyance. Keeps "no ads, no tracking" as the brand instead of spending it,
-   and earns roughly ten times more per paying user than the 99¢ route.
-2. **A tip jar** — a consumable "buy me a coffee" IAP. Earns little, costs the
-   positioning nothing, and suits a portfolio app.
-3. **Stay free forever** and treat Sip as a portfolio piece. This is a legitimate
-   answer, and it is the one the current listing is honest about.
+*(Written before the business decision below; the ordering still holds, and the
+price has since been revised down from $9.99 to $4.99-7.99.)*
+
+1. **The Pro IAP already seamed into `src/pro.ts`.** Sell *additions*, not the
+   removal of an annoyance. Keeps "no ads, no tracking" as the brand instead of
+   spending it, and earns far more per paying user than the 99¢ route.
+2. **A tip jar** — a consumable IAP. Earns little, costs the positioning
+   nothing. Pairs with option 1 rather than competing with it; see the dedicated
+   section at the end.
+3. **Stay free forever.** Ruled out by the business decision below, but it was a
+   legitimate answer and it is the one the current listing is honest about.
 4. **Ads.** Only if the app becomes something other than what it currently
    claims to be.
 
@@ -245,3 +248,71 @@ arrived at by picking a price.
   to repurchase manually, which is worse UX than a one-time unlock for no gain.
 
 **Recommendation unchanged: one-time unlock, ~$4.99-7.99.**
+
+
+---
+
+## The tip jar, properly considered
+
+Kept as a live option at the owner's request. It is **additive, not a strategy** —
+it will not carry a business on its own, but it is the cheapest thing on this
+page and it is the only monetization that costs the positioning nothing at all.
+
+### Why it fits this app specifically
+
+A tip jar speaks in the same voice as the rest of Sip. "If this is useful, you
+can support it" sits naturally beside "reminders stop when you hit your goal"
+and "nothing leaves your device". An app that has spent its whole listing
+promising not to extract from you can ask, once, without contradicting itself.
+
+It also cannot cause the problems the other options do:
+
+- **No Guideline 3.1.2 exposure.** Consumables carry no ongoing-value obligation,
+  unlike auto-renewable subscriptions.
+- **No paywall.** Nothing is gated, so no user is worse off and no review is
+  provoked.
+- **No privacy-label change.** Unlike ads, which would force the label off
+  "Data Not Collected".
+- **No promise retracted.** The listing says no ads, no account, no tracking. A
+  tip jar contradicts none of it.
+
+### Mechanics
+
+- **Consumable IAP**, not non-consumable — the point is that someone can tip
+  more than once. Consumables are not restorable, which is correct here: there
+  is nothing to restore.
+- **Three tiers** is the usual shape; something like $2.99 / $5.99 / $11.99,
+  named in the app's own voice rather than as "Small / Medium / Large".
+- **15% commission** under the Small Business Program, so a $2.99 tip nets about
+  $2.54.
+- Must go through IAP. External payment links (Buy Me a Coffee, Ko-fi, PayPal)
+  are **not** permitted for this — only reader and e-commerce apps may link out.
+- Frame it as supporting development, not as a charitable donation; donations to
+  nonprofits have their own separate rules.
+
+### Cost to build: close to zero, if sequenced right
+
+The expensive part of any IAP is the plumbing — StoreKit or RevenueCat, the
+purchase flow, receipt handling, error states. **That work is already required
+for the one-time Pro unlock.** Adding three consumable product IDs on top is an
+afternoon, not a project.
+
+So: build the Pro unlock first, then add the tip jar to the same paywall
+infrastructure. Doing the tip jar *first*, alone, would mean paying the full
+plumbing cost for the option that earns least.
+
+### What it will actually earn
+
+Little. Tip conversion in a free utility runs well under one percent — at 10,000
+lifetime installs, expect tens of tips, not hundreds. Call it a hundred dollars
+or two across the life of the app.
+
+That is a rounding error against the one-time unlock, and it is still worth
+shipping, because the marginal cost once the plumbing exists is an afternoon and
+the marginal risk is zero.
+
+### Where it goes in the app
+
+Settings → ABOUT, next to the existing "Rate Sip" row. Not on Home, not after a
+goal is reached, and never as an interstitial. The moment it interrupts, it stops
+being on-brand and starts being the thing the listing promised it would not be.
