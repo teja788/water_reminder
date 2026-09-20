@@ -110,6 +110,47 @@ category names, exactly 100 characters.
 
 ---
 
+## Localization: cross-localize, don't chase English variants
+
+Only Promotional Text is editable on a live version. Keywords, subtitle and
+description all force a new version, so every field below rides with v1.1.
+
+**Do not add en-GB / en-AU / en-CA.** The US storefront does not index them, so
+they buy nothing in the biggest market — and UK/AU/CA searchers already fall
+back to the en-US metadata. (An earlier draft of this plan recommended them.
+It was wrong.)
+
+**Add Spanish (Mexico) instead.** The US storefront indexes English (US) *plus*
+Spanish (Mexico), Russian, Chinese (Simplified), Arabic, French, Korean,
+Portuguese (Brazil) and Vietnamese. So an es-MX localization gives you a second
+100-character keyword field indexed *in the US*, free.
+
+**Write the es-MX title, subtitle and description in English.** A Spanish-locale
+user already falls back to the en-US listing today, so an English es-MX listing
+is not a regression — while the keyword field, which no user ever sees, gets
+indexed in the US. This sidesteps the usual localization trap, where localized
+metadata over an English-only UI earns one-star reviews from people who
+downloaded something they cannot read.
+
+### es-MX keyword field — 100/100
+
+```
+counter,journal,liter,gallon,refill,hourly,timer,chart,goal,weight,fitness,wellness,diet,calm,gentle
+```
+
+Zero overlap with the en-US title, subtitle and keyword field — overlap is what
+wastes the trick. `calm` and `gentle` live here rather than in the title: they
+carry the positioning but too little search volume to spend title characters on,
+and they cost nothing in a field that would otherwise go unused.
+
+Russian and Portuguese (BR) are also US-indexed, so the same trick stacks for two
+more free keyword fields once es-MX is proven.
+
+Localizing the **app UI** is a separate, larger job (~100 strings) and is not
+required for any of the above.
+
+---
+
 ## Do now (no App Review needed)
 
 1. **Fill Promotional Text.** The only store field editable without a new
