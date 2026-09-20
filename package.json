@@ -9,7 +9,7 @@
     "expo-notifications": "~56.0.23",
     "expo-splash-screen": "~56.0.14",
     "expo-status-bar": "~56.0.4",
-    "expo-store-review": "~56.0.4",
+    "expo-store-review": "56.0.3",
     "expo-updates": "~56.0.24",
     "react": "19.2.3",
     "react-native": "0.85.3",
@@ -25,5 +25,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "install": {
+      "exclude": [
+        "expo-store-review"
+      ]
+    }
+  }
 }
