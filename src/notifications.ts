@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { Settings, Units } from './types';
 import { formatAmount } from './logic/hydration';
+import { t } from './i18n';
 import {
   computeTodayReminderTimes,
   computeTomorrowReminderTimes,
@@ -48,22 +49,13 @@ export async function setupQuickLogCategory(
   await Notifications.setNotificationCategoryAsync(REMINDER_CATEGORY, [
     {
       identifier: ACTION_LOG_DEFAULT,
-      buttonTitle: `Log ${formatAmount(defaultCupMl, units)}`,
+      buttonTitle: t.notifications.quickLog(formatAmount(defaultCupMl, units)),
       options: { opensAppToForeground: false },
     },
   ]);
 }
 
-const MESSAGES: Array<[string, string]> = [
-  ['Time for water 💧', 'A quick glass now keeps you on track.'],
-  ['Hydration check', 'Your body will thank you for a sip.'],
-  ['Water break', 'Small sips, big difference.'],
-  ['Thirsty yet?', 'A glass of water sounds good right about now.'],
-  ['Keep it flowing', "You're closer to today's goal than you think."],
-  ['Sip reminder', 'Take a moment — have some water.'],
-  ["Water o'clock", 'One glass now beats catching up later.'],
-  ['Stay refreshed', 'A little water goes a long way.'],
-];
+const MESSAGES = t.notifications.messages;
 
 let rescheduleQueue: Promise<void> = Promise.resolve();
 

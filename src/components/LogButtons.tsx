@@ -11,6 +11,7 @@ import {
 import { Theme } from '../theme';
 import { Units } from '../types';
 import { formatAmount } from '../logic/hydration';
+import { t } from '../i18n';
 
 const ML_PER_OZ = 29.5735;
 /** Upper bound for a single custom entry; anything larger is a typo. */
@@ -54,7 +55,7 @@ export default function LogButtons(props: {
   };
 
   const amountLabel =
-    units === 'oz' ? 'Amount in ounces' : 'Amount in millilitres';
+    units === 'oz' ? t.log.amountInOz : t.log.amountInMl;
 
   const pressedBackground = (pressed: boolean): string =>
     pressed ? theme.accentSoftPressed : theme.accentSoft;
@@ -67,7 +68,7 @@ export default function LogButtons(props: {
             key={`${size}-${index}`}
             onPress={() => onLog(size)}
             accessibilityRole="button"
-            accessibilityLabel={`Log ${formatAmount(size, units)}`}
+            accessibilityLabel={t.log.logAmountA11y(formatAmount(size, units))}
             style={({ pressed }) => [
               styles.button,
               { backgroundColor: pressedBackground(pressed) },
@@ -85,7 +86,7 @@ export default function LogButtons(props: {
         <Pressable
           onPress={() => setCustomOpen(true)}
           accessibilityRole="button"
-          accessibilityLabel="Log a custom amount"
+          accessibilityLabel={t.log.customA11y}
           style={({ pressed }) => [
             styles.button,
             { backgroundColor: pressedBackground(pressed) },
@@ -96,7 +97,7 @@ export default function LogButtons(props: {
             maxFontSizeMultiplier={1.5}
             style={[styles.buttonLabel, { color: theme.accent }]}
           >
-            Custom…
+            {t.log.custom}
           </Text>
         </Pressable>
       </View>
@@ -105,7 +106,7 @@ export default function LogButtons(props: {
         <Pressable
           onPress={onUndo}
           accessibilityRole="button"
-          accessibilityLabel="Undo last drink"
+          accessibilityLabel={t.log.undoA11y}
           hitSlop={8}
           style={({ pressed }) => [styles.undo, { opacity: pressed ? 0.6 : 1 }]}
         >
@@ -113,7 +114,7 @@ export default function LogButtons(props: {
             maxFontSizeMultiplier={1.5}
             style={[styles.undoLabel, { color: theme.danger }]}
           >
-            Undo last
+            {t.log.undoLast}
           </Text>
         </Pressable>
       )}
@@ -131,7 +132,7 @@ export default function LogButtons(props: {
             style={styles.backdrop}
             onPress={closeCustom}
             accessibilityRole="button"
-            accessibilityLabel="Close custom amount"
+            accessibilityLabel={t.log.closeCustomA11y}
           >
             <Pressable
               onPress={() => {}}
@@ -145,7 +146,7 @@ export default function LogButtons(props: {
                 maxFontSizeMultiplier={1.5}
                 style={[styles.modalTitle, { color: theme.text }]}
               >
-                Custom amount
+                {t.log.customTitle}
               </Text>
               <Text
                 maxFontSizeMultiplier={1.5}
@@ -176,7 +177,7 @@ export default function LogButtons(props: {
                 <Pressable
                   onPress={closeCustom}
                   accessibilityRole="button"
-                  accessibilityLabel="Cancel"
+                  accessibilityLabel={t.log.cancel}
                   style={({ pressed }) => [
                     styles.modalButton,
                     { borderColor: theme.border, opacity: pressed ? 0.6 : 1 },
@@ -186,14 +187,14 @@ export default function LogButtons(props: {
                     maxFontSizeMultiplier={1.5}
                     style={[styles.modalButtonLabel, { color: theme.textSecondary }]}
                   >
-                    Cancel
+                    {t.log.cancel}
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={submitCustom}
                   disabled={!customValid}
                   accessibilityRole="button"
-                  accessibilityLabel="Log custom amount"
+                  accessibilityLabel={t.log.submitA11y}
                   accessibilityState={{ disabled: !customValid }}
                   style={({ pressed }) => [
                     styles.modalButton,
@@ -207,7 +208,7 @@ export default function LogButtons(props: {
                     maxFontSizeMultiplier={1.5}
                     style={[styles.modalButtonLabel, styles.modalPrimaryLabel]}
                   >
-                    Log
+                    {t.log.submit}
                   </Text>
                 </Pressable>
               </View>

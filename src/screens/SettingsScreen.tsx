@@ -16,6 +16,7 @@ import { ActivityLevel, Settings } from '../types';
 import { HydrationState } from '../state';
 import { calcGoalMl, formatAmount } from '../logic/hydration';
 import { requestNotificationPermission } from '../notifications';
+import { t } from '../i18n';
 
 /** Whole hours only — these ranges guarantee sleep > wake by construction. */
 const WAKE_HOURS = [5, 6, 7, 8, 9, 10, 11, 12];
@@ -36,9 +37,9 @@ const APP_VERSION = '1.0.1';
 const REVIEW_URL = 'https://apps.apple.com/app/id6801325939?action=write-review';
 
 const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
-  { id: 'sedentary', label: 'Sedentary' },
-  { id: 'moderate', label: 'Moderate' },
-  { id: 'active', label: 'Active' },
+  { id: 'sedentary', label: t.fields.sedentary },
+  { id: 'moderate', label: t.fields.moderate },
+  { id: 'active', label: t.fields.active },
 ];
 
 function hourLabel(hour: number): string {
@@ -302,15 +303,15 @@ export default function SettingsScreen(props: {
       automaticallyAdjustKeyboardInsets
     >
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
-        Settings
+        {t.settings.title}
       </Text>
 
-      <Section theme={theme} title="DAILY GOAL">
+      <Section theme={theme} title={t.settings.sectionGoal}>
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          Your weight (kg)
+          {t.fields.weightLabel}
         </Text>
         <TextInput
           value={weightDraft}
@@ -320,7 +321,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           placeholder="65"
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel="Your weight in kilograms"
+          accessibilityLabel={t.fields.weightA11y}
           style={[
             styles.input,
             {
@@ -335,7 +336,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          Activity level
+          {t.fields.activityLabel}
         </Text>
         <View style={styles.chipRow}>
           {ACTIVITIES.map((a) => (
@@ -355,7 +356,7 @@ export default function SettingsScreen(props: {
               maxFontSizeMultiplier={1.5}
               style={[styles.label, { color: theme.textSecondary }]}
             >
-              Suggested
+              {t.settings.suggested}
             </Text>
             <Text
               maxFontSizeMultiplier={1.5}
@@ -367,7 +368,7 @@ export default function SettingsScreen(props: {
           <Pressable
             onPress={useSuggested}
             accessibilityRole="button"
-            accessibilityLabel="Use suggested goal"
+            accessibilityLabel={t.settings.useSuggestedA11y}
             style={({ pressed }) => [
               styles.softButton,
               {
@@ -382,7 +383,7 @@ export default function SettingsScreen(props: {
               maxFontSizeMultiplier={1.5}
               style={[styles.softButtonLabel, { color: theme.accent }]}
             >
-              Use suggested
+              {t.settings.useSuggested}
             </Text>
           </Pressable>
         </View>
@@ -391,7 +392,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          Daily goal (ml)
+          {t.settings.goalLabel}
         </Text>
         <TextInput
           value={goalDraft}
@@ -401,7 +402,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           placeholder="2500"
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel="Daily goal in millilitres"
+          accessibilityLabel={t.settings.goalA11y}
           style={[
             styles.input,
             {
@@ -416,25 +417,28 @@ export default function SettingsScreen(props: {
             maxFontSizeMultiplier={1.5}
             style={[styles.note, { color: theme.danger }]}
           >
-            {`Enter a goal between ${MIN_GOAL_ML.toLocaleString()} and ${MAX_GOAL_ML.toLocaleString()} ml`}
+            {t.settings.goalRange(
+              MIN_GOAL_ML.toLocaleString(),
+              MAX_GOAL_ML.toLocaleString()
+            )}
           </Text>
         )}
       </Section>
 
-      <Section theme={theme} title="UNITS">
+      <Section theme={theme} title={t.settings.sectionUnits}>
         <View style={styles.chipRowTight}>
           <Chip
             theme={theme}
             label="ml"
             selected={settings.units === 'ml'}
-            accessibilityLabel="Show amounts in millilitres"
+            accessibilityLabel={t.fields.showMl}
             onPress={() => commit({ units: 'ml' })}
           />
           <Chip
             theme={theme}
             label="oz"
             selected={settings.units === 'oz'}
-            accessibilityLabel="Show amounts in ounces"
+            accessibilityLabel={t.fields.showOz}
             onPress={() => commit({ units: 'oz' })}
           />
         </View>
@@ -442,16 +446,16 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.note, { color: theme.textSecondary }]}
         >
-          Changes how amounts are shown. Everything is stored in ml.
+          {t.settings.unitsNote}
         </Text>
       </Section>
 
-      <Section theme={theme} title="SCHEDULE">
+      <Section theme={theme} title={t.settings.sectionSchedule}>
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          I wake up around
+          {t.fields.wakeLabel}
         </Text>
         <View style={styles.chipRow}>
           {WAKE_HOURS.map((h) => (
@@ -460,7 +464,7 @@ export default function SettingsScreen(props: {
               theme={theme}
               label={hourLabel(h)}
               selected={settings.wakeMinutes === h * 60}
-              accessibilityLabel={`Wake up at ${hourLabel(h)}`}
+              accessibilityLabel={t.fields.wakeA11y(hourLabel(h))}
               onPress={() => commit({ wakeMinutes: h * 60 })}
             />
           ))}
@@ -470,7 +474,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          I go to sleep around
+          {t.fields.sleepLabel}
         </Text>
         <View style={styles.chipRow}>
           {SLEEP_HOURS.map((h) => (
@@ -479,19 +483,19 @@ export default function SettingsScreen(props: {
               theme={theme}
               label={hourLabel(h)}
               selected={settings.sleepMinutes === h * 60}
-              accessibilityLabel={`Go to sleep at ${hourLabel(h)}`}
+              accessibilityLabel={t.fields.sleepA11y(hourLabel(h))}
               onPress={() => commit({ sleepMinutes: h * 60 })}
             />
           ))}
         </View>
       </Section>
 
-      <Section theme={theme} title="CUPS">
+      <Section theme={theme} title={t.settings.sectionCups}>
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          Preset sizes (ml)
+          {t.settings.presetSizes}
         </Text>
         <View style={styles.cupRow}>
           {cupDrafts.map((draft, index) => (
@@ -504,7 +508,7 @@ export default function SettingsScreen(props: {
               maxFontSizeMultiplier={1.5}
               placeholder="250"
               placeholderTextColor={theme.textSecondary}
-              accessibilityLabel={`Cup ${index + 1} size in millilitres`}
+              accessibilityLabel={t.settings.cupA11y(index + 1)}
               style={[
                 styles.input,
                 styles.cupInput,
@@ -522,7 +526,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          Default cup
+          {t.settings.defaultCup}
         </Text>
         <View style={styles.chipRow}>
           {settings.cupSizesMl.map((size, index) => (
@@ -531,7 +535,9 @@ export default function SettingsScreen(props: {
               theme={theme}
               label={formatAmount(size, settings.units)}
               selected={settings.defaultCupMl === size}
-              accessibilityLabel={`Default cup ${formatAmount(size, settings.units)}`}
+              accessibilityLabel={t.settings.defaultCupA11y(
+                formatAmount(size, settings.units)
+              )}
               onPress={() => commit({ defaultCupMl: size })}
             />
           ))}
@@ -540,22 +546,22 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.note, { color: theme.textSecondary }]}
         >
-          Logged when you tap the quick-log button on a reminder.
+          {t.settings.cupNote}
         </Text>
       </Section>
 
-      <Section theme={theme} title="REMINDERS">
+      <Section theme={theme} title={t.settings.sectionReminders}>
         <View style={styles.switchRow}>
           <Text
             maxFontSizeMultiplier={1.5}
             style={[styles.switchLabel, { color: theme.text }]}
           >
-            Reminders
+            {t.settings.reminders}
           </Text>
           <Switch
             value={settings.remindersEnabled}
             onValueChange={onToggleReminders}
-            accessibilityLabel="Reminders"
+            accessibilityLabel={t.settings.reminders}
             trackColor={{ false: theme.border, true: theme.accent }}
           />
         </View>
@@ -564,23 +570,23 @@ export default function SettingsScreen(props: {
             maxFontSizeMultiplier={1.5}
             style={[styles.note, { color: theme.danger }]}
           >
-            Enable notifications in iOS Settings
+            {t.settings.enableInIosSettings}
           </Text>
         )}
       </Section>
 
-      <Section theme={theme} title="ABOUT">
+      <Section theme={theme} title={t.settings.sectionAbout}>
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.aboutLine, { color: theme.text }]}
         >
-          {`Version ${APP_VERSION}`}
+          {t.settings.version(APP_VERSION)}
         </Text>
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.note, { color: theme.textSecondary }]}
         >
-          Your data never leaves this device.
+          {t.settings.privacyNote}
         </Text>
         <Pressable
           onPress={() => {
@@ -588,7 +594,7 @@ export default function SettingsScreen(props: {
             void Linking.openURL(REVIEW_URL).catch(() => {});
           }}
           accessibilityRole="link"
-          accessibilityLabel="Rate Sip on the App Store"
+          accessibilityLabel={t.settings.rateA11y}
           style={({ pressed }) => [
             styles.softButton,
             styles.rateButton,
@@ -604,7 +610,7 @@ export default function SettingsScreen(props: {
             maxFontSizeMultiplier={1.5}
             style={[styles.softButtonLabel, { color: theme.accent }]}
           >
-            Rate Sip
+            {t.settings.rate}
           </Text>
         </Pressable>
       </Section>

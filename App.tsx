@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { darkTheme, lightTheme } from './src/theme';
 import { useHydration } from './src/state';
+import { t } from './src/i18n';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
@@ -17,9 +18,9 @@ import SettingsScreen from './src/screens/SettingsScreen';
 type Tab = 'home' | 'history' | 'settings';
 
 const TABS: Array<{ id: Tab; label: string; icon: string }> = [
-  { id: 'home', label: 'Today', icon: '💧' },
-  { id: 'history', label: 'History', icon: '📊' },
-  { id: 'settings', label: 'Settings', icon: '⚙️' },
+  { id: 'home', label: t.tabs.today, icon: '💧' },
+  { id: 'history', label: t.tabs.history, icon: '📊' },
+  { id: 'settings', label: t.tabs.settings, icon: '⚙️' },
 ];
 
 export default function App() {

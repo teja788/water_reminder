@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
+import { t } from '../i18n';
 import {
   DayTotal,
   dailyTotals,
@@ -77,9 +78,12 @@ function Bar(props: {
   return (
     <View
       accessible
-      accessibilityLabel={`${shortDate(day.dayStart)}${
-        isToday ? ', today' : ''
-      }: ${formatAmount(day.totalMl, units)}${met ? ', goal met' : ''}`}
+      accessibilityLabel={t.history.barA11y(
+        shortDate(day.dayStart),
+        formatAmount(day.totalMl, units),
+        isToday,
+        met
+      )}
       style={[
         styles.column,
         isToday && { backgroundColor: theme.accentSoft },
@@ -143,7 +147,7 @@ export default function HistoryScreen(props: {
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.content}>
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
-        History
+        {t.history.title}
       </Text>
 
       <View
@@ -157,17 +161,17 @@ export default function HistoryScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.streakText, { color: streak > 0 ? theme.text : theme.textSecondary }]}
         >
-          {streak > 0 ? `🔥 ${streak}-day streak` : 'Start your streak today'}
+          {streak > 0 ? t.history.streak(streak) : t.history.noStreak}
         </Text>
       </View>
 
-      <Section theme={theme} title="LAST 7 DAYS">
+      <Section theme={theme} title={t.history.sectionWeek}>
         {weekIsEmpty ? (
           <Text
             maxFontSizeMultiplier={1.5}
             style={[styles.empty, { color: theme.textSecondary }]}
           >
-            No drinks logged this week
+            {t.history.emptyWeek}
           </Text>
         ) : (
           <>
@@ -191,22 +195,21 @@ export default function HistoryScreen(props: {
               maxFontSizeMultiplier={1.5}
               style={[styles.note, { color: theme.textSecondary }]}
             >
-              {`Green = daily goal ${formatAmount(
-                settings.goalMl,
-                settings.units
-              )} met`}
+              {t.history.legend(
+                formatAmount(settings.goalMl, settings.units)
+              )}
             </Text>
           </>
         )}
       </Section>
 
-      <Section theme={theme} title="ALL HISTORY">
+      <Section theme={theme} title={t.history.sectionAll}>
         {loggedDays.length === 0 ? (
           <Text
             maxFontSizeMultiplier={1.5}
             style={[styles.empty, { color: theme.textSecondary }]}
           >
-            Nothing logged yet. Your days will show up here.
+            {t.history.emptyAll}
           </Text>
         ) : (
           visibleDays.map((day, index) => {
@@ -215,10 +218,11 @@ export default function HistoryScreen(props: {
               <View
                 key={day.key}
                 accessible
-                accessibilityLabel={`${shortDate(day.dayStart)}: ${formatAmount(
-                  day.totalMl,
-                  settings.units
-                )}${met ? ', goal met' : ''}`}
+                accessibilityLabel={t.history.rowA11y(
+                  shortDate(day.dayStart),
+                  formatAmount(day.totalMl, settings.units),
+                  met
+                )}
                 style={[
                   styles.row,
                   index > 0 && { borderTopWidth: StyleSheet.hairlineWidth },
@@ -260,7 +264,7 @@ export default function HistoryScreen(props: {
           <Pressable
             onPress={() => setVisibleRows((n) => n + HISTORY_ROWS_STEP)}
             accessibilityRole="button"
-            accessibilityLabel={`Show earlier days, ${hiddenCount} more`}
+            accessibilityLabel={t.history.showEarlierA11y(hiddenCount)}
             style={({ pressed }) => [
               styles.moreButton,
               {
@@ -275,7 +279,7 @@ export default function HistoryScreen(props: {
               maxFontSizeMultiplier={1.5}
               style={[styles.moreLabel, { color: theme.accent }]}
             >
-              {`Show earlier days (${hiddenCount})`}
+              {t.history.showEarlier(hiddenCount)}
             </Text>
           </Pressable>
         )}

@@ -2,6 +2,7 @@ import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Units } from '../types';
 import { formatAmount } from '../logic/hydration';
+import { t } from '../i18n';
 import {
   DAILY_NOTICE_ML,
   IntakeNotice as Notice,
@@ -26,14 +27,18 @@ interface Copy {
 function copyFor(notice: 'pace' | 'daily', units: Units): Copy {
   if (notice === 'pace') {
     return {
-      title: 'Ease off a little',
-      body: `That's over ${formatAmount(PACE_LIMIT_ML, units)} in the past hour. Kidneys clear only about that much an hour, and drinking faster thins the sodium in your blood. Sipping steadily is kinder than gulping.`,
-      tail: 'Feeling headachy, queasy or foggy? Talk to a doctor.',
+      title: t.notice.paceTitle,
+      body: t.notice.paceBody(formatAmount(PACE_LIMIT_ML, units)),
+      tail: t.notice.paceTail,
     };
   }
   return {
-    title: "That's a big day",
-    body: `Over ${formatAmount(DAILY_NOTICE_ML, units)} logged today. Most guidance lands between ${formatAmount(GUIDANCE_LOW_ML, units)} and ${formatAmount(GUIDANCE_HIGH_ML, units)} a day, food included — more is fine if you have been sweating hard. From here, let thirst lead.`,
+    title: t.notice.dailyTitle,
+    body: t.notice.dailyBody(
+      formatAmount(DAILY_NOTICE_ML, units),
+      formatAmount(GUIDANCE_LOW_ML, units),
+      formatAmount(GUIDANCE_HIGH_ML, units)
+    ),
   };
 }
 
@@ -81,14 +86,14 @@ export default function IntakeNotice(props: {
           void Linking.openURL(LEARN_MORE_URL).catch(() => {});
         }}
         accessibilityRole="link"
-        accessibilityLabel="Why this matters — opens a web page"
+        accessibilityLabel={t.notice.learnMoreA11y}
         style={styles.linkHit}
       >
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.link, { color: theme.caution }]}
         >
-          Why this matters
+          {t.notice.learnMore}
         </Text>
       </Pressable>
     </View>

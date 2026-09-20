@@ -19,6 +19,7 @@ import Svg, {
 import { Theme } from '../theme';
 import { Units } from '../types';
 import { formatAmount } from '../logic/hydration';
+import { t } from '../i18n';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedEllipse = Animated.createAnimatedComponent(Ellipse);
@@ -121,7 +122,10 @@ export default function ProgressBottle(props: {
     <View
       accessible
       accessibilityRole="progressbar"
-      accessibilityLabel={`${formatAmount(totalMl, units)} of ${formatAmount(goalMl, units)}`}
+      accessibilityLabel={t.bottle.progressA11y(
+        formatAmount(totalMl, units),
+        formatAmount(goalMl, units)
+      )}
       accessibilityValue={{ min: 0, max: goalMl > 0 ? goalMl : 0, now: totalMl }}
       style={styles.container}
     >
@@ -220,7 +224,9 @@ export default function ProgressBottle(props: {
         maxFontSizeMultiplier={1.5}
         style={[styles.subtitle, { color: theme.textSecondary }]}
       >
-        {goalReached ? 'Goal reached! 🎉' : `of ${formatAmount(goalMl, units)}`}
+        {goalReached
+          ? t.bottle.goalReached
+          : t.bottle.ofGoal(formatAmount(goalMl, units))}
       </Text>
     </View>
   );

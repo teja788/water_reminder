@@ -19,6 +19,7 @@ import {
 } from '../types';
 import { calcGoalMl, formatAmount, mlToOz } from '../logic/hydration';
 import { requestNotificationPermission } from '../notifications';
+import { t } from '../i18n';
 
 const ML_PER_OZ = 29.5735;
 /** Whole hours only — these ranges guarantee sleep > wake by construction. */
@@ -32,9 +33,9 @@ const MIN_GOAL_ML = 500;
 const MAX_GOAL_ML = 8000;
 
 const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
-  { id: 'sedentary', label: 'Sedentary' },
-  { id: 'moderate', label: 'Moderate' },
-  { id: 'active', label: 'Active' },
+  { id: 'sedentary', label: t.fields.sedentary },
+  { id: 'moderate', label: t.fields.moderate },
+  { id: 'active', label: t.fields.active },
 ];
 
 function hourLabel(hour: number): string {
@@ -59,7 +60,7 @@ function fromMl(ml: number, units: Units): number {
 function goalRangeHint(units: Units): string {
   const min = fromMl(MIN_GOAL_ML, units).toLocaleString();
   const max = fromMl(MAX_GOAL_ML, units).toLocaleString();
-  return `Enter a goal between ${min} and ${max} ${units}`;
+  return t.onboarding.goalRange(min, max, units);
 }
 
 function Chip(props: {
@@ -179,7 +180,8 @@ export default function OnboardingScreen(props: {
     });
   };
 
-  const goalUnitLabel = units === 'oz' ? 'ounces' : 'millilitres';
+  const goalUnitLabel =
+    units === 'oz' ? t.fields.unitNameOz : t.fields.unitNameMl;
 
   return (
     <ScrollView
@@ -190,13 +192,13 @@ export default function OnboardingScreen(props: {
       automaticallyAdjustKeyboardInsets
     >
       <Text maxFontSizeMultiplier={1.5} style={[styles.title, { color: theme.text }]}>
-        Let's set your daily goal
+        {t.onboarding.title}
       </Text>
       <Text
         maxFontSizeMultiplier={1.5}
         style={[styles.subtitle, { color: theme.textSecondary }]}
       >
-        A few details and you're ready to drink.
+        {t.onboarding.subtitle}
       </Text>
 
       <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
@@ -204,7 +206,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          Your weight (kg)
+          {t.fields.weightLabel}
         </Text>
         <TextInput
           value={weightText}
@@ -214,7 +216,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           placeholder="65"
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel="Your weight in kilograms"
+          accessibilityLabel={t.fields.weightA11y}
           style={[
             styles.input,
             {
@@ -229,7 +231,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          Activity level
+          {t.fields.activityLabel}
         </Text>
         <View style={styles.chipRow}>
           {ACTIVITIES.map((a) => (
@@ -249,7 +251,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          Suggested daily goal
+          {t.onboarding.suggestedGoal}
         </Text>
         <Text
           maxFontSizeMultiplier={1.5}
@@ -267,15 +269,15 @@ export default function OnboardingScreen(props: {
           {goalOutOfRange
             ? goalRangeHint(units)
             : weightValid
-              ? 'Change it below if you prefer your own target.'
-              : 'Enter your weight to see a suggestion.'}
+              ? t.onboarding.changeBelow
+              : t.onboarding.enterWeight}
         </Text>
 
         <Text
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          {`Daily goal (${units})`}
+          {t.onboarding.goalLabel(units)}
         </Text>
         <TextInput
           value={goalFieldValue}
@@ -285,7 +287,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           placeholder={units === 'oz' ? '85' : '2500'}
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel={`Daily goal in ${goalUnitLabel}`}
+          accessibilityLabel={t.onboarding.goalA11y(goalUnitLabel)}
           style={[
             styles.input,
             {
@@ -302,21 +304,21 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          Units
+          {t.onboarding.unitsLabel}
         </Text>
         <View style={styles.chipRow}>
           <Chip
             theme={theme}
             label="ml"
             selected={units === 'ml'}
-            accessibilityLabel="Show amounts in millilitres"
+            accessibilityLabel={t.fields.showMl}
             onPress={() => changeUnits('ml')}
           />
           <Chip
             theme={theme}
             label="oz"
             selected={units === 'oz'}
-            accessibilityLabel="Show amounts in ounces"
+            accessibilityLabel={t.fields.showOz}
             onPress={() => changeUnits('oz')}
           />
         </View>
@@ -327,7 +329,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          I wake up around
+          {t.fields.wakeLabel}
         </Text>
         <View style={styles.chipRow}>
           {WAKE_HOURS.map((h) => (
@@ -336,7 +338,7 @@ export default function OnboardingScreen(props: {
               theme={theme}
               label={hourLabel(h)}
               selected={wakeHour === h}
-              accessibilityLabel={`Wake up at ${hourLabel(h)}`}
+              accessibilityLabel={t.fields.wakeA11y(hourLabel(h))}
               onPress={() => setWakeHour(h)}
             />
           ))}
@@ -346,7 +348,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, styles.labelSpaced, { color: theme.textSecondary }]}
         >
-          I go to sleep around
+          {t.fields.sleepLabel}
         </Text>
         <View style={styles.chipRow}>
           {SLEEP_HOURS.map((h) => (
@@ -355,7 +357,7 @@ export default function OnboardingScreen(props: {
               theme={theme}
               label={hourLabel(h)}
               selected={sleepHour === h}
-              accessibilityLabel={`Go to sleep at ${hourLabel(h)}`}
+              accessibilityLabel={t.fields.sleepA11y(hourLabel(h))}
               onPress={() => setSleepHour(h)}
             />
           ))}
@@ -366,7 +368,7 @@ export default function OnboardingScreen(props: {
         onPress={start}
         disabled={!canStart}
         accessibilityRole="button"
-        accessibilityLabel="Start"
+        accessibilityLabel={t.onboarding.start}
         accessibilityState={{ disabled: !canStart }}
         style={({ pressed }) => [
           styles.startButton,
@@ -377,14 +379,14 @@ export default function OnboardingScreen(props: {
         ]}
       >
         <Text maxFontSizeMultiplier={1.5} style={styles.startLabel}>
-          Start
+          {t.onboarding.start}
         </Text>
       </Pressable>
       <Text
         maxFontSizeMultiplier={1.5}
         style={[styles.footNote, { color: theme.textSecondary }]}
       >
-        We'll ask for notification permission so reminders can reach you.
+        {t.onboarding.permissionNote}
       </Text>
     </ScrollView>
   );

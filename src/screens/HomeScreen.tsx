@@ -3,25 +3,26 @@ import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
+import { t } from '../i18n';
 import ProgressBottle from '../components/ProgressBottle';
 import LogButtons from '../components/LogButtons';
 import IntakeNotice from '../components/IntakeNotice';
 
 function reminderHint(hydration: HydrationState, settings: Settings): string {
   if (settings.remindersEnabled === false) {
-    return 'Reminders are off';
+    return t.home.remindersOff;
   }
   if (hydration.todayTotalMl >= settings.goalMl) {
-    return 'Done for today — no more reminders';
+    return t.home.doneForToday;
   }
   if (hydration.nextReminder) {
     const time = hydration.nextReminder.toLocaleTimeString(undefined, {
       hour: 'numeric',
       minute: '2-digit',
     });
-    return `Next reminder around ${time}`;
+    return t.home.nextReminder(time);
   }
-  return 'No more reminders tonight — back tomorrow';
+  return t.home.noneTonight;
 }
 
 export default function HomeScreen(props: {

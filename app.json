@@ -42,7 +42,8 @@
             "backgroundColor": "#0E1620"
           }
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "extra": {
       "eas": {
