@@ -5,6 +5,7 @@ import { Settings } from '../types';
 import { HydrationState } from '../state';
 import ProgressBottle from '../components/ProgressBottle';
 import LogButtons from '../components/LogButtons';
+import IntakeNotice from '../components/IntakeNotice';
 
 function reminderHint(hydration: HydrationState, settings: Settings): string {
   if (settings.remindersEnabled === false) {
@@ -67,6 +68,12 @@ export default function HomeScreen(props: {
         canUndo={hydration.todayTotalMl > 0}
         onLog={hydration.logDrink}
         onUndo={hydration.undoLast}
+      />
+
+      <IntakeNotice
+        theme={theme}
+        notice={hydration.notice}
+        units={settings.units}
       />
 
       <Text

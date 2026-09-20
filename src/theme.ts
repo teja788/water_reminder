@@ -10,6 +10,10 @@ export interface Theme {
   accentSoftPressed: string;
   success: string;
   danger: string;
+  /** Intake notices: amber, deliberately softer than `danger` — these are
+   *  nudges about pace, not errors. */
+  caution: string;
+  cautionSoft: string;
   border: string;
   /** Bottle gauge — gradient stops for the water fill (top, bottom). */
   waterLight: string;
@@ -34,6 +38,8 @@ export const lightTheme: Theme = {
   accentSoftPressed: '#C7E1F5',
   success: '#2E9E6B',
   danger: '#D64545',
+  caution: '#8A5A00',
+  cautionSoft: '#FCF0DA',
   border: '#E1EAF2',
   // waterDeep is lighter than `accent` on purpose: the percent sits on top of
   // it at full bottle, and #1565C0 only reaches 2.9:1 against `text`.
@@ -55,6 +61,8 @@ export const darkTheme: Theme = {
   accentSoftPressed: '#1F4260',
   success: '#4CC38A',
   danger: '#E5686B',
+  caution: '#E8B44A',
+  cautionSoft: '#2E2413',
   border: '#243342',
   // Darker than the light-mode water for the same reason, inverted: the
   // percent is near-white here, so the fill has to stay deep.

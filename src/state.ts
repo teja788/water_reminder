@@ -4,6 +4,7 @@ import * as Notifications from 'expo-notifications';
 import { DrinkEntry, Settings, makeEntryId } from './types';
 import { loadEntries, loadSettings, saveEntries, saveSettings } from './storage';
 import { currentStreak, totalForDay } from './logic/hydration';
+import { IntakeNotice, intakeNotice } from './logic/intake';
 import { computeTodayReminderTimes } from './logic/reminders';
 import {
   ACTION_LOG_DEFAULT,
@@ -21,6 +22,8 @@ export interface HydrationState {
   streak: number;
   /** First upcoming reminder today, or null. */
   nextReminder: Date | null;
+  /** Gentle over-drinking notice to show, or null. */
+  notice: IntakeNotice;
   logDrink: (amountMl: number, timestampMs?: number) => void;
   undoLast: () => void;
   updateSettings: (next: Settings) => void;
@@ -87,6 +90,26 @@ export function useHydration(): HydrationState {
     const times = computeTodayReminderTimes(new Date(), settings, todayTotalMl);
     return times.length > 0 ? times[0] : null;
   }, [settings, todayTotalMl, nowTick]);
+
+  const notice = useMemo(
+    () =>
+      settings
+        ? intakeNotice({ entries, goalMl: settings.goalMl, now: Date.now() })
+        : null,
+    [entries, settings, nowTick]
+  );
+
+  // The pace notice is about a rolling hour, so it has to expire on its own —
+  // nowTick alone only moves on a log or a return to foreground, which would
+  // leave the card sitting there all evening. One minute is finer than the
+  // notice needs and costs nothing; the interval exists only while it shows.
+  useEffect(() => {
+    if (notice !== 'pace') {
+      return;
+    }
+    const id = setInterval(() => setNowTick(Date.now()), 60 * 1000);
+    return () => clearInterval(id);
+  }, [notice]);
 
   const persistEntries = useCallback(
     (update: (prev: DrinkEntry[]) => DrinkEntry[], s: Settings | null) => {
@@ -218,6 +241,7 @@ export function useHydration(): HydrationState {
     todayTotalMl,
     streak,
     nextReminder,
+    notice,
     logDrink,
     undoLast,
     updateSettings,
