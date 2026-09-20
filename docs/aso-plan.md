@@ -140,8 +140,9 @@ fills four fields and no more. The fifth onward would be padded with words that
 do not describe the app — and Apple weights relevance, so irrelevant terms pull
 in traffic that does not convert, and conversion feeds back into rank.
 
-So: **es-MX with v1.1, then pt-BR and fr with v1.2.** For US indexing the eight
-are interchangeable; the tiebreak is which also serve a real market. `fr` is
+So: **es-MX, pt-BR and fr — all three with v1.1** (owner's call, 2026-09-20).
+For US indexing the eight are interchangeable; the tiebreak is which also serve
+a real market. `fr` is
 indexed in Canada too (Canada indexes English + French) and covers France,
 Belgium and Switzerland. `pt-BR` is Brazil, large by install volume. Arabic,
 Korean, Vietnamese and Chinese are real markets that need the app actually
@@ -185,8 +186,11 @@ Deliberately left out as padding: `hydrated`, `drinking`, `reminders`,
 `tracking` are inflections Apple already indexes from the singulars above, and
 `widget`, `watch`, `siri` name features the app does not have.
 
-**Keep the order.** Ship es-MX alone first. If it moves nothing, the other two
-will not either, and you will have spent twenty minutes instead of an hour.
+All three go in at once. The trade that buys: with one locale you could read
+its effect cleanly, and with three you cannot attribute a ranking change to any
+one of them. That only matters at v1.2, when deciding whether to keep them —
+judge the set as a whole rather than trying to rank the locales against each
+other, because the data will not support it.
 
 ### The honest caveat
 
@@ -215,7 +219,9 @@ required for any of the above.
 2. Rating prompt on a 3-day streak (`expo-store-review`). Zero ratings is worth
    more than every metadata change on this page combined — see marketing-plan
    item 1.
-3. The three metadata fields above.
-4. A 15–25s App Preview video. Zero of ten on that factor today, and it is the
+3. The three metadata fields above (title, subtitle, en-US keyword field).
+4. The es-MX, pt-BR and fr localizations — English metadata, own keyword field
+   each. About thirty minutes total in App Store Connect.
+5. A 15–25s App Preview video. Zero of ten on that factor today, and it is the
    only remaining free conversion lever.
-5. Screenshots 5 and 6 (4 of 10 slots used).
+6. Screenshots 5 and 6 (4 of 10 slots used).
