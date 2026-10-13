@@ -25,3 +25,4 @@ yarn-error.*
 # Not needed in the build
 docs/
 .claude/
+store-assets/

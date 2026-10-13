@@ -1,0 +1,36 @@
+diff --git a/node_modules/expo-widgets/ios/Widgets/AppIntent.swift b/node_modules/expo-widgets/ios/Widgets/AppIntent.swift
+index 0000000..1111111 100644
+--- a/node_modules/expo-widgets/ios/Widgets/AppIntent.swift
++++ b/node_modules/expo-widgets/ios/Widgets/AppIntent.swift
+@@ -1,4 +1,5 @@
+ import AppIntents
++import UserNotifications
+ import WidgetKit
+ 
+ struct WidgetReload: AppIntent {
+@@ -86,6 +87,10 @@
+       }
+       newTimeline[entryIndex] = newEntry
+       WidgetsStorage.set(newTimeline, forKey: "__expo_widgets_\(source)_timeline")
++      // Sip: a tap logs a drink, so drop the reminders it makes pointless.
++      if let until = (newProps["cancelRemindersUntil"] as? NSNumber)?.doubleValue {
++        await cancelPendingNotifications(before: Date(timeIntervalSince1970: until / 1000))
++      }
+     }
+ 
+     WidgetsEvents.shared.sendNotification(type: .userEvent, data: [
+@@ -128,3 +133,14 @@
+     return .result()
+   }
+ }
++
++/// Sip patch: removes this app's pending local notifications due before `limit`.
++private func cancelPendingNotifications(before limit: Date) async {
++  let center = UNUserNotificationCenter.current()
++  let ids = await center.pendingNotificationRequests().filter { request in
++    let next = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
++      ?? (request.trigger as? UNTimeIntervalNotificationTrigger)?.nextTriggerDate()
++    return next.map { $0 < limit } ?? false
++  }.map(\.identifier)
++  center.removePendingNotificationRequests(withIdentifiers: ids)
++}

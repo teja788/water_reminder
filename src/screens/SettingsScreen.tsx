@@ -29,7 +29,7 @@ const MIN_GOAL_ML = 500;
 const MAX_GOAL_ML = 8000;
 const MIN_CUP_ML = 50;
 const MAX_CUP_ML = 5000;
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 // Apple's own "leave a review" deep link. The in-app StoreKit sheet is NOT
 // used here on purpose: it silently does nothing once the user's three yearly
 // prompts are spent, so a button wired to it looks broken. See src/review.ts

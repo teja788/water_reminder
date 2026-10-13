@@ -39,3 +39,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# screenshots (100 MB), regenerate with store-assets/capture-screenshots.mjs
+store-assets/screenshots/
+store-assets/screenshot-frames/
+store-assets/custom-pages/

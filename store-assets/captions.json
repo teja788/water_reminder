@@ -1,0 +1,100 @@
+{
+  "style": {
+    "text": "#0D2A45",
+    "background": ["#F1F7FD", "#C6DFF4"],
+    "dots": []
+  },
+  "captions": {
+    "en-US": {
+      "01-home": "Your whole day in one bottle",
+      "02-widget": "Log water from your Home Screen",
+      "03-reminder": "Log or snooze right from the reminder",
+      "04-history": "Build a streak worth keeping",
+      "05-settings": "A goal that fits you"
+    },
+    "de-DE": {
+      "01-home": "Dein ganzer Tag in einer Flasche",
+      "02-widget": "Direkt vom Home-Bildschirm eintragen",
+      "03-reminder": "Eintragen oder in 1 Std. erinnern lassen",
+      "04-history": "Eine Serie, die sich lohnt",
+      "05-settings": "Ein Ziel, das zu dir passt"
+    },
+    "es-MX": {
+      "01-home": "Todo tu día en una botella",
+      "02-widget": "Registra agua desde la pantalla de inicio",
+      "03-reminder": "Añade agua o pospón la notificación",
+      "04-history": "Una racha que vale la pena",
+      "05-settings": "Una meta a tu medida"
+    },
+    "es-ES": {
+      "01-home": "Todo tu día en una botella",
+      "02-widget": "Registra agua desde la pantalla de inicio",
+      "03-reminder": "Añade agua o pospón la notificación",
+      "04-history": "Una racha que vale la pena",
+      "05-settings": "Un objetivo a tu medida"
+    },
+    "fr-FR": {
+      "01-home": "Toute ta journée dans une bouteille",
+      "02-widget": "Ajoute de l’eau depuis l’écran d’accueil",
+      "03-reminder": "Ajoute ou reporte depuis la notification",
+      "04-history": "Une série qui donne envie",
+      "05-settings": "Un objectif fait pour toi"
+    },
+    "it": {
+      "01-home": "Tutta la giornata in una bottiglia",
+      "02-widget": "Registra l’acqua dalla schermata Home",
+      "03-reminder": "Aggiungi o rimanda dalla notifica",
+      "04-history": "Una serie da non spezzare",
+      "05-settings": "Un obiettivo su misura per te"
+    },
+    "nl-NL": {
+      "01-home": "Je hele dag in één fles",
+      "02-widget": "Water bijhouden vanaf je beginscherm",
+      "03-reminder": "Noteer of stel uit vanuit de melding",
+      "04-history": "Een reeks om vol te houden",
+      "05-settings": "Een doel dat bij je past"
+    },
+    "pl": {
+      "01-home": "Cały dzień w jednej butelce",
+      "02-widget": "Zapisuj wodę z ekranu początkowego",
+      "03-reminder": "Zapisz lub odłóż z powiadomienia",
+      "04-history": "Seria, którą warto utrzymać",
+      "05-settings": "Cel dopasowany do ciebie"
+    },
+    "pt-BR": {
+      "01-home": "Seu dia inteiro em uma garrafa",
+      "02-widget": "Registre água direto da Tela de Início",
+      "03-reminder": "Registre ou adie direto da notificação",
+      "04-history": "Uma sequência que vale manter",
+      "05-settings": "Uma meta do seu jeito"
+    },
+    "tr": {
+      "01-home": "Bütün günün tek bir şişede",
+      "02-widget": "Ana Ekrandan su ekle",
+      "03-reminder": "Bildirimden kaydet ya da ertele",
+      "04-history": "Bozmaya kıyamayacağın bir seri",
+      "05-settings": "Sana uygun bir hedef"
+    },
+    "ja": {
+      "01-home": "一日の水分を、ボトル1本で",
+      "02-widget": "ホーム画面から記録",
+      "03-reminder": "通知から記録、またはあとで",
+      "04-history": "続けたくなる連続記録",
+      "05-settings": "あなたに合った目標"
+    },
+    "ko": {
+      "01-home": "하루 수분 섭취를 한 병에",
+      "02-widget": "홈 화면에서 바로 기록",
+      "03-reminder": "알림에서 기록 또는 미루기",
+      "04-history": "지키고 싶은 연속 기록",
+      "05-settings": "나에게 맞는 목표"
+    },
+    "zh-Hant": {
+      "01-home": "一瓶看清你的一天",
+      "02-widget": "在主畫面直接記錄",
+      "03-reminder": "在通知中記錄或延後",
+      "04-history": "值得堅持的連續紀錄",
+      "05-settings": "為你量身打造的目標"
+    }
+  }
+}

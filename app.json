@@ -3,7 +3,7 @@
     "name": "Water Reminder",
     "slug": "water_reminder",
     "owner": "seeker88",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -11,7 +11,7 @@
       "supportsTablet": true,
       "appStoreUrl": "https://apps.apple.com/app/id6801325939",
       "bundleIdentifier": "com.teja788.waterreminder",
-      "buildNumber": "5",
+      "buildNumber": "6",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -43,7 +43,45 @@
           }
         }
       ],
-      "expo-localization"
+      [
+        "expo-localization",
+        {
+          "supportedLocales": [
+            "en",
+            "de",
+            "es",
+            "fr",
+            "it",
+            "ja",
+            "ko",
+            "nl",
+            "pl",
+            "pt",
+            "tr",
+            "zh-Hant"
+          ]
+        }
+      ],
+      "./plugins/withWidgetLocalizations",
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "SipWidget",
+              "displayName": "Sip",
+              "description": "Today's water at a glance. Tap to log a cup.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "accessoryCircular",
+                  "accessoryRectangular"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     ],
     "extra": {
       "eas": {

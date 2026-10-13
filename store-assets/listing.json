@@ -1,0 +1,162 @@
+{
+  "app": "6801325939",
+  "primaryLocale": "en-US",
+  "locales": {
+    "en-US": {
+      "name": "Sip: Calm Water Reminder & Log",
+      "subtitle": "Drink daily: hydration tracker",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "description": "Sip is the water reminder that respects you.\n\nMost hydration apps nag you all day, interrupt you with ads, and ask you to create an account. Sip does none of that.\n\nSMART REMINDERS THAT STOP\nSet your wake and sleep times once. Sip spaces gentle reminders through your day — and the moment you reach your goal, they stop. Hit your goal by lunch? Silence until tomorrow.\n\nLOG WITHOUT OPENING THE APP\nTap \"Log 250 ml\" right on the reminder notification, or on the home-screen widget. Busy? \"Not now\" holds reminders for an hour.\n\nONE-TAP TRACKING\nThree preset buttons and a custom amount. A water bottle fills as your day progresses. Undo mistakes with one tap.\n\nA GOAL THAT FITS YOU\nEnter your weight and activity level for a suggested daily goal, or set your own. Works in ml or oz.\n\nYOUR HISTORY, FOREVER\nA 7-day chart, streak tracking, and a complete history of every day you've logged — stored only on your device.\n\nPRIVATE BY DESIGN\nNo account. No ads. No analytics. No cloud. Your hydration data stays on your iPhone, full stop.\n\nFree, with no catches. Drink up.",
+      "keywords": "intake,hydrate,thirst,habit,streak,bottle,glass,cup,h2o,widget,oz,ounce,alarm,remind,health,private",
+      "promotionalText": "The water reminder that respects your attention. No mascots, no guilt, no spam — reminders stop the moment you hit your goal.",
+      "whatsNew": "Sip now lives on your Home Screen and Lock Screen.\n\n• Widget: see today's progress at a glance, and tap to log a cup without opening the app (tap-to-log needs iOS 17 or later).\n• Reminders that back off: ignore two in a row and Sip spaces the rest out, with softer wording.\n• \"Not now (1 h)\" on every reminder pushes the next one back an hour.\n• Sip learns when your evenings end and stops reminding you after your usual last drink.\n• Now in 12 languages: English, German, Spanish, French, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Turkish and Chinese.\n\nStill no ads, no account, and your data never leaves your phone.",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "es-MX": {
+      "name": "Sip: Recordatorio de Agua",
+      "subtitle": "Tomar y beber agua a diario",
+      "keywords": "hidratación,rastreador,registro,contador,meta,litros,botella,vaso,hábito,racha,alarma,aviso,widget",
+      "promotionalText": "El recordatorio de agua que no da lata. Sin caricaturas, sin sermones, sin avisos de más: en cuanto llegas a tu meta del día, se calla hasta mañana.",
+      "description": "Sip es el recordatorio de agua que te respeta.\n\nCasi todas las apps de hidratación te están recordando todo el día, te interrumpen con anuncios y te piden crear una cuenta. Sip no hace nada de eso.\n\nRECORDATORIOS QUE SABEN CUÁNDO PARAR\nConfigura una sola vez a qué hora te levantas y a qué hora te duermes. Sip reparte recordatorios discretos a lo largo del día y, en cuanto llegas a tu meta, dejan de llegar. ¿Llegaste a tu meta antes de la comida? Silencio hasta mañana.\n\nREGISTRA SIN ABRIR LA APP\nToca \"Añadir 250 ml\" directamente en la notificación. Listo.\n\nREGISTRO CON UN TOQUE\nTres botones con cantidades fijas y una cantidad a tu gusto. Una botella animada se va llenando conforme avanza tu día. Si te equivocas, lo deshaces con un toque.\n\nUNA META A TU MEDIDA\nIngresa tu peso y tu nivel de actividad para recibir una meta diaria sugerida, o pon la tuya. Funciona en mililitros o en onzas.\n\nTU HISTORIAL, PARA SIEMPRE\nUna gráfica de los últimos 7 días, tu racha y el historial completo de cada día que has registrado, guardado únicamente en tu teléfono.\n\nPRIVADO DE VERDAD\nSin cuenta. Sin anuncios. Sin rastreo. Sin nube. Tus datos de hidratación se quedan en tu iPhone, y punto.\n\nGratis, sin letras chiquitas. Salud.",
+      "whatsNew": "Sip ahora vive en tu pantalla de inicio y en la pantalla bloqueada.\n\n• Widget: ve tu avance de un vistazo y registra un vaso sin abrir la app (registrar con un toque requiere iOS 17 o posterior).\n• Recordatorios que se calman: si ignoras dos seguidos, Sip espacia los siguientes y les baja el tono.\n• \"Ahora no (1 h)\" en cada recordatorio pospone el siguiente una hora.\n• Sip aprende a qué hora termina tu día y deja de recordarte después.\n• Ahora en 12 idiomas, español incluido.\n\nSigue sin anuncios, sin cuenta, y tus datos nunca salen de tu teléfono.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "fr-FR": {
+      "name": "Sip : rappel d'eau et suivi",
+      "subtitle": "Boire de l'eau, hydratation",
+      "keywords": "traqueur,compteur,objectif,litre,verre,bouteille,habitude,série,santé,widget,gratuit,alarme,soif",
+      "promotionalText": "Le rappel d'eau qui respecte ton attention. Pas de mascotte, pas de culpabilité, pas de spam : les rappels s'arrêtent dès que ton objectif du jour est atteint.",
+      "description": "Sip est le rappel d'eau qui te respecte.\n\nLa plupart des applis d'hydratation te relancent toute la journée, t'interrompent avec des publicités et te demandent de créer un compte. Sip ne fait rien de tout cela.\n\nDES RAPPELS QUI SAVENT S'ARRÊTER\nIndique une fois tes heures de lever et de coucher. Sip répartit des rappels discrets sur ta journée, et dès que tu atteins ton objectif, ils s'arrêtent. Objectif atteint avant midi ? Silence jusqu'à demain.\n\nENREGISTRE SANS OUVRIR L'APPLI\nTouche « Ajouter 250 ml » directement dans la notification. C'est fait.\n\nUN SUIVI D'UN SEUL GESTE\nTrois boutons prédéfinis et une quantité libre. Une bouteille animée se remplit au fil de la journée. Une erreur ? Annule-la d'un geste.\n\nUN OBJECTIF À TA MESURE\nSaisis ton poids et ton niveau d'activité pour obtenir un objectif quotidien conseillé, ou fixe le tien. En ml ou en oz.\n\nTON HISTORIQUE, POUR TOUJOURS\nUn graphique sur 7 jours, le suivi de tes séries et l'historique complet de chaque journée enregistrée, conservés uniquement sur ton appareil.\n\nPRIVÉ PAR CONCEPTION\nPas de compte. Pas de publicité. Pas de traceurs. Pas de cloud. Tes données d'hydratation restent sur ton iPhone, point.\n\nGratuit, sans contrepartie. À ta santé !",
+      "whatsNew": "Sip arrive sur ton écran d'accueil et ton écran verrouillé.\n\n• Widget : vois ta progression d'un coup d'œil et ajoute un verre sans ouvrir l'appli (l'ajout d'un geste nécessite iOS 17 ou ultérieur).\n• Des rappels qui se font discrets : si tu en ignores deux de suite, Sip espace les suivants et adoucit le ton.\n• « Pas maintenant (1 h) » sur chaque rappel repousse le suivant d'une heure.\n• Sip apprend à quelle heure finit ta soirée et ne te relance plus ensuite.\n• Désormais en 12 langues, dont le français.\n\nToujours pas de publicité, pas de compte, et tes données ne quittent jamais ton téléphone.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "pt-BR": {
+      "name": "Sip: Lembrete de Beber Água",
+      "subtitle": "Controle sua hidratação diária",
+      "keywords": "lembretes,alarme,registro,contador,meta,litros,garrafa,copo,hábito,sequência,saúde,widget,grátis",
+      "promotionalText": "O lembrete de água que respeita a sua atenção. Sem mascote, sem culpa, sem spam: os lembretes param assim que você bate a meta do dia.",
+      "description": "O Sip é o lembrete de água que respeita você.\n\nA maioria dos apps de hidratação fica no seu pé o dia inteiro, interrompe você com anúncios e ainda pede para criar uma conta. O Sip não faz nada disso.\n\nLEMBRETES INTELIGENTES QUE PARAM\nDefina uma vez o horário em que você acorda e dorme. O Sip distribui lembretes discretos ao longo do dia e, assim que você atinge a meta, eles param. Bateu a meta antes do almoço? Silêncio até amanhã.\n\nREGISTRE SEM ABRIR O APP\nToque em \"Registrar 250 ml\" direto na notificação do lembrete. Pronto.\n\nREGISTRO COM UM TOQUE\nTrês botões com quantidades predefinidas e um campo para valor personalizado. Uma garrafa animada vai enchendo conforme o dia avança. Errou? Desfaça com um toque.\n\nUMA META DO SEU TAMANHO\nInforme seu peso e nível de atividade para receber uma sugestão de meta diária, ou defina a sua. Funciona em ml ou oz.\n\nSEU HISTÓRICO, PARA SEMPRE\nGráfico dos últimos 7 dias, sua sequência de dias e o histórico completo de tudo o que você já registrou, guardado só no seu aparelho.\n\nPRIVADO POR PADRÃO\nSem conta. Sem anúncios. Sem coleta de dados. Sem nuvem. Seus dados de hidratação ficam no seu iPhone, e ponto.\n\nGrátis, sem pegadinha. Saúde!",
+      "whatsNew": "O Sip agora está na sua tela de início e na tela bloqueada.\n\n• Widget: veja seu progresso num relance e registre um copo sem abrir o app (registrar com um toque exige iOS 17 ou posterior).\n• Lembretes que dão um tempo: se você ignorar dois seguidos, o Sip espaça os próximos e fala mais baixo.\n• \"Agora não (1 h)\" em cada lembrete adia o próximo em uma hora.\n• O Sip aprende a que horas sua noite termina e para de lembrar depois disso.\n• Agora em 12 idiomas, incluindo português.\n\nContinua sem anúncios, sem conta, e seus dados nunca saem do seu celular.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "en-GB": {
+      "name": "Sip: Drink Water Reminder",
+      "subtitle": "Hydration tracker & water log",
+      "keywords": "litre,daily,notify,widget,goal,drinking,counter,diary,journal,timer,routine,wellness,fitness,liquid",
+      "promotionalText": "The water reminder that respects your attention. No mascots, no guilt, no spam: reminders stop the moment you hit your goal.",
+      "description": "Sip is the water reminder that respects you.\n\nMost hydration apps nag you all day, interrupt you with ads and ask you to create an account. Sip does none of that.\n\nSMART REMINDERS THAT STOP\nSet your wake and sleep times once. Sip spaces gentle reminders through your day, and the moment you reach your goal, they stop. Hit your goal by lunch? Silence until tomorrow.\n\nLOG WITHOUT OPENING THE APP\nTap \"Log 250 ml\" right on the reminder notification. Done.\n\nONE-TAP TRACKING\nThree preset buttons and a custom amount. An animated bottle fills as your day goes on. Undo mistakes with one tap.\n\nA GOAL THAT FITS YOU\nEnter your weight and activity level for a suggested daily goal, or set your own. Works in ml or oz.\n\nYOUR HISTORY, FOREVER\nA 7-day chart, streak tracking and a complete history of every day you've logged, stored only on your device.\n\nPRIVATE BY DESIGN\nNo account. No ads. No analytics. No cloud. Your hydration data stays on your iPhone, full stop.\n\nFree, with no catches. Drink up.",
+      "whatsNew": "Sip now lives on your Home Screen and Lock Screen.\n\n• Widget: see today's progress at a glance, and tap to log a cup without opening the app (tap-to-log needs iOS 17 or later).\n• Reminders that back off: ignore two in a row and Sip spaces the rest out, with softer wording.\n• \"Not now (1 h)\" on every reminder pushes the next one back an hour.\n• Sip learns when your evenings end and stops reminding you after your usual last drink.\n• Now in 12 languages: English, German, Spanish, French, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Turkish and Chinese.\n\nStill no ads, no account, and your data never leaves your phone.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "de-DE": {
+      "name": "Sip: Trinkerinnerung & Tracker",
+      "subtitle": "Wasser trinken – Erinnerung",
+      "keywords": "wassertracker,wasserzähler,trinkwasser,trinkmenge,hydration,kostenlos,widget,glas,flasche,liter",
+      "promotionalText": "Die Trinkerinnerung, die deine Aufmerksamkeit respektiert. Kein Maskottchen, kein schlechtes Gewissen, kein Spam: Erreichst du dein Ziel, ist Ruhe.",
+      "description": "Sip ist die Trinkerinnerung, die dich respektiert.\n\nDie meisten Trink-Apps nerven den ganzen Tag, unterbrechen dich mit Werbung und wollen, dass du ein Konto anlegst. Sip macht nichts davon.\n\nERINNERUNGEN, DIE AUFHÖREN\nStell einmal ein, wann du aufstehst und schlafen gehst. Sip verteilt sanfte Erinnerungen über deinen Tag – und sobald du dein Ziel erreichst, ist Schluss. Ziel schon mittags geschafft? Ruhe bis morgen.\n\nEINTRAGEN, OHNE DIE APP ZU ÖFFNEN\nTipp in der Benachrichtigung einfach auf „250 ml eintragen“. Fertig.\n\nMIT EINEM TIPP ERFASST\nDrei feste Mengen und eine eigene Menge. Eine animierte Flasche füllt sich im Laufe des Tages. Vertippt? Mit einem Tipp rückgängig.\n\nEIN ZIEL, DAS ZU DIR PASST\nGib Gewicht und Aktivität ein und erhalte ein vorgeschlagenes Tagesziel – oder setz dein eigenes. In ml oder oz.\n\nDEIN VERLAUF, FÜR IMMER\nEin 7-Tage-Diagramm, deine Serie und der komplette Verlauf jedes erfassten Tages – nur auf deinem Gerät gespeichert.\n\nPRIVAT VON GRUND AUF\nKein Konto. Keine Werbung. Keine Analyse. Keine Cloud. Deine Trinkdaten bleiben auf deinem iPhone. Punkt.\n\nKostenlos, ohne Haken. Prost!",
+      "whatsNew": "Sip ist jetzt auf deinem Home-Bildschirm und Sperrbildschirm.\n\n• Widget: Sieh deinen Fortschritt auf einen Blick und trag einen Becher ein, ohne die App zu öffnen (Eintragen per Tipp ab iOS 17).\n• Erinnerungen, die sich zurückhalten: Ignorierst du zwei hintereinander, kommen die nächsten seltener und leiser formuliert.\n• „Nicht jetzt (1 Std.)“ in jeder Erinnerung verschiebt die nächste um eine Stunde.\n• Sip lernt, wann dein Abend endet, und erinnert dich danach nicht mehr.\n• Jetzt in 12 Sprachen, auch auf Deutsch.\n\nWeiterhin keine Werbung, kein Konto, und deine Daten verlassen nie dein Handy.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "es-ES": {
+      "name": "Sip: Aviso para Beber Agua",
+      "subtitle": "Control de hidratación diaria",
+      "keywords": "recordatorio,registro,contador,meta,litros,botella,vaso,hábito,racha,alarma,widget,gratis",
+      "promotionalText": "El recordatorio de agua que respeta tu atención. Sin mascotas, sin culpa, sin spam: los avisos se detienen en cuanto alcanzas tu meta del día.",
+      "description": "Sip es el recordatorio de agua que te respeta.\n\nCasi todas las apps de hidratación te dan la lata todo el día, te interrumpen con anuncios y te piden que crees una cuenta. Sip no hace nada de eso.\n\nRECORDATORIOS QUE SE DETIENEN\nIndica una sola vez a qué hora te levantas y te acuestas. Sip reparte recordatorios suaves a lo largo del día y, en cuanto alcanzas tu meta, se detienen. ¿Meta cumplida antes de comer? Silencio hasta mañana.\n\nREGISTRA SIN ABRIR LA APP\nToca \"Añadir 250 ml\" directamente en la notificación. Listo.\n\nREGISTRO CON UN TOQUE\nTres botones con cantidades fijas y una cantidad personalizada. Una botella animada se llena a medida que avanza el día. ¿Te has equivocado? Deshazlo con un toque.\n\nUNA META A TU MEDIDA\nIntroduce tu peso y tu nivel de actividad para obtener una meta diaria sugerida, o fija la tuya. En ml u oz.\n\nTU HISTORIAL, PARA SIEMPRE\nUn gráfico de 7 días, tu racha y el historial completo de cada día registrado, guardado solo en tu dispositivo.\n\nPRIVADO POR DISEÑO\nSin cuenta. Sin anuncios. Sin analíticas. Sin nube. Tus datos de hidratación se quedan en tu iPhone, y punto.\n\nGratis y sin trampas. ¡Salud!",
+      "whatsNew": "Sip llega a tu pantalla de inicio y a la pantalla bloqueada.\n\n• Widget: consulta tu progreso de un vistazo y registra un vaso sin abrir la app (registrar con un toque requiere iOS 17 o posterior).\n• Recordatorios que se moderan: si ignoras dos seguidos, Sip espacia los siguientes y suaviza el mensaje.\n• \"Ahora no (1 h)\" en cada recordatorio retrasa el siguiente una hora.\n• Sip aprende a qué hora acaba tu día y deja de avisarte después.\n• Ahora en 12 idiomas, también en español.\n\nSigue sin anuncios, sin cuenta, y tus datos nunca salen de tu teléfono.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "it": {
+      "name": "Sip: Bevi Acqua – Promemoria",
+      "subtitle": "Monitora l'idratazione",
+      "keywords": "tracker,contatore,obiettivo,litri,bottiglia,bicchiere,abitudine,serie,salute,widget,gratis,sete,bere",
+      "promotionalText": "Il promemoria per bere che rispetta la tua attenzione. Niente mascotte, niente sensi di colpa, niente spam: i promemoria si fermano appena raggiungi l'obiettivo.",
+      "description": "Sip è il promemoria per bere acqua che ti rispetta.\n\nLa maggior parte delle app di idratazione ti tormenta tutto il giorno, ti interrompe con la pubblicità e ti chiede di creare un account. Sip non fa niente di tutto questo.\n\nPROMEMORIA CHE SI FERMANO\nImposta una volta sola quando ti svegli e quando vai a dormire. Sip distribuisce promemoria discreti durante la giornata e, appena raggiungi l'obiettivo, si fermano. Obiettivo raggiunto a pranzo? Silenzio fino a domani.\n\nREGISTRA SENZA APRIRE L'APP\nTocca \"Aggiungi 250 ml\" direttamente nella notifica. Fatto.\n\nREGISTRAZIONE CON UN TOCCO\nTre quantità predefinite e una quantità a scelta. Una bottiglia animata si riempie man mano che la giornata va avanti. Hai sbagliato? Annulla con un tocco.\n\nUN OBIETTIVO SU MISURA\nInserisci peso e livello di attività per un obiettivo giornaliero suggerito, oppure scegli il tuo. In ml o oz.\n\nLA TUA CRONOLOGIA, PER SEMPRE\nUn grafico di 7 giorni, la tua serie e la cronologia completa di ogni giorno registrato, salvati solo sul tuo dispositivo.\n\nPRIVATA PER SCELTA\nNessun account. Nessuna pubblicità. Nessuna analisi. Nessun cloud. I tuoi dati restano sul tuo iPhone, punto.\n\nGratis, senza trucchi. Salute!",
+      "whatsNew": "Sip arriva nella schermata Home e nella schermata di blocco.\n\n• Widget: vedi i tuoi progressi a colpo d'occhio e aggiungi un bicchiere senza aprire l'app (l'aggiunta con un tocco richiede iOS 17 o successivo).\n• Promemoria che si fanno da parte: se ne ignori due di fila, Sip distanzia i successivi e usa toni più morbidi.\n• \"Non ora (1 h)\" su ogni promemoria sposta il successivo di un'ora.\n• Sip impara quando finisce la tua serata e smette di ricordartelo dopo.\n• Ora in 12 lingue, anche in italiano.\n\nSempre senza pubblicità, senza account, e i tuoi dati non lasciano mai il telefono.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "nl-NL": {
+      "name": "Sip: Water Drinken Herinnering",
+      "subtitle": "Drinkwater tracker en logboek",
+      "keywords": "hydratatie,reminder,teller,doel,liter,fles,glas,gewoonte,reeks,gezondheid,widget,gratis,dorst",
+      "promotionalText": "De waterherinnering die je aandacht respecteert. Geen mascotte, geen schuldgevoel, geen spam: de herinneringen stoppen zodra je je doel haalt.",
+      "description": "Sip is de waterherinnering die jou respecteert.\n\nDe meeste drink-apps zeuren de hele dag, onderbreken je met advertenties en willen dat je een account aanmaakt. Sip doet niets daarvan.\n\nHERINNERINGEN DIE STOPPEN\nStel één keer in hoe laat je opstaat en gaat slapen. Sip verdeelt rustige herinneringen over je dag, en zodra je je doel haalt, stoppen ze. Doel al gehaald bij de lunch? Stilte tot morgen.\n\nNOTEREN ZONDER DE APP TE OPENEN\nTik in de melding op \"250 ml noteren\". Klaar.\n\nBIJHOUDEN MET ÉÉN TIK\nDrie vaste hoeveelheden en een eigen hoeveelheid. Een geanimeerde fles vult zich in de loop van de dag. Vergist? Met één tik ongedaan.\n\nEEN DOEL DAT BIJ JE PAST\nVul je gewicht en activiteit in voor een voorgesteld dagdoel, of kies je eigen doel. In ml of oz.\n\nJE GESCHIEDENIS, VOOR ALTIJD\nEen grafiek van 7 dagen, je reeks en de volledige geschiedenis van elke dag die je hebt bijgehouden, alleen op je apparaat opgeslagen.\n\nPRIVÉ VAN NATURE\nGeen account. Geen advertenties. Geen analytics. Geen cloud. Je gegevens blijven op je iPhone. Punt.\n\nGratis, zonder addertje. Proost!",
+      "whatsNew": "Sip staat nu op je beginscherm en toegangsscherm.\n\n• Widget: zie je voortgang in één oogopslag en noteer een glas zonder de app te openen (noteren met een tik vanaf iOS 17).\n• Herinneringen die zich inhouden: negeer je er twee achter elkaar, dan komen de volgende minder vaak en zachter.\n• \"Nu niet (1 u)\" bij elke herinnering schuift de volgende een uur op.\n• Sip leert wanneer je avond eindigt en herinnert je daarna niet meer.\n• Nu in 12 talen, ook in het Nederlands.\n\nNog steeds geen advertenties, geen account, en je gegevens verlaten nooit je telefoon.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "pl": {
+      "name": "Sip: Przypomnienie o wodzie",
+      "subtitle": "Pij wodę i licz nawodnienie",
+      "keywords": "picie,piciu,wody,woda,tracker,licznik,cel,litry,butelka,szklanka,nawyk,zdrowie,widget,pragnienie",
+      "promotionalText": "Przypomnienie o wodzie, które szanuje Twoją uwagę. Bez maskotek, bez wyrzutów, bez spamu: przypomnienia milkną, gdy tylko osiągniesz cel.",
+      "description": "Sip to przypomnienie o wodzie, które Cię szanuje.\n\nWiększość aplikacji do nawadniania męczy Cię przez cały dzień, przerywa reklamami i każe zakładać konto. Sip nie robi nic z tych rzeczy.\n\nPRZYPOMNIENIA, KTÓRE SIĘ KOŃCZĄ\nUstaw raz, o której wstajesz i kładziesz się spać. Sip rozłoży delikatne przypomnienia na cały dzień, a gdy tylko osiągniesz cel, ucichną. Cel osiągnięty do obiadu? Cisza do jutra.\n\nZAPISUJ BEZ OTWIERANIA APLIKACJI\nStuknij „Zapisz 250 ml” prosto w powiadomieniu. Gotowe.\n\nJEDNO STUKNIĘCIE\nTrzy gotowe ilości i własna ilość. Animowana butelka napełnia się w ciągu dnia. Pomyłka? Cofnij jednym stuknięciem.\n\nCEL DOPASOWANY DO CIEBIE\nPodaj wagę i poziom aktywności, a dostaniesz sugerowany dzienny cel, albo ustaw własny. W ml lub oz.\n\nTWOJA HISTORIA, NA ZAWSZE\nWykres z 7 dni, Twoja seria i pełna historia każdego zapisanego dnia, przechowywane tylko na Twoim urządzeniu.\n\nPRYWATNOŚĆ W STANDARDZIE\nBez konta. Bez reklam. Bez analityki. Bez chmury. Twoje dane zostają na Twoim iPhonie. Kropka.\n\nZa darmo, bez haczyków. Na zdrowie!",
+      "whatsNew": "Sip jest teraz na ekranie początkowym i ekranie blokady.\n\n• Widżet: zobacz postęp jednym spojrzeniem i zapisz szklankę bez otwierania aplikacji (zapis jednym stuknięciem wymaga iOS 17 lub nowszego).\n• Przypomnienia, które odpuszczają: jeśli zignorujesz dwa z rzędu, Sip rozsunie kolejne i złagodzi ton.\n• „Nie teraz (1 h)” w każdym przypomnieniu przesuwa następne o godzinę.\n• Sip uczy się, kiedy kończy się Twój wieczór, i potem już nie przypomina.\n• Teraz w 12 językach, także po polsku.\n\nNadal bez reklam, bez konta, a Twoje dane nigdy nie opuszczają telefonu.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "tr": {
+      "name": "Sip: Su İçme Hatırlatıcı",
+      "subtitle": "Su takibi ve günlük hedef",
+      "keywords": "hatırlatıcısı,sayacı,ücretsiz,alarm,bildirim,litre,şişe,bardak,alışkanlık,sağlık,widget",
+      "promotionalText": "Dikkatine saygı duyan su hatırlatıcısı. Maskot yok, suçluluk yok, spam yok: hedefine ulaştığın anda hatırlatmalar susar.",
+      "description": "Sip, sana saygı duyan su hatırlatıcısıdır.\n\nÇoğu su uygulaması gün boyu dırdır eder, reklamlarla böler ve hesap açmanı ister. Sip bunların hiçbirini yapmaz.\n\nDURMAYI BİLEN HATIRLATMALAR\nKalkış ve yatış saatini bir kez gir. Sip nazik hatırlatmaları gününe yayar ve hedefine ulaştığın anda durur. Hedefe öğlen mi ulaştın? Yarına kadar sessizlik.\n\nUYGULAMAYI AÇMADAN KAYDET\nBildirimdeki \"250 ml kaydet\"e dokun. Bitti.\n\nTEK DOKUNUŞLA TAKİP\nÜç hazır miktar ve özel bir miktar. Animasyonlu bir şişe gün ilerledikçe dolar. Yanlış mı girdin? Tek dokunuşla geri al.\n\nSANA UYGUN BİR HEDEF\nKilonu ve aktivite düzeyini gir, önerilen günlük hedefi al ya da kendi hedefini koy. ml veya oz.\n\nGEÇMİŞİN, HEP SENİNLE\n7 günlük grafik, serin ve kaydettiğin her günün tam geçmişi; yalnızca cihazında saklanır.\n\nTASARIMDAN GİZLİ\nHesap yok. Reklam yok. Analiz yok. Bulut yok. Su verilerin iPhone'unda kalır, nokta.\n\nÜcretsiz, şartsız. Afiyet olsun!",
+      "whatsNew": "Sip artık ana ekranında ve kilit ekranında.\n\n• Widget: ilerlemeni bir bakışta gör, uygulamayı açmadan bir bardak kaydet (tek dokunuşla kayıt iOS 17 veya sonrasını gerektirir).\n• Geri çekilen hatırlatmalar: arka arkaya ikisini yok sayarsan Sip sonrakileri seyrekleştirir ve daha yumuşak yazar.\n• Her hatırlatmadaki \"Şimdi değil (1 sa.)\" bir sonrakini bir saat erteler.\n• Sip akşamının ne zaman bittiğini öğrenir ve sonrasında hatırlatmaz.\n• Artık Türkçe dahil 12 dilde.\n\nHâlâ reklam yok, hesap yok ve verilerin telefonundan hiç çıkmaz.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "ja": {
+      "name": "Sip: 水分補給・飲水リマインダー",
+      "subtitle": "水を飲む習慣と摂取量を記録",
+      "keywords": "お知らせ,通知,アラーム,ウィジェット,健康,目標,無料,ドリンク",
+      "promotionalText": "あなたの集中を邪魔しない水分補給リマインダー。キャラクターも罪悪感もスパムもなし。目標を達成したら、その日の通知はおしまいです。",
+      "description": "Sipは、あなたを尊重する水分補給リマインダーです。\n\n多くの水分補給アプリは一日中しつこく通知し、広告で邪魔をし、アカウント作成を求めます。Sipはそのどれもしません。\n\nちゃんと止まるリマインダー\n起きる時間と寝る時間を一度設定するだけ。Sipは一日の中にやさしいリマインダーを配置し、目標に届いた瞬間に止まります。お昼までに達成？明日まで静かです。\n\nアプリを開かずに記録\n通知の「250 mlを記録」をタップするだけ。完了です。\n\nワンタップで記録\n3つのプリセットと好きな量の入力。一日の進み具合に合わせて、ボトルのアニメーションが満ちていきます。間違えてもワンタップで取り消せます。\n\nあなたに合った目標\n体重と活動量を入力すると一日の目標を提案します。自分で決めることもできます。mlとozに対応。\n\n記録はずっと残る\n7日間のグラフ、連続記録、記録したすべての日の履歴。保存先はあなたの端末だけです。\n\nプライバシー重視の設計\nアカウントなし。広告なし。分析なし。クラウドなし。水分補給のデータはiPhoneの中にとどまります。\n\n無料で、条件もありません。さあ、水を一杯。",
+      "whatsNew": "Sipがホーム画面とロック画面に登場しました。\n\n• ウィジェット：今日の進み具合をひと目で確認し、アプリを開かずに1杯記録できます（タップで記録はiOS 17以降）。\n• 控えめになるリマインダー：2回続けてスルーすると、次からは間隔をあけ、言葉もやわらかくなります。\n• 各リマインダーの「あとで（1時間）」で、次の通知を1時間後にずらせます。\n• Sipはあなたの夜がいつ終わるかを学び、そのあとは通知しません。\n• 日本語を含む12言語に対応しました。\n\nこれまでどおり広告なし、アカウントなし。データがスマホの外に出ることはありません。",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "ko": {
+      "name": "Sip: 물 마시기 알리미",
+      "subtitle": "수분 섭취 기록과 물 트래커",
+      "keywords": "물마시기,알림,알람,음수량,수분섭취,리마인더,위젯,건강,습관,목표,무료",
+      "promotionalText": "당신의 집중을 존중하는 물 마시기 알림. 마스코트도, 죄책감도, 스팸도 없어요. 오늘 목표를 채우면 알림이 바로 멈춰요.",
+      "description": "Sip은 당신을 존중하는 물 마시기 알림이에요.\n\n대부분의 수분 앱은 하루 종일 재촉하고, 광고로 흐름을 끊고, 계정을 만들라고 해요. Sip은 그런 걸 하나도 하지 않아요.\n\n멈출 줄 아는 알림\n일어나는 시간과 잠드는 시간을 한 번만 설정하세요. Sip이 하루 동안 부드러운 알림을 나눠 보내고, 목표에 닿는 순간 멈춰요. 점심 전에 목표 달성? 내일까지 조용해요.\n\n앱을 열지 않고 기록\n알림에서 바로 \"250 ml 기록\"을 탭하세요. 끝이에요.\n\n한 번의 탭으로 기록\n세 가지 기본 양과 직접 입력. 하루가 지날수록 애니메이션 물병이 채워져요. 잘못 눌렀다면 한 번에 되돌릴 수 있어요.\n\n나에게 맞는 목표\n체중과 활동량을 입력하면 하루 목표를 추천해 드려요. 직접 정할 수도 있어요. ml와 oz 모두 지원해요.\n\n기록은 영원히\n7일 그래프, 연속 기록, 기록한 모든 날의 전체 기록. 오직 내 기기에만 저장돼요.\n\n처음부터 프라이버시\n계정 없음. 광고 없음. 분석 없음. 클라우드 없음. 수분 데이터는 iPhone에만 머물러요.\n\n무료이고, 조건도 없어요. 물 한 잔 하세요.",
+      "whatsNew": "Sip이 홈 화면과 잠금 화면에 왔어요.\n\n• 위젯: 오늘의 진행 상황을 한눈에 보고, 앱을 열지 않고 한 잔을 기록해요 (탭해서 기록은 iOS 17 이상).\n• 물러설 줄 아는 알림: 두 번 연속 넘기면 다음 알림은 간격을 넓히고 더 부드럽게 말해요.\n• 알림마다 있는 \"나중에 (1시간)\"으로 다음 알림을 한 시간 미룰 수 있어요.\n• Sip이 저녁이 언제 끝나는지 배우고, 그 뒤로는 알리지 않아요.\n• 이제 한국어를 포함한 12개 언어를 지원해요.\n\n여전히 광고 없음, 계정 없음, 데이터는 휴대폰 밖으로 나가지 않아요.",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    },
+    "zh-Hant": {
+      "name": "Sip：喝水提醒與紀錄",
+      "subtitle": "每日飲水追蹤，補充水分",
+      "keywords": "喝水時間,鬧鐘,水量,補水,健康,習慣,目標,小工具,免費,減肥",
+      "promotionalText": "尊重你注意力的喝水提醒。沒有吉祥物、沒有罪惡感、沒有洗版通知：一達成今天的目標，提醒就會停止。",
+      "description": "Sip 是尊重你的喝水提醒。\n\n大多數喝水 App 整天催個不停，用廣告打斷你，還要你註冊帳號。Sip 一樣都不做。\n\n懂得停下來的提醒\n只要設定一次起床和睡覺時間。Sip 會把溫和的提醒分散在一天之中，一達成目標就停止。中午前就達標？安靜到明天。\n\n不必開啟 App 就能記錄\n在通知上直接點「記錄 250 ml」。完成。\n\n一點就記錄\n三種預設份量，也能自訂份量。動畫水瓶會隨著一天慢慢裝滿。點錯了？一點就能復原。\n\n適合你的目標\n輸入體重和活動量，取得建議的每日目標，或自行設定。支援 ml 和 oz。\n\n紀錄永久保存\n7 天圖表、連續天數，以及每一天的完整紀錄，只儲存在你的裝置上。\n\n隱私優先的設計\n不用帳號。沒有廣告。沒有分析。沒有雲端。你的喝水資料只留在 iPhone 裡。\n\n免費，沒有附加條件。來喝杯水吧。",
+      "whatsNew": "Sip 現在來到主畫面和鎖定畫面。\n\n• 小工具：一眼看到今天的進度，不必開啟 App 就能記錄一杯（點一下記錄需 iOS 17 或以上）。\n• 會退一步的提醒：連續兩次沒理會，Sip 就會拉長之後的間隔，語氣也更溫和。\n• 每則提醒上的「稍後（1 小時）」可把下一則延後一小時。\n• Sip 會學習你的晚上何時結束，之後就不再提醒。\n• 現已支援 12 種語言，包括繁體中文。\n\n依然沒有廣告、不用帳號，資料也從不離開你的手機。",
+      "privacyPolicyUrl": "https://teja788.github.io/water_reminder/privacy.html",
+      "supportUrl": "https://teja788.github.io/water_reminder/support.html",
+      "marketingUrl": ""
+    }
+  },
+  "reviewNotes": "No account or sign-in; all data is stored locally on device. No servers, no data collection.\n\nNotification permission is requested during onboarding; the app is fully usable if declined (reminders simply stay off).\n\nTo test the headline feature: complete onboarding, background the app; a scheduled reminder notification includes a \"Log 250 ml\" action that logs water without opening the app.",
+  "copyright": "2026 Ravi Teja Gandham"
+}

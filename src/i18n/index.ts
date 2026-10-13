@@ -1,7 +1,21 @@
 import { getLocales } from 'expo-localization';
 import { Strings, en } from './en';
+import { de } from './de';
+import { es } from './es';
+import { fr } from './fr';
+import { it } from './it';
+import { ja } from './ja';
+import { ko } from './ko';
+import { nl } from './nl';
+import { pl } from './pl';
+import { pt } from './pt';
+import { tr } from './tr';
+import { zh } from './zh';
 
-const CATALOGS: Record<string, Strings> = { en };
+/** zh is Traditional Chinese (zh-Hant), used for every Chinese locale. */
+export const CATALOGS: Record<string, Strings> = {
+  en, de, es, fr, it, ja, ko, nl, pl, pt, tr, zh,
+};
 const FALLBACK = 'en';
 
 function pickLanguage(): string {
@@ -25,4 +39,6 @@ function pickLanguage(): string {
  * language is changed, so this cannot go stale while the app is running, and
  * keeping it a plain constant spares every screen a context or a hook.
  */
-export const t: Strings = CATALOGS[pickLanguage()] ?? en;
+/** Active catalog's language code, e.g. "de". */
+export const lang: string = pickLanguage();
+export const t: Strings = CATALOGS[lang] ?? en;

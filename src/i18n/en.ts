@@ -124,6 +124,13 @@ export const en = {
     unitNameOz: 'ounces',
   },
 
+  /** Home-screen widget. Passed in as props: the widget cannot import this. */
+  widget: {
+    add: (amount: string) => `+${amount}`,
+    toGo: (amount: string) => `${amount} to go`,
+    done: 'Goal reached',
+  },
+
   /**
    * Health copy. Translate this with more care than the rest — a clumsy
    * rendering of medical guidance is worse than a clumsy button label.
@@ -142,6 +149,7 @@ export const en = {
 
   notifications: {
     quickLog: (amount: string) => `Log ${amount}`,
+    snooze: 'Not now (1 h)',
     /**
      * Idiomatic on purpose — these are the app's voice. Rewrite them for each
      * language rather than translating them literally; "Water o'clock" has no
@@ -156,6 +164,13 @@ export const en = {
       ['Sip reminder', 'Take a moment — have some water.'],
       ["Water o'clock", 'One glass now beats catching up later.'],
       ['Stay refreshed', 'A little water goes a long way.'],
+    ] as Array<[string, string]>,
+    /** After reminders go unanswered: quieter, and no pressure. Same rule. */
+    softMessages: [
+      ["We'll check in later", 'Whenever you get a moment, a glass of water.'],
+      ['No rush', "Sip when it suits you. We'll keep it quiet."],
+      ['Still here', 'A little water, whenever you are ready.'],
+      ['Gentle nudge', "Busy day? We'll space these out."],
     ] as Array<[string, string]>,
   },
 };

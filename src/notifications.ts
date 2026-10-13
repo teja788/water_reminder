@@ -1,8 +1,9 @@
 import * as Notifications from 'expo-notifications';
-import { Settings, Units } from './types';
+import { DrinkEntry, Settings, Units } from './types';
 import { formatAmount } from './logic/hydration';
 import { t } from './i18n';
 import {
+  BACKOFF_AFTER,
   computeTodayReminderTimes,
   computeTomorrowReminderTimes,
 } from './logic/reminders';
@@ -11,6 +12,8 @@ import {
 // might not work as expected with them. (Action identifiers are unconstrained.)
 export const REMINDER_CATEGORY = 'waterReminder';
 export const ACTION_LOG_DEFAULT = 'log-default';
+export const ACTION_SNOOZE = 'snooze';
+export const SNOOZE_MS = 60 * 60 * 1000;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -38,7 +41,7 @@ export async function requestNotificationPermission(): Promise<boolean> {
 }
 
 /**
- * Registers the quick-log action so the user can log their default cup
+ * Registers the quick-log and snooze actions so the user can log their default cup
  * straight from the notification without opening the app.
  * Re-run whenever defaultCupMl or units change (button title shows the amount).
  */
@@ -52,10 +55,16 @@ export async function setupQuickLogCategory(
       buttonTitle: t.notifications.quickLog(formatAmount(defaultCupMl, units)),
       options: { opensAppToForeground: false },
     },
+    {
+      identifier: ACTION_SNOOZE,
+      buttonTitle: t.notifications.snooze,
+      options: { opensAppToForeground: false },
+    },
   ]);
 }
 
 const MESSAGES = t.notifications.messages;
+const SOFT_MESSAGES = t.notifications.softMessages;
 
 let rescheduleQueue: Promise<void> = Promise.resolve();
 
@@ -71,11 +80,12 @@ let rescheduleQueue: Promise<void> = Promise.resolve();
  */
 export function rescheduleReminders(
   settings: Settings,
-  todayTotalMl: number,
+  entries: DrinkEntry[],
+  snoozedUntil = 0,
   now: Date = new Date()
 ): Promise<void> {
   rescheduleQueue = rescheduleQueue
-    .then(() => doReschedule(settings, todayTotalMl, now))
+    .then(() => doReschedule(settings, entries, snoozedUntil, now))
     .catch(() => {
       // A failed reschedule must not poison the queue for later calls.
     });
@@ -84,24 +94,33 @@ export function rescheduleReminders(
 
 async function doReschedule(
   settings: Settings,
-  todayTotalMl: number,
+  entries: DrinkEntry[],
+  snoozedUntil: number,
   now: Date
 ): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
   if (!settings.remindersEnabled) {
     return;
   }
-  const times = [
-    ...computeTodayReminderTimes(now, settings, todayTotalMl),
-    ...computeTomorrowReminderTimes(now, settings),
+  // Each batch assumes nothing gets logged from its start, so its index is
+  // also how many reminders in a row have gone unanswered by then.
+  const batches = [
+    computeTodayReminderTimes(now, settings, entries, snoozedUntil),
+    computeTomorrowReminderTimes(now, settings, entries),
   ];
+  const times = batches.flatMap((batch) =>
+    batch.map((date, i) => ({ date, i, soft: i >= BACKOFF_AFTER }))
+  );
   await Promise.all(
-    times.map((date) => {
+    times.map(({ date, i, soft }) => {
       // Key the message off the target hour, not the array index. The times
       // array is rebuilt on every reschedule, so an index key would pin the
       // soonest reminder — the one users actually see — to MESSAGES[0] forever.
+      // `+ i` because backed-off gaps are often exactly 4 or 8 hours, which
+      // would land every soft reminder on the same one of SOFT_MESSAGES' four.
       const slot = Math.floor(date.getTime() / (60 * 60 * 1000));
-      const [title, body] = MESSAGES[slot % MESSAGES.length];
+      const pool = soft ? SOFT_MESSAGES : MESSAGES;
+      const [title, body] = pool[(slot + i) % pool.length];
       return Notifications.scheduleNotificationAsync({
         content: {
           title,

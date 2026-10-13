@@ -2,15 +2,17 @@ import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Theme } from '../theme';
 import { Units } from '../types';
 import { formatAmount } from '../logic/hydration';
-import { t } from '../i18n';
+import { lang, t } from '../i18n';
 import {
   DAILY_NOTICE_ML,
   IntakeNotice as Notice,
   PACE_LIMIT_ML,
 } from '../logic/intake';
 
-const LEARN_MORE_URL =
-  'https://teja788.github.io/water_reminder/hydration.html';
+/** One page per UI language: site/hydration.html (en), site/hydration-<lang>.html. */
+const LEARN_MORE_URL = `https://teja788.github.io/water_reminder/hydration${
+  lang === 'en' ? '' : `-${lang}`
+}.html`;
 
 /** Adequate-intake range quoted in the daily notice: EFSA's 2.0–2.5 L and the
  *  US IOM's 2.7–3.7 L, total water including food. */

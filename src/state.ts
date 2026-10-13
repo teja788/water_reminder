@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { DrinkEntry, Settings, makeEntryId } from './types';
 import { loadEntries, loadSettings, saveEntries, saveSettings } from './storage';
@@ -8,10 +8,18 @@ import { IntakeNotice, intakeNotice } from './logic/intake';
 import { computeTodayReminderTimes } from './logic/reminders';
 import {
   ACTION_LOG_DEFAULT,
+  ACTION_SNOOZE,
+  SNOOZE_MS,
   rescheduleReminders,
   setupQuickLogCategory,
 } from './notifications';
 import { maybeRequestReview } from './review';
+import { onWidgetTap, syncWidget } from './widget';
+
+// expo-notifications has no web implementation and this hook throws there,
+// blanking the iPad Safari test build. Fixed per platform, so hook order holds.
+const useLastNotificationResponse =
+  Platform.OS === 'web' ? () => undefined : Notifications.useLastNotificationResponse;
 
 export interface HydrationState {
   /** False until AsyncStorage has been read. */
@@ -42,6 +50,13 @@ export function useHydration(): HydrationState {
   // the day-based memos below to recompute — without it, an app backgrounded
   // over midnight would keep showing yesterday's totals.
   const [nowTick, setNowTick] = useState(() => Date.now());
+  // Set by the notification's "Not now" action: no reminder before this.
+  // ponytail: in memory only — an app kill inside the hour forgets the snooze
+  // and the next reminder comes 45 min after relaunch; persist it if that bites.
+  const snoozeRef = useRef(0);
+  // Synchronous mirror of `settings` (set wherever settings are), for async
+  // work that must act on the settings current when it resumes.
+  const settingsRef = useRef<Settings | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -60,6 +75,7 @@ export function useHydration(): HydrationState {
           // here would skip setReady(true) and hang the loading screen forever.
         }
       }
+      settingsRef.current = s;
       setSettings(s);
       entriesRef.current = e;
       setEntries(e);
@@ -68,8 +84,9 @@ export function useHydration(): HydrationState {
         // Enqueue synchronously, before yielding: this baseline reschedule
         // must be ordered ahead of any reschedule a pending quick-log effect
         // enqueues, so the quick-log's (higher) total is the queue's last word.
-        void rescheduleReminders(s, totalForDay(e, Date.now()));
+        void rescheduleReminders(s, e, snoozeRef.current);
         void setupQuickLogCategory(s.defaultCupMl, s.units);
+        void importWidgetDrinks();
       }
     })();
   }, []);
@@ -88,9 +105,9 @@ export function useHydration(): HydrationState {
     if (!settings) {
       return null;
     }
-    const times = computeTodayReminderTimes(new Date(), settings, todayTotalMl);
+    const times = computeTodayReminderTimes(new Date(), settings, entries, snoozeRef.current);
     return times.length > 0 ? times[0] : null;
-  }, [settings, todayTotalMl, nowTick]);
+  }, [settings, entries, nowTick]);
 
   const notice = useMemo(
     () =>
@@ -112,18 +129,49 @@ export function useHydration(): HydrationState {
     return () => clearInterval(id);
   }, [notice]);
 
+  const commitEntries = useCallback((next: DrinkEntry[], s: Settings | null) => {
+    // Backoff note: every reschedule restarts the unanswered count, so opening
+    // the app without logging brings back the firmer reminders. Deliberate —
+    // opening the app is attention; counting fired reminders would need state.
+    entriesRef.current = next;
+    setEntries(next);
+    void saveEntries(next);
+    if (s) {
+      void rescheduleReminders(s, next, snoozeRef.current);
+    }
+  }, []);
+
+  // Drinks tapped on the home-screen widget live in the widget's own storage
+  // until the app collects them: on launch, on foreground, on a live tap, and
+  // before every widget update. Backdated to the tap, so a tap from yesterday
+  // lands on yesterday.
+  const importWidgetDrinks = useCallback(
+    () =>
+      syncWidget(
+        () => settingsRef.current,
+        () => entriesRef.current,
+        (drinks) =>
+          commitEntries(
+            [
+              ...entriesRef.current,
+              ...drinks.map((d) => ({ id: makeEntryId(d.t), timestamp: d.t, amountMl: d.ml })),
+            ],
+            settingsRef.current
+          )
+      ),
+    [commitEntries]
+  );
+
   const persistEntries = useCallback(
     (update: (prev: DrinkEntry[]) => DrinkEntry[], s: Settings | null) => {
       const next = update(entriesRef.current);
-      entriesRef.current = next;
-      setEntries(next);
-      void saveEntries(next);
+      commitEntries(next, s);
       if (s) {
-        void rescheduleReminders(s, totalForDay(next, Date.now()));
+        void importWidgetDrinks();
       }
       return next;
     },
-    []
+    [commitEntries, importWidgetDrinks]
   );
 
   const logDrink = useCallback(
@@ -177,15 +225,14 @@ export function useHydration(): HydrationState {
 
   const updateSettings = useCallback(
     (next: Settings) => {
+      settingsRef.current = next;
       setSettings(next);
       void saveSettings(next);
       void setupQuickLogCategory(next.defaultCupMl, next.units);
-      void rescheduleReminders(
-        next,
-        totalForDay(entriesRef.current, Date.now())
-      );
+      void rescheduleReminders(next, entriesRef.current, snoozeRef.current);
+      void importWidgetDrinks();
     },
-    []
+    [importWidgetDrinks]
   );
 
   // On foreground: refresh "today" and re-sync scheduled notifications with
@@ -203,10 +250,8 @@ export function useHydration(): HydrationState {
       if (!settings) {
         return;
       }
-      void rescheduleReminders(
-        settings,
-        totalForDay(entriesRef.current, Date.now())
-      );
+      void rescheduleReminders(settings, entriesRef.current, snoozeRef.current);
+      void importWidgetDrinks();
       if (settings.remindersEnabled) {
         // Mirror the launch-time revocation check: without this, revoking
         // permission while backgrounded leaves the Settings switch on and
@@ -224,20 +269,29 @@ export function useHydration(): HydrationState {
       }
     });
     return () => sub.remove();
-  }, [settings, updateSettings]);
+  }, [settings, updateSettings, importWidgetDrinks]);
+
+  useEffect(() => {
+    if (!settings) {
+      return;
+    }
+    const sub = onWidgetTap(() => void importWidgetDrinks());
+    return () => sub.remove();
+  }, [settings, importWidgetDrinks]);
 
   // Quick-log action tapped on a notification (works from background; if the
   // app was killed, the response arrives on next launch). The entry is
   // backdated to when the notification FIRED (not when it was tapped), so an
   // overnight-delayed response lands on the day the reminder belonged to.
   // Known v1 limitation: only the most recent response survives an app kill.
-  const lastResponse = Notifications.useLastNotificationResponse();
+  const lastResponse = useLastNotificationResponse();
   const processedResponses = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (!lastResponse || !settings) {
       return;
     }
-    if (lastResponse.actionIdentifier !== ACTION_LOG_DEFAULT) {
+    const action = lastResponse.actionIdentifier;
+    if (action !== ACTION_LOG_DEFAULT && action !== ACTION_SNOOZE) {
       return;
     }
     const id = lastResponse.notification.request.identifier;
@@ -245,6 +299,13 @@ export function useHydration(): HydrationState {
       return;
     }
     processedResponses.current.add(id);
+    if (action === ACTION_SNOOZE) {
+      snoozeRef.current = Date.now() + SNOOZE_MS;
+      setNowTick(Date.now());
+      void rescheduleReminders(settings, entriesRef.current, snoozeRef.current);
+      Notifications.clearLastNotificationResponse();
+      return;
+    }
     // expo-notifications serializes Notification.date as SECONDS on iOS
     // (timeIntervalSince1970 in NotificationRecords.swift) but MILLISECONDS
     // on Android, with no JS-side normalization. 1e11 sits unambiguously
