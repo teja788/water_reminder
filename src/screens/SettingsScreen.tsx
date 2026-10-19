@@ -193,7 +193,9 @@ export default function SettingsScreen(props: {
     }
     const merged = { ...pendingRef.current, ...patch };
     pendingRef.current = null;
-    hydration.updateSettings({ ...settings, ...merged });
+    // settingsRef, not `settings`: the reminders toggle commits after awaiting
+    // the permission alert, and the render it closed over may be stale by then.
+    hydration.updateSettings({ ...settingsRef.current, ...merged });
   };
 
   /** Debounced commit for text fields. */
@@ -218,7 +220,7 @@ export default function SettingsScreen(props: {
     draftWeight >= MIN_WEIGHT_KG &&
     draftWeight <= MAX_WEIGHT_KG;
   // A typed goal the app will not accept — explained rather than ignored.
-  const draftGoal = goalInputToMl(parseNumber(goalDraft));
+  const draftGoal = goalInputToMl(goalDraft);
   const goalOutOfRange =
     goalDraft.trim() !== '' &&
     !(
@@ -246,7 +248,7 @@ export default function SettingsScreen(props: {
 
   const onGoalChange = (text: string): void => {
     setGoalDraft(text);
-    const value = goalInputToMl(parseNumber(text));
+    const value = goalInputToMl(text);
     if (!Number.isFinite(value) || value < MIN_GOAL_ML || value > MAX_GOAL_ML) {
       return;
     }

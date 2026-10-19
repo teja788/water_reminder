@@ -259,8 +259,8 @@ export function useHydration(): HydrationState {
         void (async () => {
           try {
             const perm = await Notifications.getPermissionsAsync();
-            if (!perm.granted) {
-              updateSettings({ ...settings, remindersEnabled: false });
+            if (!perm.granted && settingsRef.current) {
+              updateSettings({ ...settingsRef.current, remindersEnabled: false });
             }
           } catch {
             // Best-effort; a failed check must not disturb foregrounding.

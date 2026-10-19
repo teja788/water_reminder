@@ -22,7 +22,7 @@ const STRINGS = {
   ko: '오늘 마신 물을 한눈에. 탭해서 한 잔 기록하세요.',
   nl: 'Je water van vandaag in één oogopslag. Tik om een glas te noteren.',
   pl: 'Dzisiejsza woda w skrócie. Stuknij, aby zapisać szklankę.',
-  'pt-BR': 'Sua água de hoje num relance. Toque para registrar um copo.',
+  pt: 'Sua água de hoje num relance. Toque para registrar um copo.',
   tr: 'Bugünkü suyun bir bakışta. Bir bardak eklemek için dokun.',
   'zh-Hant': '今天的飲水一目了然。點一下即可記錄一杯。',
 };

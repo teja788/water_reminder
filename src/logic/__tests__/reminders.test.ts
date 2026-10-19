@@ -99,3 +99,9 @@ test("tomorrow's cutoff counts today's drinks", () => {
   const tomorrow = computeTomorrowReminderTimes(at(14, 22), SETTINGS, entries);
   assert.ok(tomorrow.some((d) => d > at(15, 19, 30)));
 });
+
+test('three cups left still get three reminders', () => {
+  const logged = drink(at(14, 9), SETTINGS.goalMl - 3 * 250);
+  const times = computeTodayReminderTimes(at(14, 14), SETTINGS, [logged]);
+  assert.deepEqual(times.map(hhmm), ['14:45', '17:00', '21:30']);
+});

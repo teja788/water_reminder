@@ -51,6 +51,12 @@ function spread(startMs: number, endMs: number, wanted: number): Date[] {
   while (units(count) > evenCount - 1) {
     count--;
   }
+  // Three cups left must not shrink to "now and bedtime": keep one reminder
+  // past the even pair whenever it still fits the minimum gap.
+  const floor = Math.min(evenCount, BACKOFF_AFTER + 1);
+  if (count < floor && units(floor) <= maxFit - 1) {
+    count = floor;
+  }
   const gap = (endMs - startMs) / units(count);
   const times: Date[] = [];
   for (let at = startMs, i = 0; i < count; i++) {
