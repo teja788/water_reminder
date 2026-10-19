@@ -78,7 +78,7 @@ export const ko: Strings = {
     suggested: '추천',
     useSuggested: '추천 목표 사용',
     useSuggestedA11y: '추천 목표 사용',
-    goalLabel: '하루 목표(ml)',
+    goalLabel: '하루 목표(ml / L)',
     goalA11y: '하루 목표(밀리리터)',
     goalRange: (min: string, max: string) =>
       `${min}~${max} ml 사이로 입력해 주세요`,

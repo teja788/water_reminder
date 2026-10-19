@@ -79,7 +79,7 @@ export const ja: Strings = {
     suggested: 'おすすめ',
     useSuggested: 'おすすめを使う',
     useSuggestedA11y: 'おすすめの目標を使う',
-    goalLabel: '1日の目標（ml）',
+    goalLabel: '1日の目標（ml / L）',
     goalA11y: '1日の目標（ミリリットル）',
     goalRange: (min: string, max: string) =>
       `${min}〜${max} mlの範囲で入力してください`,

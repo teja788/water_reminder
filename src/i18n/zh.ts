@@ -79,7 +79,7 @@ export const zh: Strings = {
     suggested: '建議',
     useSuggested: '使用建議值',
     useSuggestedA11y: '使用建議目標',
-    goalLabel: '每日目標（ml）',
+    goalLabel: '每日目標（ml / L）',
     goalA11y: '每日目標（毫升）',
     goalRange: (min: string, max: string) =>
       `請輸入 ${min} 到 ${max} ml 之間的目標`,

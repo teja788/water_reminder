@@ -83,7 +83,7 @@ export const es: Strings = {
     suggested: 'Sugerida',
     useSuggested: 'Usar sugerida',
     useSuggestedA11y: 'Usar la meta sugerida',
-    goalLabel: 'Meta diaria (ml)',
+    goalLabel: 'Meta diaria (ml / L)',
     goalA11y: 'Meta diaria en mililitros',
     goalRange: (min: string, max: string) =>
       `Escribe una meta entre ${min} y ${max} ml`,

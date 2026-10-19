@@ -13,6 +13,12 @@ export function calcGoalMl(weightKg: number, activity: ActivityLevel): number {
   return Math.round(clamped / 50) * 50;
 }
 
+/** A typed goal in ml, or in litres when it is 8 or less ("2.5" = 2500 ml).
+ *  No goal is under 500 ml, so small numbers can only mean litres. */
+export function goalInputToMl(value: number): number {
+  return Math.round(value > 0 && value <= 8 ? value * 1000 : value);
+}
+
 export function mlToOz(ml: number): number {
   return ml / 29.5735;
 }

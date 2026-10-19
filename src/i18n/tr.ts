@@ -80,7 +80,7 @@ export const tr: Strings = {
     suggested: 'Önerilen',
     useSuggested: 'Öneriyi kullan',
     useSuggestedA11y: 'Önerilen hedefi kullan',
-    goalLabel: 'Günlük hedef (ml)',
+    goalLabel: 'Günlük hedef (ml / L)',
     goalA11y: 'Mililitre cinsinden günlük hedef',
     goalRange: (min: string, max: string) =>
       `${min} ile ${max} ml arasında bir hedef gir`,

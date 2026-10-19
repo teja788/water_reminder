@@ -88,7 +88,7 @@ export const en = {
     suggested: 'Suggested',
     useSuggested: 'Use suggested',
     useSuggestedA11y: 'Use suggested goal',
-    goalLabel: 'Daily goal (ml)',
+    goalLabel: 'Daily goal (ml / L)',
     goalA11y: 'Daily goal in millilitres',
     goalRange: (min: string, max: string) =>
       `Enter a goal between ${min} and ${max} ml`,

@@ -84,7 +84,7 @@ export const nl: Strings = {
     suggested: 'Voorgesteld',
     useSuggested: 'Voorstel gebruiken',
     useSuggestedA11y: 'Voorgesteld doel gebruiken',
-    goalLabel: 'Dagdoel (ml)',
+    goalLabel: 'Dagdoel (ml / L)',
     goalA11y: 'Dagdoel in milliliter',
     goalRange: (min: string, max: string) =>
       `Kies een doel tussen ${min} en ${max} ml`,

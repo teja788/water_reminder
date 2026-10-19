@@ -14,7 +14,7 @@ import * as Notifications from 'expo-notifications';
 import { Theme } from '../theme';
 import { ActivityLevel, Settings } from '../types';
 import { HydrationState } from '../state';
-import { calcGoalMl, formatAmount } from '../logic/hydration';
+import { calcGoalMl, formatAmount, goalInputToMl } from '../logic/hydration';
 import { requestNotificationPermission } from '../notifications';
 import { t } from '../i18n';
 
@@ -218,7 +218,7 @@ export default function SettingsScreen(props: {
     draftWeight >= MIN_WEIGHT_KG &&
     draftWeight <= MAX_WEIGHT_KG;
   // A typed goal the app will not accept — explained rather than ignored.
-  const draftGoal = parseNumber(goalDraft);
+  const draftGoal = goalInputToMl(parseNumber(goalDraft));
   const goalOutOfRange =
     goalDraft.trim() !== '' &&
     !(
@@ -246,11 +246,11 @@ export default function SettingsScreen(props: {
 
   const onGoalChange = (text: string): void => {
     setGoalDraft(text);
-    const value = parseNumber(text);
+    const value = goalInputToMl(parseNumber(text));
     if (!Number.isFinite(value) || value < MIN_GOAL_ML || value > MAX_GOAL_ML) {
       return;
     }
-    commitDebounced({ goalMl: Math.round(value) });
+    commitDebounced({ goalMl: value });
   };
 
   const useSuggested = (): void => {
@@ -397,10 +397,10 @@ export default function SettingsScreen(props: {
         <TextInput
           value={goalDraft}
           onChangeText={onGoalChange}
-          keyboardType="number-pad"
+          keyboardType="decimal-pad"
           maxLength={5}
           maxFontSizeMultiplier={1.5}
-          placeholder="2500"
+          placeholder="2500 / 2.5"
           placeholderTextColor={theme.textSecondary}
           accessibilityLabel={t.settings.goalA11y}
           style={[

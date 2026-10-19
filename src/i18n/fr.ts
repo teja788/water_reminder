@@ -81,7 +81,7 @@ export const fr: Strings = {
     suggested: 'Suggéré',
     useSuggested: 'Utiliser la suggestion',
     useSuggestedA11y: 'Utiliser l’objectif suggéré',
-    goalLabel: 'Objectif du jour (ml)',
+    goalLabel: 'Objectif du jour (ml / L)',
     goalA11y: 'Objectif du jour en millilitres',
     goalRange: (min: string, max: string) =>
       `Indique un objectif entre ${min} et ${max} ml`,

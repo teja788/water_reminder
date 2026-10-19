@@ -84,7 +84,7 @@ export const pl: Strings = {
     suggested: 'Sugerowany',
     useSuggested: 'Użyj sugerowanego',
     useSuggestedA11y: 'Użyj sugerowanego celu',
-    goalLabel: 'Dzienny cel (ml)',
+    goalLabel: 'Dzienny cel (ml / L)',
     goalA11y: 'Dzienny cel w mililitrach',
     goalRange: (min: string, max: string) =>
       `Podaj cel od ${min} do ${max} ml`,
