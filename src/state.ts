@@ -15,6 +15,7 @@ import {
 } from './notifications';
 import { maybeRequestReview } from './review';
 import { onWidgetTap, syncWidget } from './widget';
+import { count } from './analytics';
 
 // expo-notifications has no web implementation and this hook throws there,
 // blanking the iPad Safari test build. Fixed per platform, so hook order holds.
@@ -133,6 +134,13 @@ export function useHydration(): HydrationState {
     // Backoff note: every reschedule restarts the unanswered count, so opening
     // the app without logging brings back the firmer reminders. Deliberate —
     // opening the app is attention; counting fired reminders would need state.
+    // ponytail: undo then re-log across the goal counts the goal twice; fine for totals.
+    if (s) {
+      const now = Date.now();
+      if (totalForDay(entriesRef.current, now) < s.goalMl && totalForDay(next, now) >= s.goalMl) {
+        count({ goal: 1 });
+      }
+    }
     entriesRef.current = next;
     setEntries(next);
     void saveEntries(next);
@@ -150,14 +158,16 @@ export function useHydration(): HydrationState {
       syncWidget(
         () => settingsRef.current,
         () => entriesRef.current,
-        (drinks) =>
+        (drinks) => {
+          count({ drink: drinks.length, 'drink.widget': drinks.length });
           commitEntries(
             [
               ...entriesRef.current,
               ...drinks.map((d) => ({ id: makeEntryId(d.t), timestamp: d.t, amountMl: d.ml })),
             ],
             settingsRef.current
-          )
+          );
+        }
       ),
     [commitEntries]
   );
@@ -182,6 +192,8 @@ export function useHydration(): HydrationState {
         timestamp: ts,
         amountMl,
       };
+      // Only a notification's quick-log passes a timestamp.
+      count(timestampMs === undefined ? { drink: 1 } : { drink: 1, 'drink.reminder': 1 });
       const prevTotalMl = totalForDay(entriesRef.current, Date.now());
       const next = persistEntries((prev) => [...prev, entry], settings);
       if (!settings) {
@@ -210,6 +222,7 @@ export function useHydration(): HydrationState {
     if (entriesRef.current.length === 0) {
       return;
     }
+    count({ undo: 1 });
     persistEntries((prev) => {
       // Backdated quick-log entries mean the last array element isn't
       // necessarily the most recent drink — remove the max-timestamp entry.
@@ -225,6 +238,9 @@ export function useHydration(): HydrationState {
 
   const updateSettings = useCallback(
     (next: Settings) => {
+      if (!settingsRef.current) {
+        count({ onboard: 1 });
+      }
       settingsRef.current = next;
       setSettings(next);
       void saveSettings(next);
@@ -300,6 +316,7 @@ export function useHydration(): HydrationState {
     }
     processedResponses.current.add(id);
     if (action === ACTION_SNOOZE) {
+      count({ snooze: 1 });
       snoozeRef.current = Date.now() + SNOOZE_MS;
       setNowTick(Date.now());
       void rescheduleReminders(settings, entriesRef.current, snoozeRef.current);

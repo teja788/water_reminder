@@ -101,7 +101,7 @@ export const en = {
     reminders: 'Reminders',
     enableInIosSettings: 'Enable notifications in iOS Settings',
     version: (version: string) => `Version ${version}`,
-    privacyNote: 'Your data never leaves this device.',
+    privacyNote: 'Your drinks and settings stay on this device. Only anonymous usage counts are sent.',
     rate: 'Rate Sip',
     rateA11y: 'Rate Sip on the App Store',
   },

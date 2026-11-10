@@ -97,7 +97,7 @@ export const pl: Strings = {
     reminders: 'Przypomnienia',
     enableInIosSettings: 'Włącz powiadomienia w Ustawieniach iOS',
     version: (version: string) => `Wersja ${version}`,
-    privacyNote: 'Twoje dane nigdy nie opuszczają tego urządzenia.',
+    privacyNote: 'Twoje napoje i ustawienia zostają na tym urządzeniu. Wysyłane są tylko anonimowe statystyki użycia.',
     rate: 'Oceń Sip',
     rateA11y: 'Oceń Sip w App Store',
   },

@@ -93,7 +93,7 @@ export const tr: Strings = {
     reminders: 'Hatırlatıcılar',
     enableInIosSettings: 'Bildirimleri iOS Ayarlar’dan aç',
     version: (version: string) => `Sürüm ${version}`,
-    privacyNote: 'Verilerin bu cihazdan asla çıkmaz.',
+    privacyNote: 'İçtiklerin ve ayarların bu cihazda kalır. Yalnızca anonim kullanım sayıları gönderilir.',
     rate: 'Sip’i değerlendir',
     rateA11y: 'Sip’i App Store’da değerlendir',
   },

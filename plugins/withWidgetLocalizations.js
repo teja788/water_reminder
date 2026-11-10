@@ -17,6 +17,7 @@ const STRINGS = {
   de: 'Dein Wasser heute auf einen Blick. Tippen, um ein Glas einzutragen.',
   es: 'Tu agua de hoy de un vistazo. Toca para registrar un vaso.',
   fr: 'Ton eau du jour en un coup d’œil. Touche pour ajouter un verre.',
+  hi: 'आज का पानी एक नज़र में। एक गिलास जोड़ने के लिए टैप करें।',
   it: 'L’acqua di oggi a colpo d’occhio. Tocca per registrare un bicchiere.',
   ja: '今日の水分をひと目で。タップで1杯記録。',
   ko: '오늘 마신 물을 한눈에. 탭해서 한 잔 기록하세요.',

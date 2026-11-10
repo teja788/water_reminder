@@ -97,7 +97,7 @@ export const nl: Strings = {
     reminders: 'Herinneringen',
     enableInIosSettings: 'Zet meldingen aan in de iOS-instellingen',
     version: (version: string) => `Versie ${version}`,
-    privacyNote: 'Je gegevens verlaten dit apparaat nooit.',
+    privacyNote: 'Je drankjes en instellingen blijven op dit apparaat. Alleen anonieme gebruikstellingen worden verstuurd.',
     rate: 'Beoordeel Sip',
     rateA11y: 'Beoordeel Sip in de App Store',
   },

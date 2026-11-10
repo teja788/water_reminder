@@ -92,7 +92,7 @@ export const ja: Strings = {
     reminders: 'リマインダー',
     enableInIosSettings: 'iOSの設定で通知をオンにしてください',
     version: (version: string) => `バージョン ${version}`,
-    privacyNote: 'データがこの端末の外に出ることはありません。',
+    privacyNote: '記録と設定はこの端末に保存されます。送信されるのは匿名の利用回数だけです。',
     rate: 'Sipを評価する',
     rateA11y: 'App StoreでSipを評価する',
   },

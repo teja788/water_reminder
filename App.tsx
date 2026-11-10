@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   Pressable,
@@ -10,6 +10,7 @@ import {
 import { darkTheme, lightTheme } from './src/theme';
 import { useHydration } from './src/state';
 import { t } from './src/i18n';
+import { startAnalytics } from './src/analytics';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
@@ -28,6 +29,7 @@ export default function App() {
   const theme = scheme === 'dark' ? darkTheme : lightTheme;
   const hydration = useHydration();
   const [tab, setTab] = useState<Tab>('home');
+  useEffect(() => startAnalytics(), []);
 
   if (!hydration.ready) {
     return (

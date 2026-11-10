@@ -6,6 +6,7 @@ import { en } from '../en';
 import { de } from '../de';
 import { es } from '../es';
 import { fr } from '../fr';
+import { hi } from '../hi';
 import { it } from '../it';
 import { ja } from '../ja';
 import { ko } from '../ko';
@@ -16,7 +17,7 @@ import { tr } from '../tr';
 import { zh } from '../zh';
 
 // index.ts imports expo-localization, which needs the native runtime.
-const CATALOGS = { en, de, es, fr, it, ja, ko, nl, pl, pt, tr, zh };
+const CATALOGS = { en, de, es, fr, hi, it, ja, ko, nl, pl, pt, tr, zh };
 
 /** Distinct, greppable sample arguments; numbers sweep the plural forms. */
 const NUMBERS = [0, 1, 2, 3, 5, 12, 22, 25, 101];

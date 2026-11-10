@@ -92,7 +92,7 @@ export const zh: Strings = {
     reminders: '提醒',
     enableInIosSettings: '請到 iOS 設定開啟通知',
     version: (version: string) => `版本 ${version}`,
-    privacyNote: '你的資料不會離開這台裝置。',
+    privacyNote: '你的飲水紀錄和設定只存在這台裝置。只會傳送匿名的使用次數。',
     rate: '為 Sip 評分',
     rateA11y: '在 App Store 為 Sip 評分',
   },

@@ -94,7 +94,7 @@ export const it: Strings = {
     reminders: 'Promemoria',
     enableInIosSettings: 'Attiva le notifiche nelle Impostazioni di iOS',
     version: (version: string) => `Versione ${version}`,
-    privacyNote: 'I tuoi dati non lasciano mai questo dispositivo.',
+    privacyNote: 'Le tue bevute e impostazioni restano su questo dispositivo. Vengono inviati solo conteggi d’uso anonimi.',
     rate: 'Valuta Sip',
     rateA11y: 'Valuta Sip sull’App Store',
   },

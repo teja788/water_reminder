@@ -94,7 +94,7 @@ export const fr: Strings = {
     reminders: 'Rappels',
     enableInIosSettings: 'Active les notifications dans les Réglages d’iOS',
     version: (version: string) => `Version ${version}`,
-    privacyNote: 'Tes données ne quittent jamais cet appareil.',
+    privacyNote: 'Tes boissons et réglages restent sur cet appareil. Seuls des comptages d’utilisation anonymes sont envoyés.',
     rate: 'Noter Sip',
     rateA11y: 'Noter Sip sur l’App Store',
   },

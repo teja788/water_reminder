@@ -36,7 +36,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const BASE = process.env.SIP_URL ?? 'http://localhost:8091';
 const COMPOSE = path.join(os.homedir(), '.claude/skills/ship-ios-app/compose-screenshots.mjs');
 
-const LANGS = { en: 'en-US', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', ja: 'ja-JP',
+const LANGS = { en: 'en-US', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', hi: 'hi-IN', it: 'it-IT', ja: 'ja-JP',
   ko: 'ko-KR', nl: 'nl-NL', pl: 'pl-PL', pt: 'pt-BR', tr: 'tr-TR', zh: 'zh-TW' };
 const DEVICES = {
   'iphone-6.9': { viewport: { width: 440, height: 956 }, deviceScaleFactor: 3 },

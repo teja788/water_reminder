@@ -3,6 +3,7 @@ import { Strings, en } from './en';
 import { de } from './de';
 import { es } from './es';
 import { fr } from './fr';
+import { hi } from './hi';
 import { it } from './it';
 import { ja } from './ja';
 import { ko } from './ko';
@@ -14,7 +15,7 @@ import { zh } from './zh';
 
 /** zh is Traditional Chinese (zh-Hant), used for every Chinese locale. */
 export const CATALOGS: Record<string, Strings> = {
-  en, de, es, fr, it, ja, ko, nl, pl, pt, tr, zh,
+  en, de, es, fr, hi, it, ja, ko, nl, pl, pt, tr, zh,
 };
 const FALLBACK = 'en';
 

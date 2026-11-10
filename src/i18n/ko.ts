@@ -91,7 +91,7 @@ export const ko: Strings = {
     reminders: '알림',
     enableInIosSettings: 'iOS 설정에서 알림을 켜 주세요',
     version: (version: string) => `버전 ${version}`,
-    privacyNote: '데이터는 이 기기 밖으로 나가지 않아요.',
+    privacyNote: '기록과 설정은 이 기기에만 저장돼요. 익명의 사용 횟수만 전송돼요.',
     rate: 'Sip 평가하기',
     rateA11y: 'App Store에서 Sip 평가하기',
   },

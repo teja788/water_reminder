@@ -96,7 +96,7 @@ export const es: Strings = {
     reminders: 'Recordatorios',
     enableInIosSettings: 'Activa las notificaciones en los Ajustes de iOS',
     version: (version: string) => `Versión ${version}`,
-    privacyNote: 'Tus datos nunca salen de este dispositivo.',
+    privacyNote: 'Tus bebidas y ajustes se quedan en este dispositivo. Solo se envían recuentos de uso anónimos.',
     rate: 'Valorar Sip',
     rateA11y: 'Valorar Sip en el App Store',
   },
