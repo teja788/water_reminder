@@ -23,10 +23,10 @@
 </head>
 <body>
 <h1>Water Reminder — Privacy Policy</h1>
-<p class="updated">Last updated: August 14, 2026</p>
+<p class="updated">Last updated: November 10, 2026</p>
 
 <h2>The short version</h2>
-<p><strong>Water Reminder collects no data. Everything you enter stays on your device.</strong></p>
+<p><strong>Everything you enter stays on your device. From version 1.3, the app also sends <a href="#counts">anonymous usage counts</a> with nothing that identifies you.</strong></p>
 
 <h2>What the app stores</h2>
 <p>Your settings (weight, activity level, daily goal, cup sizes, schedule) and
@@ -35,9 +35,19 @@ There is no account, no sign-up, and no cloud sync.</p>
 
 <h2>What the app does not do</h2>
 <ul>
-  <li>No data is transmitted off your device.</li>
-  <li>No analytics, tracking, or advertising SDKs.</li>
+  <li>Your drink log and settings are never transmitted off your device.</li>
+  <li>No tracking, no advertising, no third-party analytics or advertising SDKs.</li>
   <li>No third parties receive any information.</li>
+</ul>
+
+<h2 id="counts">Anonymous usage counts</h2>
+<p>From version 1.3, the app tells us how it is used, as totals with nothing that identifies you, so we can see what helps and fix what doesn't.</p>
+<ul>
+  <li><strong>What is sent:</strong> a few times a day, a short message with that day's counts: how many drinks were logged (and how many from a reminder or the widget), whether setup was finished, whether the daily goal was reached, how often a drink was undone or a reminder snoozed, and how long the app was open. Amounts, times and your goal are not sent. The first message of a day also says the app version, the kind of device (iPhone or iPad), the app's language, and how many days ago the app was installed.</li>
+  <li><strong>What is never sent:</strong> your drink log, weight, goal, schedule, a device or advertising identifier, an account, your location, or anything else that could single you out. The messages carry no code that links one day's message to another or to you.</li>
+  <li><strong>What we keep:</strong> our server adds each message to that day's totals for the whole app (for example "312 drinks, 41 devices") and does not keep the message itself. The network (IP) address a message comes from is used only in the server's working memory, for up to an hour, to stop floods; it is never stored or logged.</li>
+  <li><strong>Offline:</strong> the counts wait on your device and go with the next message once there is a connection. Counts more than a week old are deleted unsent.</li>
+  <li><strong>Hosting:</strong> Cloudflare Workers, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>, with request logging turned off.</li>
 </ul>
 
 <h2>Notifications</h2>
