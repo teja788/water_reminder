@@ -11,10 +11,9 @@ const PROMPT_DELAY_MS = 1800;
  * every logged drink — the policy in ./logic/review decides.
  */
 export async function maybeRequestReview(args: {
-  prevTotalMl: number;
-  newTotalMl: number;
+  todayTotalMl: number;
   goalMl: number;
-  streak: number;
+  goalDays: number;
 }): Promise<void> {
   try {
     const state = await loadReviewState();

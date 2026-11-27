@@ -12,6 +12,9 @@ export const fr: Strings = {
     doneForToday: 'Terminé pour aujourd’hui — plus de rappels',
     nextReminder: (time: string) => `Prochain rappel vers ${time}`,
     noneTonight: 'Plus de rappels ce soir — à demain',
+    widgetTipTitle: 'Note depuis l’écran d’accueil',
+    widgetTipBody: 'Maintiens le doigt sur l’écran d’accueil, touche Modifier ou +, puis ajoute le widget Sip.',
+    widgetTipDismiss: 'Compris',
   },
 
   bottle: {
@@ -102,6 +105,8 @@ export const fr: Strings = {
   fields: {
     weightLabel: 'Ton poids (kg)',
     weightA11y: 'Ton poids en kilogrammes',
+    weightLabelLb: 'Ton poids (lb)',
+    weightA11yLb: 'Ton poids en livres',
     activityLabel: 'Niveau d’activité',
     sedentary: 'Sédentaire',
     moderate: 'Modéré',

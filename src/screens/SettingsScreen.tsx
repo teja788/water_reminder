@@ -12,11 +12,17 @@ import {
 } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { Theme } from '../theme';
-import { ActivityLevel, Settings } from '../types';
+import { ActivityLevel, Settings, Units } from '../types';
 import { HydrationState } from '../state';
-import { calcGoalMl, formatAmount, goalInputToMl } from '../logic/hydration';
+import {
+  calcGoalMl,
+  formatAmount,
+  goalInputToMl,
+  weightFromKg,
+  weightToKg,
+} from '../logic/hydration';
 import { requestNotificationPermission } from '../notifications';
-import { t } from '../i18n';
+import { hourLabel, t } from '../i18n';
 
 /** Whole hours only — these ranges guarantee sleep > wake by construction. */
 const WAKE_HOURS = [5, 6, 7, 8, 9, 10, 11, 12];
@@ -41,10 +47,6 @@ const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
   { id: 'moderate', label: t.fields.moderate },
   { id: 'active', label: t.fields.active },
 ];
-
-function hourLabel(hour: number): string {
-  return `${String(hour).padStart(2, '0')}:00`;
-}
 
 /** Number('') is 0, not NaN — every caller also range-checks the result. */
 function parseNumber(text: string): number {
@@ -122,7 +124,9 @@ export default function SettingsScreen(props: {
   const { theme, hydration, settings } = props;
   // Drafts seed from the persisted settings ONCE. Re-syncing them on every
   // prop change would fight the user's keystrokes on each committed render.
-  const [weightDraft, setWeightDraft] = useState(() => String(settings.weightKg));
+  const [weightDraft, setWeightDraft] = useState(() =>
+    String(weightFromKg(settings.weightKg, settings.units))
+  );
   const [goalDraft, setGoalDraft] = useState(() => String(settings.goalMl));
   const [cupDrafts, setCupDrafts] = useState<string[]>(() =>
     settings.cupSizesMl.map((ml) => String(ml))
@@ -214,7 +218,7 @@ export default function SettingsScreen(props: {
     ...pendingRef.current,
   });
 
-  const draftWeight = parseNumber(weightDraft);
+  const draftWeight = weightToKg(parseNumber(weightDraft), settings.units);
   const draftWeightValid =
     Number.isFinite(draftWeight) &&
     draftWeight >= MIN_WEIGHT_KG &&
@@ -235,7 +239,7 @@ export default function SettingsScreen(props: {
 
   const onWeightChange = (text: string): void => {
     setWeightDraft(text);
-    const value = parseNumber(text);
+    const value = weightToKg(parseNumber(text), settings.units);
     if (
       !Number.isFinite(value) ||
       value < MIN_WEIGHT_KG ||
@@ -244,6 +248,15 @@ export default function SettingsScreen(props: {
       return;
     }
     commitDebounced({ weightKg: value });
+  };
+
+  /** The weight field follows the units (kg with ml, lb with oz). */
+  const changeUnits = (units: Units): void => {
+    if (units === settings.units) {
+      return;
+    }
+    setWeightDraft(String(weightFromKg(effectiveSettings().weightKg, units)));
+    commit({ units });
   };
 
   const onGoalChange = (text: string): void => {
@@ -313,7 +326,7 @@ export default function SettingsScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          {t.fields.weightLabel}
+          {settings.units === 'oz' ? t.fields.weightLabelLb : t.fields.weightLabel}
         </Text>
         <TextInput
           value={weightDraft}
@@ -321,9 +334,11 @@ export default function SettingsScreen(props: {
           keyboardType="number-pad"
           maxLength={3}
           maxFontSizeMultiplier={1.5}
-          placeholder="65"
+          placeholder={settings.units === 'oz' ? '154' : '70'}
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel={t.fields.weightA11y}
+          accessibilityLabel={
+            settings.units === 'oz' ? t.fields.weightA11yLb : t.fields.weightA11y
+          }
           style={[
             styles.input,
             {
@@ -434,14 +449,14 @@ export default function SettingsScreen(props: {
             label="ml"
             selected={settings.units === 'ml'}
             accessibilityLabel={t.fields.showMl}
-            onPress={() => commit({ units: 'ml' })}
+            onPress={() => changeUnits('ml')}
           />
           <Chip
             theme={theme}
             label="oz"
             selected={settings.units === 'oz'}
             accessibilityLabel={t.fields.showOz}
-            onPress={() => commit({ units: 'oz' })}
+            onPress={() => changeUnits('oz')}
           />
         </View>
         <Text

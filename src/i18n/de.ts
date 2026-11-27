@@ -12,6 +12,9 @@ export const de: Strings = {
     doneForToday: 'Fertig für heute – keine Erinnerungen mehr',
     nextReminder: (time: string) => `Nächste Erinnerung gegen ${time}`,
     noneTonight: 'Heute Abend keine Erinnerungen mehr – morgen geht’s weiter',
+    widgetTipTitle: 'Vom Home-Bildschirm aus eintragen',
+    widgetTipBody: 'Halte den Home-Bildschirm gedrückt, tippe auf „Bearbeiten“ oder + und füge das Sip-Widget hinzu.',
+    widgetTipDismiss: 'Verstanden',
   },
 
   bottle: {
@@ -102,6 +105,8 @@ export const de: Strings = {
   fields: {
     weightLabel: 'Dein Gewicht (kg)',
     weightA11y: 'Dein Gewicht in Kilogramm',
+    weightLabelLb: 'Dein Gewicht (lb)',
+    weightA11yLb: 'Dein Gewicht in Pfund',
     activityLabel: 'Aktivität',
     sedentary: 'Wenig',
     moderate: 'Mittel',

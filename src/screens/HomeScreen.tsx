@@ -1,9 +1,17 @@
-import { useState } from 'react';
-import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  LayoutChangeEvent,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { Theme } from '../theme';
 import { Settings } from '../types';
 import { HydrationState } from '../state';
 import { t } from '../i18n';
+import { loadWidgetTipDone, saveWidgetTipDone } from '../storage';
 import ProgressBottle from '../components/ProgressBottle';
 import LogButtons from '../components/LogButtons';
 import IntakeNotice from '../components/IntakeNotice';
@@ -36,6 +44,20 @@ export default function HomeScreen(props: {
   const [gaugeHeight, setGaugeHeight] = useState(0);
   const onGaugeLayout = (e: LayoutChangeEvent): void => {
     setGaugeHeight(e.nativeEvent.layout.height);
+  };
+  // Nobody had used the widget as of Nov 2026, so point it out once, after
+  // the second drink (the app has proved useful by then). iOS only: there is
+  // no widget anywhere else.
+  const [tipDone, setTipDone] = useState(true);
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      void loadWidgetTipDone().then(setTipDone);
+    }
+  }, []);
+  const showTip = !tipDone && hydration.entries.length >= 2 && hydration.notice === null;
+  const dismissTip = (): void => {
+    setTipDone(true);
+    saveWidgetTipDone();
   };
   const dateLabel = new Date().toLocaleDateString(undefined, {
     weekday: 'long',
@@ -77,6 +99,38 @@ export default function HomeScreen(props: {
         units={settings.units}
       />
 
+      {showTip && (
+        <View
+          style={[
+            styles.tip,
+            { backgroundColor: theme.accentSoft, borderColor: theme.accent },
+          ]}
+        >
+          <Text
+            maxFontSizeMultiplier={1.5}
+            style={[styles.tipTitle, { color: theme.accent }]}
+          >
+            {t.home.widgetTipTitle}
+          </Text>
+          <Text maxFontSizeMultiplier={1.5} style={[styles.tipBody, { color: theme.text }]}>
+            {t.home.widgetTipBody}
+          </Text>
+          <Pressable
+            onPress={dismissTip}
+            accessibilityRole="button"
+            accessibilityLabel={t.home.widgetTipDismiss}
+            style={styles.tipButton}
+          >
+            <Text
+              maxFontSizeMultiplier={1.5}
+              style={[styles.tipButtonLabel, { color: theme.accent }]}
+            >
+              {t.home.widgetTipDismiss}
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
       <Text
         maxFontSizeMultiplier={1.5}
         style={[styles.hint, { color: theme.textSecondary }]}
@@ -111,6 +165,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
   },
+  tip: {
+    width: '100%',
+    borderRadius: 18,
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    marginTop: 16,
+  },
+  tipTitle: { fontSize: 14, fontWeight: '700', letterSpacing: 0.2 },
+  tipBody: { fontSize: 13, fontWeight: '500', lineHeight: 19, marginTop: 6 },
+  tipButton: { minHeight: 44, justifyContent: 'center', alignSelf: 'flex-end' },
+  tipButtonLabel: { fontSize: 14, fontWeight: '700' },
   hint: {
     fontSize: 13,
     fontWeight: '500',

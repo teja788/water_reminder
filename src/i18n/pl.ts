@@ -13,6 +13,9 @@ export const pl: Strings = {
     doneForToday: 'Na dziś koniec — bez kolejnych przypomnień',
     nextReminder: (time: string) => `Następne przypomnienie około ${time}`,
     noneTonight: 'Dziś już bez przypomnień — wracamy jutro',
+    widgetTipTitle: 'Zapisuj z ekranu początkowego',
+    widgetTipBody: 'Przytrzymaj ekran początkowy, stuknij Edycja lub +, a potem dodaj widżet Sip.',
+    widgetTipDismiss: 'Rozumiem',
   },
 
   bottle: {
@@ -105,6 +108,8 @@ export const pl: Strings = {
   fields: {
     weightLabel: 'Twoja waga (kg)',
     weightA11y: 'Twoja waga w kilogramach',
+    weightLabelLb: 'Twoja waga (lb)',
+    weightA11yLb: 'Twoja waga w funtach',
     activityLabel: 'Poziom aktywności',
     sedentary: 'Niski',
     moderate: 'Średni',

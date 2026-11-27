@@ -1,4 +1,5 @@
-import { getLocales } from 'expo-localization';
+import { getCalendars, getLocales } from 'expo-localization';
+import { Units } from '../types';
 import { Strings, en } from './en';
 import { de } from './de';
 import { es } from './es';
@@ -43,3 +44,26 @@ function pickLanguage(): string {
 /** Active catalog's language code, e.g. "de". */
 export const lang: string = pickLanguage();
 export const t: Strings = CATALOGS[lang] ?? en;
+
+function deviceSetting<T>(read: () => T, fallback: T): T {
+  try {
+    return read();
+  } catch {
+    return fallback;
+  }
+}
+
+/** oz (with weight in lb) for US-measurement devices, ml otherwise. */
+export const defaultUnits: Units = deviceSetting(
+  () => (getLocales()[0]?.measurementSystem === 'us' ? 'oz' : 'ml'),
+  'ml'
+);
+
+const uses24h = deviceSetting(() => getCalendars()[0]?.uses24hourClock !== false, true);
+
+/** "07:00", or "7 AM" (in the device's language) on a 12-hour clock. */
+export function hourLabel(hour: number): string {
+  return uses24h
+    ? `${String(hour).padStart(2, '0')}:00`
+    : new Date(2000, 0, 1, hour).toLocaleTimeString(undefined, { hour: 'numeric' });
+}

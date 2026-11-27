@@ -21,6 +21,17 @@ export function goalInputToMl(text: string): number {
   return Math.round(/[.,]/.test(text) ? value * 1000 : value);
 }
 
+const KG_PER_LB = 0.45359237;
+
+/** Weight is typed in lb when amounts show in oz, else kg; stored in kg. */
+export function weightFromKg(kg: number, units: Units): number {
+  return Math.round(units === 'oz' ? kg / KG_PER_LB : kg);
+}
+
+export function weightToKg(value: number, units: Units): number {
+  return units === 'oz' ? Math.round(value * KG_PER_LB * 10) / 10 : value;
+}
+
 export function mlToOz(ml: number): number {
   return ml / 29.5735;
 }
@@ -90,13 +101,18 @@ export function loggedDayTotals(entries: DrinkEntry[]): DayTotal[] {
   return result.sort((a, b) => b.dayStart - a.dayStart);
 }
 
+/** A missed day is forgiven once per this many days, so one off day (travel,
+ *  illness) does not wipe a habit the user has otherwise kept. */
+export const GRACE_EVERY_DAYS = 7;
+
 /**
- * Consecutive days meeting the goal, counting back from today.
- * Today not yet meeting the goal does not break the streak (the day
- * is still in progress); it just doesn't count yet.
+ * Days meeting the goal, counting back from today. Today not yet meeting the
+ * goal does not break the streak (the day is still in progress). One missed
+ * day per GRACE_EVERY_DAYS is forgiven when the day before it was met; it does
+ * not add to the count. Two misses in a row always end the streak.
  */
 export function currentStreak(entries: DrinkEntry[], goalMl: number, now: Date): number {
-  // 0/negative goals would make the while-loop below walk back forever
+  // 0/negative goals would make the loop below walk back forever
   // (0 >= 0 every day). Written negated so null/NaN from a corrupt persisted
   // settings blob also bail out to 0 instead of hanging the render.
   if (!(goalMl > 0)) {
@@ -107,13 +123,26 @@ export function currentStreak(entries: DrinkEntry[], goalMl: number, now: Date):
     const k = dayKey(e.timestamp);
     totals.set(k, (totals.get(k) ?? 0) + e.amountMl);
   }
-  let streak = 0;
+  const met = (d: Date): boolean => (totals.get(dayKey(d.getTime())) ?? 0) >= goalMl;
   const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if ((totals.get(dayKey(cursor.getTime())) ?? 0) < goalMl) {
+  if (!met(cursor)) {
     cursor.setDate(cursor.getDate() - 1);
   }
-  while ((totals.get(dayKey(cursor.getTime())) ?? 0) >= goalMl) {
-    streak++;
+  let streak = 0;
+  // Days walked since the last forgiven miss; starts "long ago" so the first
+  // miss can be forgiven.
+  let sinceGrace = GRACE_EVERY_DAYS;
+  for (;;) {
+    if (met(cursor)) {
+      streak++;
+      sinceGrace++;
+    } else {
+      const before = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() - 1);
+      if (sinceGrace < GRACE_EVERY_DAYS - 1 || !met(before)) {
+        break;
+      }
+      sinceGrace = 0;
+    }
     cursor.setDate(cursor.getDate() - 1);
   }
   return streak;

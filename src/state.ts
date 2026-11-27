@@ -3,7 +3,7 @@ import { AppState, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { DrinkEntry, Settings, makeEntryId } from './types';
 import { loadEntries, loadSettings, saveEntries, saveSettings } from './storage';
-import { currentStreak, totalForDay } from './logic/hydration';
+import { currentStreak, loggedDayTotals, totalForDay } from './logic/hydration';
 import { IntakeNotice, intakeNotice } from './logic/intake';
 import { computeTodayReminderTimes } from './logic/reminders';
 import {
@@ -16,6 +16,22 @@ import {
 import { maybeRequestReview } from './review';
 import { onWidgetTap, syncWidget } from './widget';
 import { count } from './analytics';
+
+/** Rating ask after a drink lands (in-app or widget). The policy in
+ *  ./logic/review decides; this only gathers its inputs. */
+function askForReview(entries: DrinkEntry[], s: Settings): void {
+  const now = Date.now();
+  // Asking for five stars in the same breath as "you are drinking too fast"
+  // reads badly, so a live notice takes the moment.
+  if (intakeNotice({ entries, goalMl: s.goalMl, now })) {
+    return;
+  }
+  void maybeRequestReview({
+    todayTotalMl: totalForDay(entries, now),
+    goalMl: s.goalMl,
+    goalDays: loggedDayTotals(entries).filter((d) => d.totalMl >= s.goalMl).length,
+  });
+}
 
 // expo-notifications has no web implementation and this hook throws there,
 // blanking the iPad Safari test build. Fixed per platform, so hook order holds.
@@ -160,13 +176,16 @@ export function useHydration(): HydrationState {
         () => entriesRef.current,
         (drinks) => {
           count({ drink: drinks.length, 'drink.widget': drinks.length });
-          commitEntries(
-            [
-              ...entriesRef.current,
-              ...drinks.map((d) => ({ id: makeEntryId(d.t), timestamp: d.t, amountMl: d.ml })),
-            ],
-            settingsRef.current
-          );
+          const next = [
+            ...entriesRef.current,
+            ...drinks.map((d) => ({ id: makeEntryId(d.t), timestamp: d.t, amountMl: d.ml })),
+          ];
+          commitEntries(next, settingsRef.current);
+          // Widget users log without opening the app, so this import (on
+          // launch/foreground) is the only moment they could be asked.
+          if (settingsRef.current) {
+            askForReview(next, settingsRef.current);
+          }
         }
       ),
     [commitEntries]
@@ -194,26 +213,11 @@ export function useHydration(): HydrationState {
       };
       // Only a notification's quick-log passes a timestamp.
       count(timestampMs === undefined ? { drink: 1 } : { drink: 1, 'drink.reminder': 1 });
-      const prevTotalMl = totalForDay(entriesRef.current, Date.now());
       const next = persistEntries((prev) => [...prev, entry], settings);
-      if (!settings) {
-        return;
-      }
-      // Asking for five stars in the same breath as "you are drinking too
-      // fast" reads badly, so a live notice takes the moment.
-      if (intakeNotice({ entries: next, goalMl: settings.goalMl, now: Date.now() })) {
-        return;
-      }
-      // Both totals are recomputed rather than derived by adding amountMl: a
-      // quick-log backdated to yesterday's reminder does not move today's
-      // total at all, and would otherwise fake a goal crossing.
       // Hooked here and not in persistEntries so undoLast can never trigger it.
-      void maybeRequestReview({
-        prevTotalMl,
-        newTotalMl: totalForDay(next, Date.now()),
-        goalMl: settings.goalMl,
-        streak: currentStreak(next, settings.goalMl, new Date()),
-      });
+      if (settings) {
+        askForReview(next, settings);
+      }
     },
     [settings, persistEntries]
   );

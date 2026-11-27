@@ -12,6 +12,9 @@ export const ko: Strings = {
     doneForToday: '오늘 목표 달성! 더 이상 알림이 없어요',
     nextReminder: (time: string) => `다음 알림은 ${time}쯤이에요`,
     noneTonight: '오늘 밤 알림은 끝났어요. 내일 다시 만나요',
+    widgetTipTitle: '홈 화면에서 바로 기록',
+    widgetTipBody: '홈 화면을 길게 누른 뒤 편집 또는 +를 탭하고 Sip 위젯을 추가하세요.',
+    widgetTipDismiss: '확인',
   },
 
   bottle: {
@@ -99,6 +102,8 @@ export const ko: Strings = {
   fields: {
     weightLabel: '체중(kg)',
     weightA11y: '체중(킬로그램)',
+    weightLabelLb: '체중(lb)',
+    weightA11yLb: '체중(파운드)',
     activityLabel: '활동량',
     sedentary: '적음',
     moderate: '보통',

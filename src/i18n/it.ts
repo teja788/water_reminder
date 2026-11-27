@@ -12,6 +12,9 @@ export const it: Strings = {
     doneForToday: 'Fatto per oggi — niente più promemoria',
     nextReminder: (time: string) => `Prossimo promemoria verso le ${time}`,
     noneTonight: 'Niente più promemoria stasera — a domani',
+    widgetTipTitle: 'Registra dalla schermata Home',
+    widgetTipBody: 'Tieni premuto sulla schermata Home, tocca Modifica o +, poi aggiungi il widget di Sip.',
+    widgetTipDismiss: 'Ho capito',
   },
 
   bottle: {
@@ -102,6 +105,8 @@ export const it: Strings = {
   fields: {
     weightLabel: 'Il tuo peso (kg)',
     weightA11y: 'Il tuo peso in chilogrammi',
+    weightLabelLb: 'Il tuo peso (lb)',
+    weightA11yLb: 'Il tuo peso in libbre',
     activityLabel: 'Livello di attività',
     sedentary: 'Sedentario',
     moderate: 'Moderato',

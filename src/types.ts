@@ -27,6 +27,8 @@ export interface DrinkEntry {
 
 export const DEFAULT_CUP_SIZES_ML = [150, 250, 500];
 export const DEFAULT_CUP_ML = 250;
+/** Used when onboarding skips the weight: a typical adult, 154 lb. */
+export const DEFAULT_WEIGHT_KG = 70;
 export const DEFAULT_WAKE_MINUTES = 7 * 60;
 export const DEFAULT_SLEEP_MINUTES = 22 * 60;
 
