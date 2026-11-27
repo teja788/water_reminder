@@ -17,6 +17,9 @@ export const hi: Strings = {
     doneForToday: 'आज का लक्ष्य पूरा — अब कोई रिमाइंडर नहीं',
     nextReminder: (time: string) => `अगला रिमाइंडर लगभग ${time}`,
     noneTonight: 'आज रात और रिमाइंडर नहीं — कल फिर मिलेंगे',
+    widgetTipTitle: 'होम स्क्रीन से ही दर्ज करें',
+    widgetTipBody: 'होम स्क्रीन को दबाकर रखें, संपादित करें या + पर टैप करें, फिर Sip विजेट जोड़ें।',
+    widgetTipDismiss: 'ठीक है',
   },
 
   bottle: {
@@ -103,6 +106,8 @@ export const hi: Strings = {
   fields: {
     weightLabel: 'आपका वज़न (kg)',
     weightA11y: 'आपका वज़न किलोग्राम में',
+    weightLabelLb: 'आपका वज़न (lb)',
+    weightA11yLb: 'आपका वज़न पाउंड में',
     activityLabel: 'आप कितने सक्रिय हैं',
     sedentary: 'कम',
     moderate: 'मध्यम',

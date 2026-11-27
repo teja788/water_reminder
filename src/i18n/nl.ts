@@ -13,6 +13,9 @@ export const nl: Strings = {
     doneForToday: 'Klaar voor vandaag — geen herinneringen meer',
     nextReminder: (time: string) => `Volgende herinnering rond ${time}`,
     noneTonight: 'Vanavond geen herinneringen meer — morgen weer',
+    widgetTipTitle: 'Log vanaf je beginscherm',
+    widgetTipBody: 'Houd je beginscherm ingedrukt, tik op Wijzig of + en voeg de Sip-widget toe.',
+    widgetTipDismiss: 'Begrepen',
   },
 
   bottle: {
@@ -105,6 +108,8 @@ export const nl: Strings = {
   fields: {
     weightLabel: 'Je gewicht (kg)',
     weightA11y: 'Je gewicht in kilogram',
+    weightLabelLb: 'Je gewicht (lb)',
+    weightA11yLb: 'Je gewicht in pond',
     activityLabel: 'Activiteitsniveau',
     sedentary: 'Weinig',
     moderate: 'Gemiddeld',

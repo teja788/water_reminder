@@ -5,6 +5,7 @@ import { EMPTY_REVIEW_STATE, ReviewState } from './logic/review';
 const SETTINGS_KEY = 'wr:settings';
 const ENTRIES_KEY = 'wr:entries';
 const REVIEW_KEY = 'wr:review';
+const WIDGET_TIP_KEY = 'wr:widgetTipDone';
 
 export async function loadSettings(): Promise<Settings | null> {
   try {
@@ -70,4 +71,18 @@ export async function saveReviewState(state: ReviewState): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/** True once the Home widget tip was dismissed. A failed read also says true:
+ *  better to skip a tip than to show it again on every launch. */
+export async function loadWidgetTipDone(): Promise<boolean> {
+  try {
+    return (await AsyncStorage.getItem(WIDGET_TIP_KEY)) !== null;
+  } catch {
+    return true;
+  }
+}
+
+export function saveWidgetTipDone(): void {
+  AsyncStorage.setItem(WIDGET_TIP_KEY, '1').catch(() => {});
 }

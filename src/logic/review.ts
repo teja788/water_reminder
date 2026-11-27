@@ -3,8 +3,8 @@
  *
  * Rating count is one of the strongest App Store search-ranking inputs, and
  * iOS grants only three system prompts per user per year — so the policy is to
- * spend them at the one moment the app has visibly just done its job: the
- * drink that completes the daily goal, on a day that extends a streak.
+ * spend them while the app has visibly just done its job: a drink logged on a
+ * day already at goal, once the user has reached the goal on a few days.
  */
 
 export interface ReviewState {
@@ -14,37 +14,27 @@ export interface ReviewState {
 
 export const EMPTY_REVIEW_STATE: ReviewState = { lastPromptedAt: null };
 
-/** Days in a row at goal before asking is fair. Below this the user has not
- *  had enough out of the app to hold an opinion worth collecting. */
-export const MIN_STREAK = 3;
+/** Days at goal (any days, not in a row) before asking is fair. It was 3 in a
+ *  row, but users met the goal on only ~1 day in 4 (Nov 2026 counts), so that
+ *  almost never fired: 1 rating after 3 months. */
+export const MIN_GOAL_DAYS = 2;
 
 /** iOS caps the prompt at 3 per 365 days and silently swallows the rest, so
  *  this gap only has to stop us burning all three inside one good week. */
 export const MIN_GAP_MS = 120 * 24 * 60 * 60 * 1000;
 
 export function shouldRequestReview(args: {
-  /** Today's total BEFORE the drink being logged. */
-  prevTotalMl: number;
-  /** Today's total AFTER it. */
-  newTotalMl: number;
+  /** Today's total including the drink just logged. */
+  todayTotalMl: number;
   goalMl: number;
-  /** Streak including today, computed after the drink. */
-  streak: number;
+  /** Days in the whole history at or over goal, today included. */
+  goalDays: number;
   state: ReviewState;
   now: number;
 }): boolean {
-  const { prevTotalMl, newTotalMl, goalMl, streak, state, now } = args;
-  // A 0/NaN goal from a corrupt settings blob would make every log a
-  // "crossing" — the same guard currentStreak needs, for the same reason.
-  if (!(goalMl > 0)) {
-    return false;
-  }
-  // Only the drink that crosses the goal: never on a missed day, and never
-  // again on a day the user keeps logging past it.
-  if (!(prevTotalMl < goalMl && newTotalMl >= goalMl)) {
-    return false;
-  }
-  if (streak < MIN_STREAK) {
+  const { todayTotalMl, goalMl, goalDays, state, now } = args;
+  // A 0/NaN goal from a corrupt settings blob would make every day "at goal".
+  if (!(goalMl > 0) || todayTotalMl < goalMl || goalDays < MIN_GOAL_DAYS) {
     return false;
   }
   if (state.lastPromptedAt === null) {

@@ -13,6 +13,9 @@ export const tr: Strings = {
     doneForToday: 'Bugünlük bu kadar — başka hatırlatma yok',
     nextReminder: (time: string) => `Sonraki hatırlatma ${time} civarı`,
     noneTonight: 'Bu akşam başka hatırlatma yok — yarın görüşürüz',
+    widgetTipTitle: 'Ana Ekran’dan kaydet',
+    widgetTipBody: 'Ana Ekran’a dokunup basılı tut, Düzenle’ye veya +’ya dokun, sonra Sip widget’ını ekle.',
+    widgetTipDismiss: 'Anladım',
   },
 
   bottle: {
@@ -101,6 +104,8 @@ export const tr: Strings = {
   fields: {
     weightLabel: 'Kilon (kg)',
     weightA11y: 'Kilogram cinsinden kilon',
+    weightLabelLb: 'Kilon (lb)',
+    weightA11yLb: 'Libre cinsinden kilon',
     activityLabel: 'Aktivite düzeyi',
     sedentary: 'Hareketsiz',
     moderate: 'Orta',

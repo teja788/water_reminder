@@ -13,6 +13,9 @@ export const pt: Strings = {
     doneForToday: 'Meta de hoje cumprida — sem mais lembretes',
     nextReminder: (time: string) => `Próximo lembrete por volta das ${time}`,
     noneTonight: 'Sem mais lembretes hoje — até amanhã',
+    widgetTipTitle: 'Registre pela Tela de Início',
+    widgetTipBody: 'Toque e segure a Tela de Início, toque em Editar ou + e adicione o widget do Sip.',
+    widgetTipDismiss: 'Entendi',
   },
 
   bottle: {
@@ -103,6 +106,8 @@ export const pt: Strings = {
   fields: {
     weightLabel: 'Seu peso (kg)',
     weightA11y: 'Seu peso em quilos',
+    weightLabelLb: 'Seu peso (lb)',
+    weightA11yLb: 'Seu peso em libras',
     activityLabel: 'Nível de atividade',
     sedentary: 'Sedentário',
     moderate: 'Moderado',

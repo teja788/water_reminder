@@ -12,6 +12,9 @@ export const es: Strings = {
     doneForToday: 'Por hoy has terminado — no habrá más recordatorios',
     nextReminder: (time: string) => `Próximo recordatorio: ${time} aprox.`,
     noneTonight: 'No hay más recordatorios esta noche — hasta mañana',
+    widgetTipTitle: 'Registra desde la pantalla de inicio',
+    widgetTipBody: 'Mantén pulsada la pantalla de inicio, toca Editar o + y añade el widget de Sip.',
+    widgetTipDismiss: 'Entendido',
   },
 
   bottle: {
@@ -104,6 +107,8 @@ export const es: Strings = {
   fields: {
     weightLabel: 'Tu peso (kg)',
     weightA11y: 'Tu peso en kilogramos',
+    weightLabelLb: 'Tu peso (lb)',
+    weightA11yLb: 'Tu peso en libras',
     activityLabel: 'Nivel de actividad',
     sedentary: 'Sedentario',
     moderate: 'Moderado',

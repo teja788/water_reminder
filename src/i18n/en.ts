@@ -19,6 +19,10 @@ export const en = {
     doneForToday: 'Done for today — no more reminders',
     nextReminder: (time: string) => `Next reminder around ${time}`,
     noneTonight: 'No more reminders tonight — back tomorrow',
+    widgetTipTitle: 'Log from your Home Screen',
+    widgetTipBody:
+      'Touch and hold your Home Screen, tap Edit or +, then add the Sip widget.',
+    widgetTipDismiss: 'Got it',
   },
 
   bottle: {
@@ -110,6 +114,8 @@ export const en = {
   fields: {
     weightLabel: 'Your weight (kg)',
     weightA11y: 'Your weight in kilograms',
+    weightLabelLb: 'Your weight (lb)',
+    weightA11yLb: 'Your weight in pounds',
     activityLabel: 'Activity level',
     sedentary: 'Sedentary',
     moderate: 'Moderate',

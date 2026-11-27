@@ -14,12 +14,19 @@ import {
   DEFAULT_CUP_SIZES_ML,
   DEFAULT_SLEEP_MINUTES,
   DEFAULT_WAKE_MINUTES,
+  DEFAULT_WEIGHT_KG,
   Settings,
   Units,
 } from '../types';
-import { calcGoalMl, formatAmount, mlToOz } from '../logic/hydration';
+import {
+  calcGoalMl,
+  formatAmount,
+  mlToOz,
+  weightFromKg,
+  weightToKg,
+} from '../logic/hydration';
 import { requestNotificationPermission } from '../notifications';
-import { t } from '../i18n';
+import { defaultUnits, hourLabel, t } from '../i18n';
 
 const ML_PER_OZ = 29.5735;
 /** Whole hours only — these ranges guarantee sleep > wake by construction. */
@@ -37,10 +44,6 @@ const ACTIVITIES: Array<{ id: ActivityLevel; label: string }> = [
   { id: 'moderate', label: t.fields.moderate },
   { id: 'active', label: t.fields.active },
 ];
-
-function hourLabel(hour: number): string {
-  return `${String(hour).padStart(2, '0')}:00`;
-}
 
 /** Number('') is 0, not NaN — every caller also range-checks the result. */
 function parseNumber(text: string): number {
@@ -110,19 +113,22 @@ export default function OnboardingScreen(props: {
   const { theme, onComplete } = props;
   const [weightText, setWeightText] = useState('');
   const [activity, setActivity] = useState<ActivityLevel>('moderate');
-  const [units, setUnits] = useState<Units>('ml');
+  const [units, setUnits] = useState<Units>(defaultUnits);
   // null = "still following the suggestion"; a string = user-typed override.
   const [goalDraft, setGoalDraft] = useState<string | null>(null);
   const [wakeHour, setWakeHour] = useState(DEFAULT_WAKE_MINUTES / 60);
   const [sleepHour, setSleepHour] = useState(DEFAULT_SLEEP_MINUTES / 60);
   const [submitting, setSubmitting] = useState(false);
 
-  const weightKg = parseNumber(weightText);
+  // Weight is optional: left empty, a typical adult's stands in so the goal
+  // shows at once and Start works without typing anything.
+  const weightEntered = weightText.trim() !== '';
+  const typedKg = weightToKg(parseNumber(weightText), units);
   const weightValid =
-    Number.isFinite(weightKg) &&
-    weightKg >= MIN_WEIGHT_KG &&
-    weightKg <= MAX_WEIGHT_KG;
-  // NaN while the weight is empty/invalid — validated below like typed input.
+    !weightEntered ||
+    (Number.isFinite(typedKg) && typedKg >= MIN_WEIGHT_KG && typedKg <= MAX_WEIGHT_KG);
+  const weightKg = weightEntered ? typedKg : DEFAULT_WEIGHT_KG;
+  // NaN while a typed weight is invalid — validated below like typed input.
   const suggestedMl = weightValid ? calcGoalMl(weightKg, activity) : NaN;
   const goalMl =
     goalDraft === null ? suggestedMl : toMl(parseNumber(goalDraft), units);
@@ -141,6 +147,9 @@ export default function OnboardingScreen(props: {
   const changeUnits = (next: Units): void => {
     if (next === units) {
       return;
+    }
+    if (weightEntered && weightValid) {
+      setWeightText(String(weightFromKg(typedKg, next)));
     }
     if (goalDraft !== null) {
       // Keep the typed override at the same real amount across the toggle.
@@ -206,7 +215,7 @@ export default function OnboardingScreen(props: {
           maxFontSizeMultiplier={1.5}
           style={[styles.label, { color: theme.textSecondary }]}
         >
-          {t.fields.weightLabel}
+          {units === 'oz' ? t.fields.weightLabelLb : t.fields.weightLabel}
         </Text>
         <TextInput
           value={weightText}
@@ -214,9 +223,9 @@ export default function OnboardingScreen(props: {
           keyboardType="number-pad"
           maxLength={3}
           maxFontSizeMultiplier={1.5}
-          placeholder="65"
+          placeholder={String(weightFromKg(DEFAULT_WEIGHT_KG, units))}
           placeholderTextColor={theme.textSecondary}
-          accessibilityLabel={t.fields.weightA11y}
+          accessibilityLabel={units === 'oz' ? t.fields.weightA11yLb : t.fields.weightA11y}
           style={[
             styles.input,
             {

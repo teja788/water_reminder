@@ -12,6 +12,9 @@ export const ja: Strings = {
     doneForToday: '今日は達成！もうリマインダーはありません',
     nextReminder: (time: string) => `次のリマインダーは${time}ごろ`,
     noneTonight: '今夜のリマインダーはもうありません。また明日',
+    widgetTipTitle: 'ホーム画面から記録',
+    widgetTipBody: 'ホーム画面を長押しして「編集」または「+」をタップし、Sipのウィジェットを追加してください。',
+    widgetTipDismiss: 'OK',
   },
 
   bottle: {
@@ -100,6 +103,8 @@ export const ja: Strings = {
   fields: {
     weightLabel: '体重（kg）',
     weightA11y: '体重（キログラム）',
+    weightLabelLb: '体重（lb）',
+    weightA11yLb: '体重（ポンド）',
     activityLabel: '活動量',
     sedentary: '少なめ',
     moderate: 'ふつう',

@@ -13,6 +13,9 @@ export const zh: Strings = {
     doneForToday: '今天達標了，不會再提醒你',
     nextReminder: (time: string) => `下次提醒約在 ${time}`,
     noneTonight: '今晚不再提醒，明天見',
+    widgetTipTitle: '從主畫面記錄',
+    widgetTipBody: '按住主畫面，點一下「編輯」或「+」，然後加入 Sip 小工具。',
+    widgetTipDismiss: '知道了',
   },
 
   bottle: {
@@ -100,6 +103,8 @@ export const zh: Strings = {
   fields: {
     weightLabel: '體重（kg）',
     weightA11y: '體重（公斤）',
+    weightLabelLb: '體重（lb）',
+    weightA11yLb: '體重（磅）',
     activityLabel: '活動量',
     sedentary: '久坐',
     moderate: '適中',
